@@ -14,6 +14,23 @@ import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRig
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 
 
+const International = [
+    {image:Athens, label:"London to Athens", date: '4 Sept - 11 Sept · Round trip'},
+    {image:Rome, label:"London to Rome", date: '4 Sept - 11 Sept · Round trip'},
+    {image:Dubai, label:"London to Dubai", date: '4 Sept - 11 Sept · Round trip'},
+    {image:Antalya, label:"London to Antalya", date: '4 Sept - 11 Sept · Round trip'},
+    {image:Sydney, label:"London to Sydney", date: '4 Sept - 11 Sept · Round trip'},
+    {image: Paris, label: "London to Paris", date: '4 Sept - 11 Sept · Round trip'}
+];
+
+const Domestic = [
+    {image:Cardiff, label:"London to Cardiff", date: '4 Sept - 11 Sept · Round trip'},
+    {image:Edinburgh, label:"London to Edinburgh", date: '4 Sept - 11 Sept · Round trip'},
+    {image:Dublin, label:"London to Dublin", date: '4 Sept - 11 Sept · Round trip'},
+    
+]
+
+
 
 
 const PopularFlights = () => {
@@ -52,21 +69,7 @@ const showBackwardArrow = scrollPosition > 0;
 
 
 
-    const International = [
-        {image:Athens, label:"London to Athens", date: '4 Sept - 11 Sept · Round trip'},
-        {image:Rome, label:"London to Rome", date: '4 Sept - 11 Sept · Round trip'},
-        {image:Dubai, label:"London to Dubai", date: '4 Sept - 11 Sept · Round trip'},
-        {image:Antalya, label:"London to Antalya", date: '4 Sept - 11 Sept · Round trip'},
-        {image:Sydney, label:"London to Sydney", date: '4 Sept - 11 Sept · Round trip'},
-        {image: Paris, label: "London to Paris", date: '4 Sept - 11 Sept · Round trip'}
-    ];
-
-    const Domestic = [
-        {image:Cardiff, label:"London to Cardiff", date: '4 Sept - 11 Sept · Round trip'},
-        {image:Edinburgh, label:"London to Edinburgh", date: '4 Sept - 11 Sept · Round trip'},
-        {image:Dublin, label:"London to Dublin", date: '4 Sept - 11 Sept · Round trip'},
-        
-    ]
+    
 
     const destinations = selectedTab === 'International' ? International : Domestic;
 
@@ -170,10 +173,10 @@ const showBackwardArrow = scrollPosition > 0;
                 borderRadius: '8px',
                 objectFit: 'cover',
             }}/>
-            <Typography variant="body1" sx={{ mt: 1, fontWeight: 'bold' }}>
+            <Typography variant="H4" sx={{ mt: 1, fontWeight: 'bold' }}>
                 {destination.label}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body2" color="grey">
                 {destination.date}
             </Typography>
             </Box>
