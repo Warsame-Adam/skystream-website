@@ -1,9 +1,10 @@
 import React from "react"
-import Navbar from "../Components/Navbar/Navbar"
-import SearchBar from "../Components/SearchBar/SearchBar"
-import CalandarLayout from "../Components/CalandarLayout"
-import PopularFlights from "../Components/PopularFlights/PopularFlights"
-import TrendingCities from "../Components/TrendingCities/TrendingCities"
+import Navbar from "../Components/Navbar/Navbar";
+import SearchBar from "../Components/SearchBar/SearchBar";
+import CalandarLayout from "../Components/CalandarLayout";
+import Hero from "../Components/Hero/Hero";
+import FAQ from "../Components/FAQs/FAQs";
+
 
 
 const HomePage = () => {
@@ -13,8 +14,12 @@ const HomePage = () => {
         <Navbar />
         <SearchBar />
         <CalandarLayout />
-        <PopularFlights />
-        <TrendingCities />
+        <Hero/>
+        <FAQ
+         />
+        
+        
+    
         </>
     )
 }

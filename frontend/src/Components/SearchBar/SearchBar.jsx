@@ -3,6 +3,7 @@ import {Input, AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box
 import FlightIcon from '@mui/icons-material/Flight';
 import HotelIcon from '@mui/icons-material/Hotel';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { format } from 'date-fns';
 import { useDispatch, useSelector } from "react-redux";
 import { showCalendar } from "../Slices/calendarVisible";
 import {  setDepartureDate,
@@ -26,6 +27,15 @@ const SearchBar = () => {
     const returnDate = useSelector((state) => state.dates.returnDate);
     const isSelectingDepartDate = useSelector((state) => state.dates.isSelectingDepartDate);
 
+    const formattedDepartureDate = departureDate 
+  ? format(new Date(departureDate), 'dd/MM/yyyy') 
+  : ''; 
+
+const formattedReturnDate = returnDate 
+  ? format(new Date(returnDate), 'dd/MM/yyyy') 
+  : ''; 
+
+
     const handleClearDeparture = () => {
         dispatch(clearDepartureDate());
       };
@@ -36,35 +46,28 @@ const SearchBar = () => {
     
       const handleClickDepart = () => {
         dispatch(setIsSelectingDepartDate(true));
-        handleClick(); // Set to true for departure date
+        handleClick(); 
+      };
+
+      const handleClickReturn = () => {
+        console.log('Clicking Return. Current Departure Date:', departureDate); 
+        if (!departureDate) {
+          
+          dispatch(setIsSelectingDepartDate(true));
+        } else {
+          
+          dispatch(setIsSelectingDepartDate(false));
+        }
+        handleClick();  
       };
     
-      const handleClickReturn = () => {
-        dispatch(setIsSelectingDepartDate(false));
-        handleClick(); // Set to false for return date
-      };
+      
     
       const handleClick = () => {
         dispatch(showCalendar());
       };
     
       
-
-
-  
-
-  
-  
-  
-
-
-
-
-
-
-
-  
-  
 
 return (
         <>
@@ -164,8 +167,9 @@ return (
                 borderColor: 'primary.main',
             },
             }}
-            value={departureDate ? departureDate : ''}
-        onClick={handleClickDepart}
+            value={formattedDepartureDate}
+        onClick = {handleClickDepart}
+      
         endAdornment={
           departureDate ? (
             <button onClick={handleClearDeparture}>✕</button>
@@ -190,8 +194,10 @@ return (
                 borderColor: 'primary.main',
             },
             }}
-            value={returnDate ? returnDate : ''}
-            onClick={handleClickReturn}
+            value={formattedReturnDate}
+            onClick = {handleClickReturn}
+          
+          
             endAdornment={
               returnDate ? (
                 <button onClick={handleClearReturn}>✕</button>

@@ -120,10 +120,10 @@ const Navbar = ({ open, onClose}) =>{
             id="menu-appbar"
             PaperProps={{
                 sx: {
-                  width: "350px",  // Desired width
-                  maxWidth: "none", // Remove max width restriction
+                  width: "350px",
+                  maxWidth: "none",
                   minWidth: "300px",
-                   // Ensure it doesn't get too small
+                   
                 },
             }}
             anchorOrigin={{

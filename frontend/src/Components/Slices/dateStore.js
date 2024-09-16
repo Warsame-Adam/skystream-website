@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   departureDate: null,
   returnDate: null,
-  isSelectingDepartDate: true, // Add this to your initial state
+  isSelectingDepartDate: true,
 };
 
 const dateStore = createSlice({
@@ -11,10 +11,13 @@ const dateStore = createSlice({
   initialState,
   reducers: {
     setDepartureDate: (state, action) => {
-      state.departureDate = action.payload;
+      console.log("Action payload (departure):", action.payload);
+      state.departureDate = action.payload
     },
     setReturnDate: (state, action) => {
-      state.returnDate = action.payload;
+      console.log("Action payload (return):", action.payload);
+
+      state.returnDate = action.payload
     },
     clearDepartureDate: (state) => {
       state.departureDate = null;

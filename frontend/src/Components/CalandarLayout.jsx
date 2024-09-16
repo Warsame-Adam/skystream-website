@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import {Input, AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box,Grid, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { setFirstMonth, setSecondMonth, updateMonths} from "./Slices/monthsSlice.js";
 import { hideCalendar } from "./Slices/calendarVisible.js";
-import {setDepartureDate, setReturnDate} from "./Slices/dateStore.js"
+import {setDepartureDate, setReturnDate,setIsSelectingDepartDate} from "./Slices/dateStore.js"
 
 
 
@@ -18,7 +18,7 @@ import {setDepartureDate, setReturnDate} from "./Slices/dateStore.js"
 const CustomStaticDatePicker = styled(StaticDatePicker)({
     
     '& .MuiPickersCalendarHeader-root': {
-        display: 'none', // Hide the header with arrows and month/year text
+        display: 'none',
     },
 
     '& .MuiDayCalendar-weekDayLabel': {
@@ -28,10 +28,19 @@ const CustomStaticDatePicker = styled(StaticDatePicker)({
         color:"black"
     },
     '& .MuiPickersDay-root.Mui-selected': {
-        backgroundColor: 'primary.main', // Change the background color of selected day (optional)
-        color: '#ffffff', // Ensure the selected day text is white for contrast
+        backgroundColor: 'primary.main', 
+        color: '#ffffff', 
     },
+
+    
+
+
+  
 });
+
+
+
+
 
 
 
@@ -56,17 +65,27 @@ const getNext12Months = () => {
 
 
 
+
+
 const CalandarLayout = () => {
 
   const firstMonth = useSelector((state)=> state.months.firstMonth)
   const secondMonth = useSelector((state)=> state.months.secondMonth)
   const isCalendarVisible = useSelector((state) => state.visible.isCalendarVisible)
   const isSelectingDepartDate = useSelector((state) => state.dates.isSelectingDepartDate);
+  const departureDate = useSelector((state) => state.dates.departureDate);
+const returnDate = useSelector((state) => state.dates.returnDate);
+
+const departureDateObjectMemo = useMemo(() => departureDate ? new Date(departureDate) : null, [departureDate]);
+const returnDateObjectMemo = useMemo(() => returnDate ? new Date(returnDate) : null, [returnDate]);
+
+console.log("Rendering DatePicker with departureDateObject:", departureDateObjectMemo);
+console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo);
 
 
 
-  console.log('firstMonth:', firstMonth);
-  console.log('secondMonth:', secondMonth);
+
+
   const dispatch = useDispatch()
   
 
@@ -99,7 +118,7 @@ const CalandarLayout = () => {
   };
 
   if (!firstMonth || !secondMonth) {
-    return <div>Loading...</div>; // You can replace this with a loading spinner or any other placeholder.
+    return <div>Loading...</div>; 
 }
 
  const months = getNext12Months();
@@ -112,21 +131,47 @@ const CalandarLayout = () => {
     };
 
     const handleDateChange = (date) => {
-      if (isSelectingDepartDate) {
-        dispatch(setDepartureDate(date));
+      const selectedTimestamp = date.getTime();  
+      const selectedMonth = date.getMonth();  
+      const selectedYear = date.getFullYear();  
+  
+      
+      console.log("Raw Selected Date:", date);
+      console.log("Timestamp:", selectedTimestamp);
+      console.log("Month:", selectedMonth);
+      console.log("Year:", selectedYear);
+  
+      if (departureDate && returnDate) {
+          console.log('Setting Departure Date:', selectedTimestamp);
+  
+          dispatch(setDepartureDate(selectedTimestamp));
+          dispatch(setReturnDate(null)); 
+  
+          dispatch(setIsSelectingDepartDate(false));
+      } else if (isSelectingDepartDate) {
+          console.log('Setting Departure Date:', selectedTimestamp);
+  
+          dispatch(setDepartureDate(selectedTimestamp));
+          dispatch(setIsSelectingDepartDate(false));
       } else {
-        dispatch(setReturnDate(date));
+          console.log('Setting Return Date:', selectedTimestamp);
+  
+          dispatch(setReturnDate(selectedTimestamp));
+          dispatch(setIsSelectingDepartDate(true));
       }
-    };
   
-  
-  
+      console.log('Selected Date:', date);
+  };
 
-
-  
-
+   
     
   
+    
+
+
+
+    
+    
 
     const isPreviousMonthDisabled = firstMonth.getMonth() <= new Date().getMonth() && firstMonth.getFullYear === new Date().getFullYear
 
@@ -136,7 +181,7 @@ const CalandarLayout = () => {
 
     return (
       <Box ref={calendarRef} sx={{ padding: 2, maxWidth: '800px', margin: 'auto' }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" my="2" marginRight="20px">
+      <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:"2", marginRight:"20px"}}>
         <Button
           variant={view === 'specific' ? 'contained' : 'outlined'}
           onClick={() => setView('specific')}
@@ -161,7 +206,7 @@ const CalandarLayout = () => {
 
       {view === 'specific' ? (
         <Box>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", mb:2}}>
             <IconButton
             disabled={isPreviousMonthDisabled}
              onClick={() => handleMonthChange(-1)}>
@@ -181,11 +226,16 @@ const CalandarLayout = () => {
                   </Typography>
               </Box>
               <CustomStaticDatePicker
+                disableHighlightToday={true}
               
                 displayStaticWrapperAs="desktop"
-                value={firstMonth}
-                onChange={(date) => handleDateChange(date)}
-               // Handle the date change here
+                value={departureDateObjectMemo || null}
+                onChange={(date) => { 
+                  console.log("Date selected from DatePicker:", date);
+                  handleDateChange(date)}}
+                  minDate={new Date()}
+                
+                
                 renderInput={(params) => null}
               />
             </Grid>
@@ -196,9 +246,15 @@ const CalandarLayout = () => {
                   </Typography>
             </Box>
               <CustomStaticDatePicker
+                disableHighlightToday={true}
                 displayStaticWrapperAs="desktop"
-                value={secondMonth}
-                onChange={(date) => handleDateChange(date)}// Handle the date change here
+                value={returnDateObjectMemo || null}
+                onChange={(date) => { 
+                  console.log("Date selected from DatePicker:", date);
+                  handleDateChange(date)}}
+                   
+                
+                
                 renderInput={(params) => null}
               />
             </Grid>
