@@ -34,7 +34,7 @@ const Hero = () => {
     }
 
     return (
-        <Container sx={{marginTop:16.5,  display: "flex", justifyContent: "space-evenly", flexDirection:"column"}}>
+        <Container sx={{marginTop:16.5,  display: "flex", justifyContent: "space-evenly", flexDirection:"column", marginBottom:"15px"}}>
             <Box sx={{display:"flex", alignItems:"center", marginBottom:"30px"}}>
             <Box sx={{...HeroStyles}}>
                 <IconButton disabled>
@@ -79,12 +79,15 @@ const Hero = () => {
             </Box>
 
             <Box sx={{position:"absolute",  top: "40%", left: "20%", transform: "translate(-40%, -20%)", color: 'white', zIndex:1 }}>
-                <Typography>
+                <Typography sx={{paddingBottom:"25px"}}>
                     <span style={{fontWeight:"bold", fontSize:"45px"}}>Go further, get <br /> closer</span>
                     <br />
-                    <span>Sneak off for a romantic hotel stay with prices <br/> you'll love. </span>
+                    <span style={{}}>Sneak off for a romantic hotel stay with prices <br/> you'll love. </span>
                 </Typography>
-                <Box sx={{backgroundColor:"white", color:"black", border:"0.1px solid black", borderRadius:"5px", padding:"5px 15px", display:"inline-block"}}>
+                <Box sx={{backgroundColor:"white", color:"black", fontWeight:"bold", borderRadius:"5px", padding:"5px 15px", display:"inline-block", '&:hover': {
+                            backgroundColor: 'lightgrey',
+                            
+                        },}}>
                     Find your room
                 </Box>
 
