@@ -55,7 +55,7 @@ const faqData = [
               </IconButton>
             </Box>
 
-            {/* Conditionally render the extra content for each FAQ */}
+            
             {visibleFAQs[index] && (
               <Typography variant="subtitle1" sx={{ marginTop: '10px', fontStyle: 'italic'}}>
                 {faq.answer}

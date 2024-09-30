@@ -77,7 +77,7 @@ const Navbar = ({ open, onClose}) =>{
 
     return (
         <AppBar position="static" sx={{padding:"0", backgroundColor:"primary.dark"}}>
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between', alignItems: 'flex-start', height: "300px", mx:3, padding: "25px 16px" }}>
+        <Toolbar disableGutters sx={{ display:"flex", justifyContent: 'space-between', alignItems: 'flex-start', height: "300px", mx:3, padding: "25px 16px" }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
               <Avatar src={companyLogo} sx={{ mx: 2 }} />

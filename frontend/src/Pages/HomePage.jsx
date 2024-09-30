@@ -1,6 +1,6 @@
 import React from "react"
 import Navbar from "../Components/Navbar/Navbar";
-import SearchBar from "../Components/SearchBar/SearchBar";
+import HomeSearchBar from "../Components/SearchBar/HomeSearchBar";
 import CalandarLayout from "../Components/CalandarLayout";
 import Hero from "../Components/Hero/Hero";
 import FAQ from "../Components/FAQs/FAQs";
@@ -13,7 +13,7 @@ const HomePage = () => {
     return (
         <>
         <Navbar />
-        <SearchBar />
+        <HomeSearchBar />
         <CalandarLayout />
         <Hero/>
         <FAQ/>

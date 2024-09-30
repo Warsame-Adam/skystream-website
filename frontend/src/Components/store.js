@@ -3,6 +3,8 @@ import monthsReducer from "./Slices/monthsSlice";
 import calendarVisibilty from "./Slices/calendarVisible";
 import dateSelector from "./Slices/dateStore";
 import faqVisibility from "./Slices/FAQVisible";
+import SearchBarReducer from './Slices/SearchBarSlice';
+
 
 const store  = configureStore({
     
@@ -10,7 +12,9 @@ const store  = configureStore({
         months: monthsReducer,
         visible: calendarVisibilty,
         dates: dateSelector,
-        faqVisible: faqVisibility
+        faqVisible: faqVisibility,
+        search: SearchBarReducer,
+
 
     }
 })
