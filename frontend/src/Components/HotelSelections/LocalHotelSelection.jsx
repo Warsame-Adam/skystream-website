@@ -4,75 +4,40 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import StarIcon from '@mui/icons-material/Star'; 
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { cities, hotels } from "../HotelData.js";
+import {useDispatch, useSelector } from "react-redux";
+import { setSelectedCity, setCurrentIndex } from '../Slices/hotelSlice';
 
-const HotelSection = () => {
-  const [selectedCity, setSelectedCity] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
+
+const LocalHotelSelection = () => {
+
+  const dispatch = useDispatch();
+
+  const selectedCity = useSelector((state) => state.hotels.selectedCity);
+const currentIndex = useSelector((state) => state.hotels.currentIndex);
+
+
+
+ 
 
   const handleCityChange = (event, newValue) => {
-    setSelectedCity(newValue);
-    setCurrentIndex(0); 
+    dispatch(setSelectedCity(newValue)); 
+    dispatch(setCurrentIndex(0));
   };
 
-  const cities = ["Edinburgh", "London", "Dublin", "Cardiff"];
-  const hotels = [
-    {
-      city: "Edinburgh",
-      hotels: [
-        { name: "Edinburgh Hotel 1", price: "£100", image: "placeholder.jpg", stars: 4 },
-        { name: "Edinburgh Hotel 2", price: "£150", image: "placeholder.jpg", stars: 3 },
-        { name: "Edinburgh Hotel 3", price: "£120", image: "placeholder.jpg", stars: 5 },
-        { name: "Edinburgh Hotel 4", price: "£110", image: "placeholder.jpg", stars: 4 },
-        { name: "Edinburgh Hotel 5", price: "£130", image: "placeholder.jpg", stars: 2 },
-        { name: "Edinburgh Hotel 6", price: "£140", image: "placeholder.jpg", stars: 3 },
-      ],
-    },
-    {
-      city: "London",
-      hotels: [
-        { name: "London Hotel 1", price: "£200", image: "placeholder.jpg", stars: 4 },
-        { name: "London Hotel 2", price: "£250", image: "placeholder.jpg", stars: 5 },
-        { name: "London Hotel 3", price: "£220", image: "placeholder.jpg", stars: 3 },
-        { name: "London Hotel 4", price: "£210", image: "placeholder.jpg", stars: 4 },
-        { name: "London Hotel 5", price: "£230", image: "placeholder.jpg", stars: 2 },
-        { name: "London Hotel 6", price: "placeholder.jpg", stars: 3 },
-      ],
-    },
-    {
-      city: "Dublin",
-      hotels: [
-        { name: "Dublin Hotel 1", price: "€90", image: "placeholder.jpg", stars: 3 },
-        { name: "Dublin Hotel 2", price: "€140", image: "placeholder.jpg", stars: 4 },
-        { name: "Dublin Hotel 3", price: "€130", image: "placeholder.jpg", stars: 5 },
-        { name: "Dublin Hotel 4", price: "€110", image: "placeholder.jpg", stars: 2 },
-        { name: "Dublin Hotel 5", price: "€150", image: "placeholder.jpg", stars: 3 },
-        { name: "Dublin Hotel 6", price: "€160", image: "placeholder.jpg", stars: 4 },
-      ],
-    },
-    {
-      city: "Cardiff",
-      hotels: [
-        { name: "Cardiff Hotel 1", price: "£90", image: "placeholder.jpg", stars: 3 },
-        { name: "Cardiff Hotel 2", price: "£140", image: "placeholder.jpg", stars: 4 },
-        { name: "Cardiff Hotel 3", price: "£130", image: "placeholder.jpg", stars: 5 },
-        { name: "Cardiff Hotel 4", price: "£110", image: "placeholder.jpg", stars: 2 },
-        { name: "Cardiff Hotel 5", price: "£150", image: "placeholder.jpg", stars: 3 },
-        { name: "Cardiff Hotel 6", price: "£160", image: "placeholder.jpg", stars: 4 },
-      ],
-    },
-  ];
+  
 
   const visibleHotels = hotels[selectedCity].hotels.slice(currentIndex, currentIndex + 3);
 
   const handleNext = () => {
     if (currentIndex + 3 < hotels[selectedCity].hotels.length) {
-      setCurrentIndex(currentIndex + 3);
+       dispatch(setCurrentIndex(currentIndex + 3));
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 3);
+        dispatch(setCurrentIndex(currentIndex - 3));
     }
   };
 
@@ -86,10 +51,25 @@ const HotelSection = () => {
             Your next adventure may be closer than you think. Discover hotels just beyond your doorstep.
         </Typography>
       
-      <Tabs value={selectedCity} onChange={handleCityChange} sx={{'& .MuiTabs-indicator': {
-            display: 'none',}}}  >
+      <Tabs value={selectedCity} onChange={handleCityChange}
+ sx={{'& .MuiTabs-indicator': {
+            display: 'none'}, '& .MuiTab-root': {
+      padding: '5px 8px', 
+      minHeight: 'auto',
+      border:"1px solid grey",
+      marginRight:"10px",
+      borderRadius:"5px",
+      color:"black",
+      textTransform: 'none'
+    
+}, 
+} } >
         {cities.map((city, index) => (
-          <Tab key={index} label={city} sx={{backgroundColor:"white", color:"black", border:"1px solid black", marginRight:"25px", borderRadius:"10px",display:"flex",fontSize:"12px", padding:"0px"}} />
+          <Tab key={index} label={city} disableRipple
+          sx={{ '&.Mui-selected': {
+            backgroundColor: 'blue !important', // Override with blue background
+            color: 'white !important', // Override with white text
+          },}} />
         ))}
       </Tabs>
 
@@ -167,4 +147,4 @@ const HotelSection = () => {
   );
 };
 
-export default HotelSection;
+export default LocalHotelSelection;

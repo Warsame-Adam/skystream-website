@@ -4,6 +4,8 @@ import calendarVisibilty from "./Slices/calendarVisible";
 import dateSelector from "./Slices/dateStore";
 import faqVisibility from "./Slices/FAQVisible";
 import SearchBarReducer from './Slices/SearchBarSlice';
+import hotelSelectionReducer from './Slices/hotelSlice'; 
+
 
 
 const store  = configureStore({
@@ -14,6 +16,8 @@ const store  = configureStore({
         dates: dateSelector,
         faqVisible: faqVisibility,
         search: SearchBarReducer,
+        hotels: hotelSelectionReducer,
+
 
 
     }
