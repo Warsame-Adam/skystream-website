@@ -38,10 +38,10 @@ const HotelFAQ = () => {
 
 
     return (
-        <Container sx={{marginTop:4}}>
+        <Container sx={{marginTop:"-60px"}}>
             
-        <Typography variant="h6" sx={{fontWeight:"bold", paddingBottom:"10px"}}>
-        Finding flight deals: frequently asked questions
+        <Typography variant="h6" sx={{fontWeight:"bold", paddingBottom:"10px", fontSize:"28px"}}>
+        FAQs
         </Typography>
 
         <Box>

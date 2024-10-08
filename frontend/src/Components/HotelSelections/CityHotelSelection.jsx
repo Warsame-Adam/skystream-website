@@ -30,7 +30,7 @@ const currentFabCityIndex = useSelector((state) => state.hotels.currentFabCityIn
     const visibleCities = fabCityHotelLocations.slice(currentFabCityIndex, currentFabCityIndex + 3)
 
     return (
-        <Container>
+        <Container sx={{marginBottom:"100px"}}>
             <Typography sx={{fontWeight:"bold", fontSize:"28px"}}>
             Hotels for fab city breaks
             </Typography>
@@ -51,7 +51,8 @@ const currentFabCityIndex = useSelector((state) => state.hotels.currentFabCityIn
                     image={hotel.image}
                     alt={hotel.name}
                   />
-                  <CardContent sx={{ padding: '8px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
+                  <CardContent sx={{ padding: '8px', display: 'flex' }}>
+                    <Box sx={{display:"flex", flexDirection:"column", justifyContent:"flex-start", marginRight:"270px"}}>
                     <Typography sx={{ color: 'black', fontSize: "19px", fontWeight: "bold", marginBottom: '4px' }}>
                       {hotel.city}
                     </Typography>
@@ -59,15 +60,16 @@ const currentFabCityIndex = useSelector((state) => state.hotels.currentFabCityIn
                     <Typography sx={{ color: 'black', fontSize: "11px", marginBottom: '8px' }}>
                       {hotel.country}
                     </Typography>
+                    </Box>
                 
-                    <Box sx={{ textAlign: 'right', marginTop: '4px', marginBottom: '5px' }}>
+                    <Box sx={{ marginTop: '10px', display:"flex", flexDirection:"column", justifyContent:"flex-end" }}>
                       <Typography sx={{ color: 'grey', fontSize: "11px" }}>
                         From
                       </Typography>
                       <Typography sx={{ color: 'black', fontSize: "15px", fontWeight: "bold" }}>
                         {hotel.price}
                       </Typography>
-                      <Typography sx={{ color: 'grey', fontSize: "11px" }}>
+                      <Typography sx={{ color: 'grey', fontSize: "11px", }}>
                         per night
                       </Typography>
                     </Box>

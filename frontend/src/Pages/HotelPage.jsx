@@ -7,6 +7,7 @@ import LocalHotelSection from "../Components/HotelSelections/LocalHotelSelection
 import CityHotelSelection from "../Components/HotelSelections/CityHotelSelection";
 import HotelFAQ from "../Components/FAQs/HotelFAQ";
 import CentredFooter from "../Components/Footer/CentredFooter";
+import FastFactsHotels from "../Components/FastFactsHotels";
 
 
 
@@ -20,8 +21,10 @@ const HotelPage = () => {
         <HotelBanner />
         <LocalHotelSection />
         <CityHotelSelection />
+        <FastFactsHotels />
         <HotelFAQ />
         <CentredFooter />
+        
         
 
         
