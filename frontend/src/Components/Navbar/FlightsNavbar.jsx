@@ -13,7 +13,7 @@ const navFlights = () => {
     return (
         
             <AppBar position="static" sx={{backgroundColor:"primary.dark", padding:"20px 310px"}}>
-                <Toolbar  sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                <Toolbar   sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                         <IconButton>
                             <Avatar src={companyLogo} />

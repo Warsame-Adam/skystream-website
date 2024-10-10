@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
 import FlightPage from "./Pages/FlightPage.jsx";
 import HotelPage from "./Pages/HotelPage.jsx";
+import IndividualHotelPage from "./Pages/IndividualHotelPage.jsx";
 
 
 
@@ -22,6 +23,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path = "/flights" element={<FlightPage />} />
         <Route path = "/hotels" element ={<HotelPage />} />
+        <Route path="/hotels/:country/:city/:hotelName/:hotelId" element={<IndividualHotelPage />} />
+
         
       </Routes>
     </Router>
