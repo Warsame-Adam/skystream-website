@@ -10,18 +10,14 @@ const IndividualHotelNavbar = () => {
 
 
     return (
-        <Container>
-            <AppBar sx={{backgroundColor:"primary.dark", padding:"20px 310px"}}>
+        
+            <AppBar  sx={{backgroundColor:"primary.dark", padding:"20px 310px", position:"static"}}>
                 <Toolbar sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft:"30px" }}>
                         <IconButton >
                             <Avatar src={companyLogo}  />
-
                         </IconButton>
-                        
-                        
-
                     </Box>
 
                     <Box sx={{display:"flex", gap:"16px", alignItems:"center"}}>
@@ -64,7 +60,7 @@ const IndividualHotelNavbar = () => {
                 </Toolbar>
             </AppBar>
 
-        </Container>
+        
 
     )
 }
