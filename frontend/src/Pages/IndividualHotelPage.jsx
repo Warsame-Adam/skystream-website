@@ -4,6 +4,7 @@ import BreadCrumbs from "../Components/BreadCrumbs";
 import HotelDetailsSection from "../Components/HotelDetailsSection";
 import HotelImageSection from "../Components/HotelImageSection";
 import IndividualHotelTabs from "../Components/IndividualHotelTabs";
+import RoomsAndPrices from "../Components/RoomsAndPrices";
 
 import { Box } from '@mui/material';
 
@@ -19,6 +20,7 @@ const IndividualHotelPage = () => {
         <HotelDetailsSection />
         <HotelImageSection />
         <IndividualHotelTabs />
+        <RoomsAndPrices />
 
         <Box sx={{ height: '3000px' }} />
         
