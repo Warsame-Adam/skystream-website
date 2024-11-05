@@ -58,3 +58,141 @@
     {city:" Dublin" , country: "Ireland", image: "placehodler.jpg" , price: "£89"  },
 
   ]
+
+
+  export const similarHotelsData = [
+    {
+        hotelImage: "https://via.placeholder.com/300x200",
+        stars: 4.5,
+        hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+        dFromHotel: "0.3 miles from Kimpton-Fitzroy London, an IHG Hotel",
+        Price: "£120/night"
+    },
+    {
+        hotelImage: "https://via.placeholder.com/300x200",
+        stars: 4.0,
+        hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+        dFromHotel: "1.2 miles from Kimpton-Fitzroy London, an IHG Hotel",
+        Price: "£85/night"
+    },
+    {
+        hotelImage: "https://via.placeholder.com/300x200",
+        stars:5,
+        hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+        dFromHotel: "0.5 miles from Kimpton-Fitzroy London, an IHG Hotel",
+        Price: "£150/night"
+    },
+    {
+        hotelImage: "https://via.placeholder.com/300x200",
+        stars: 4.0,
+        hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+        dFromHotel: "0.8 miles from Kimpton-Fitzroy London, an IHG Hotel",
+        Price: "£100/night"
+    },
+    {
+        hotelImage: "https://via.placeholder.com/300x200",
+        stars: 4.5,
+        hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+        dFromHotel: "1.0 miles from Kimpton-Fitzroy London, an IHG Hotel",
+        Price: "£130/night"
+    },
+    {
+        hotelImage: "https://via.placeholder.com/300x200",
+        stars: 4.0,
+        hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+        dFromHotel: "0.4 miles from Kimpton-Fitzroy London, an IHG Hotel",
+        Price: "£90/night"
+    }
+  ];
+
+export const topHotelsData = [
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.5,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.3 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£120/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.0,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "1.2 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£85/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars:5,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.5 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£150/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.0,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.8 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£100/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.5,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "1.0 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£130/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.0,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.4 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£90/night"
+  }
+];
+
+
+
+export const popularHotelsData = [
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.5,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.3 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£120/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.0,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "1.2 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£85/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars:5,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.5 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£150/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.0,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.8 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£100/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.5,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "1.0 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£130/night"
+  },
+  {
+      hotelImage: "https://via.placeholder.com/300x200",
+      stars: 4.0,
+      hotelName: "Kimpton-Fitzroy London, an IHG Hotel",
+      dFromHotel: "0.4 miles from Kimpton-Fitzroy London, an IHG Hotel",
+      Price: "£90/night"
+  }
+];

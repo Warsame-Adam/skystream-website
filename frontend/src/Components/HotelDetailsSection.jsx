@@ -15,23 +15,23 @@ const HotelDetailsSection = () => {
 
   return (
 
-    <Container sx={{ marginTop: '20px' }}>
-    {/* Hotel Name and Star Rating */}
-    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-      <Typography variant="h4" fontWeight="bold" sx={{ marginRight: '10px' }}>
+    <Container sx={{ marginTop: '20px'}}>
+    
+    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingLeft:"60px" }}>
+      <Typography  sx={{ marginRight: '10px', fontSize:"45px", fontWeight:"bold"  }}>
         {hotelName}
       </Typography>
       <Rating value={rating} precision={0.5} readOnly sx={{ marginRight: '10px' }} />
     </Box>
 
-    {/* Hotel Address */}
-    <Typography variant="body1" color="black" sx={{ marginBottom: '10px' }}>
+    
+    <Typography variant="body1" color="black" sx={{ marginBottom: '10px', paddingLeft:"60px" }}>
       {address}
     </Typography>
 
-    {/* Star Rating, Reviews, and Review Boxes */}
-    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-      {/* Star Rating and Reviews */}
+    
+    <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingLeft:"60px" }}>
+      
       <Box sx={{ display: 'flex', alignItems: 'center', marginRight: '20px' }}>
         <Typography variant="h6" sx={{ marginRight: '9px', fontWeight:"bold" }}>
           {rating}
@@ -41,7 +41,7 @@ const HotelDetailsSection = () => {
         </Typography>
       </Box>
 
-      {/* Review Boxes */}
+      
       <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         {reviewBoxes.map((box, index) => (
           <Paper key={index} sx={{ padding: '20px 10px', display: 'flex', alignItems: 'center' }}>

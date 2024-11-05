@@ -11,7 +11,7 @@ const inputStyle = {
     
     padding: '20px 15px',
     '&:focus': {
-        borderColor: 'primary.main',
+        borderColor: '#5c6f82',
     },
   
   }
@@ -121,20 +121,20 @@ const filteredHotels = hotelBookingData.map(hotel => {
 
     return (
         <Container sx={{marginTop:"50px"}}>
-            <Typography sx={{fontSize:"24px", fontWeight:"bold"}}>
+            <Typography sx={{fontSize:"43px", fontWeight:"bold",}}>
                 Compare rooms and prices
             </Typography>
 
-            <Box sx={{marginLeft:"-18px"}}>
+            <Box sx={{marginLeft:"-18px", marginBottom:"20px"}}>
                 <img src={roomsandpricesimg} />
             </Box>
 
-            <Box sx={{width:"auto", border:"1px solid grey", backgroundColor:"#eff3f8"}}>
+            <Box sx={{width:"auto", backgroundColor:"#eff3f8", borderRadius:"5px"}}>
               
               <Box sx={{display:"flex", gap: 2, padding:"20px 20px"}}>
                 <Input placeholder="Date" disableUnderline sx={{ ...inputStyle, width: "20px", height: "55px", flex:1,  border:" 1px solid #c1c7cf", borderRadius:"5px" }} />
                 <Input placeholder="Adults, Rooms" disableUnderline sx={{ ...inputStyle, width: "70px", height: "55px", flex:1, border:" 1px solid #c1c7cf", borderRadius:"5px" }} />
-                <Button sx={{flex:1, width:"70px",  border:" 1px solid #c1c7cf", backgroundColor:"#05203c", color:"white", borderRadius:"5px",  '&:hover': {backgroundColor:"#154679" }}}>Search rooms and rates</Button>
+                <Button sx={{flex:1, width:"70px",  border:" 1px solid #c1c7cf",  textTransform: "none", backgroundColor:"#05203c", color:"white", borderRadius:"5px",  '&:hover': {backgroundColor:"#154679" }}}>Search rooms and rates</Button>
               </Box>
               
               <Box sx={{display:"flex", alignItems:"center", gap: 2, paddingLeft:"20px", marginBottom:"10px"}}>

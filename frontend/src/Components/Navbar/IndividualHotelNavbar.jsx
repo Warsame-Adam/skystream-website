@@ -11,8 +11,10 @@ const IndividualHotelNavbar = () => {
 
     return (
         
-            <AppBar  sx={{backgroundColor:"primary.dark", padding:"20px 310px", position:"static"}}>
+            <AppBar  sx={{backgroundColor:"#05203c", position:"static", padding:"10px"}}>
+                <Container>
                 <Toolbar sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                    
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft:"30px" }}>
                         <IconButton >
@@ -20,13 +22,14 @@ const IndividualHotelNavbar = () => {
                         </IconButton>
                     </Box>
 
-                    <Box sx={{display:"flex", gap:"16px", alignItems:"center"}}>
+                    <Box sx={{display:"flex", gap:"6px", alignItems:"center", padding:"7px"}}>
                         <Typography underLine="hover" sx={{fontSize:"14px",cursor:"pointer"}}>
                             Help
                         </Typography>
-                        <Typography variant="caption" sx={{border:"0.5px solid grey", 
+                        <Typography  sx={{border:"0.5px solid grey", 
                             padding:"8px 15px", 
-                            borderRadius:"5px", 
+                            borderRadius:"5px",
+                            fontSize:"11px", 
                             backgroundColor:"rgba(255, 255, 255, 0.11)",
                             '&:hover': {
                                 backgroundColor:"black"},
@@ -46,19 +49,25 @@ const IndividualHotelNavbar = () => {
                         </IconButton>
                         <Box sx={{ 
                             border:"0.5px solid grey", 
-                            padding:"7px 25px", 
+                            padding:"7px 25px",
+                            color:"black",
+                            fontWeight:"bold",
+                            backgroundColor:"#e0e4e9", 
                             borderRadius:"10px",
                             '&:hover': {
-                                backgroundColor:"grey"},
+                                backgroundColor:"#c1c7cf"},
                                 cursor:"pointer"
                           }}>
                             Log in
 
                         </Box>
                     </Box>
+                
 
                 </Toolbar>
+                </Container>
             </AppBar>
+            
 
         
 

@@ -9,8 +9,10 @@ import FastfactsandAmenties from "../Components/FastfactsandAmenties";
 import TravellerReviews from "../Components/TravellerReviews";
 import HotelMap from "../Components/HotelMap";
 import IndividualHotelFAQ from "../Components/IndividualHotelFAQ";
+import RecommendedHotels from "../Components/RecommendedHotels";
+import CentredFooter from "../Components/Footer/CentredFooter";
 
-import { Box } from '@mui/material';
+
 
 
 
@@ -29,8 +31,10 @@ const IndividualHotelPage = () => {
         <TravellerReviews />
         <HotelMap />
         <IndividualHotelFAQ />
+        < RecommendedHotels />
+        <CentredFooter />
 
-        <Box sx={{ height: '3000px' }} />
+        
         
 
         </>

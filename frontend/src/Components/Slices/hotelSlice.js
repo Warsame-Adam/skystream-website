@@ -4,6 +4,7 @@ const initialState = {
     selectedCity: 0,
     currentIndex: 0,
     currentFabCityIndex: 0,
+    recommendedHotels: 0,
 
 }
 
@@ -23,11 +24,14 @@ const hotelSlice = createSlice({
         setCurrentFabCityIndex: (state, action) => { 
             state.currentFabCityIndex = action.payload;
           },
+        setRecommendedHotels: (state, action) => {
+            state.recommendedHotels = action.payload;
+        } 
 
     }
 });
 
 
-export const {setSelectedCity, setCurrentIndex, setCurrentFabCityIndex} = hotelSlice.actions;
+export const {setSelectedCity, setCurrentIndex, setCurrentFabCityIndex, setRecommendedHotels} = hotelSlice.actions;
 
 export default hotelSlice.reducer;

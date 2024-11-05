@@ -13,7 +13,7 @@ console.log('Breadcrumbs component rendered');
 const BreadCrumbs  = () => {
 
     const breadcrumbs = [
-        <Link underline="hover" key= "1" color="#1d6ee6" href="/" >
+        <Link underline="hover" key= "1" color="#1d6ee6" href="/" sx={{paddingLeft:"80px"}} >
           Home
         </Link>,
         <Link
@@ -43,14 +43,16 @@ const BreadCrumbs  = () => {
     <Container sx={{display: "flex", 
       justifyContent: "flex-start", 
       alignItems: "center", 
-      marginTop: "20px", 
-      padding: "10px", 
+      marginTop: "20px",
+      
+      
+       
        }}>
         <Stack spacing={2}>
         
         
 
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" sx={{ color:"grey"  }} />}
+            <Breadcrumbs sx={{fontSize:"15px"}} separator={<NavigateNextIcon fontSize="small" sx={{ color:"grey"  }} />}
             aria-label="breadcrumb">
               {breadcrumbs}
 
