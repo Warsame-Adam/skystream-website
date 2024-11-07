@@ -2,6 +2,7 @@ import React from "react";
 import { AppBar,Menu, Toolbar, Input, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel, RadioGroup, Radio } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Hotelimg from "../../Components/Assets/HotelHeroimg.jpg";
+import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
 
 
 const inputStyle = {
@@ -30,7 +31,7 @@ const HeroHotel = () => {
     <Box sx={{position:"relative"}}> 
         <Box sx={{
         width: '100%',
-        height: '700px',
+        height: '550px',
         overflow: 'hidden'
         }}
          >
@@ -43,6 +44,9 @@ const HeroHotel = () => {
                 objectFit: 'cover',
             }}/>
         </Box>
+        <Typography sx={{position:"absolute", top:"23%", left:"24.2%",  transform: 'translate(-23%, -24.2%)', color:"white", fontSize:"50px", fontWeight:"bold"}}>
+            Find the right hotel today
+        </Typography>
         <Box sx={{
             position: 'absolute',
             top: '50%',
@@ -53,8 +57,10 @@ const HeroHotel = () => {
             backgroundColor: '#002540',
             padding: '20px',
             borderRadius: '8px',
-            height:"130px"
+            height:"130px",
+            
       }}>
+       
         <Typography component="div" sx={{marginBottom:"5px", color:"white", fontSize:"11px"}}>
         <span style={{ marginRight: '453px'}}>Where do you want to stay?</span>
         <span style={{ marginRight: '104px' }}>Check in</span>
@@ -70,14 +76,24 @@ const HeroHotel = () => {
             <Input placeholder="Rooms" disableUnderline sx={{ ...inputStyle, width:"300px", height:"55px",borderRadius: '0 8px 8px 0', }} />
 
         </Box>
-        <Box sx={{marginTop:"10px", display:"flex", alignItems:"center"}}>
-            <Typography sx={{marginRight:"20px", color:"white", fontSize:"13px", fontWeight:"bold"}}>
+        
+        <Box sx={{marginTop:"20px", display:"flex", alignItems:"center"}}>
+            <Typography sx={{marginRight:"30px", color:"white", fontSize:"13px", fontWeight:"bold"}}>
                 Popular Filters:
             </Typography>
-            <FormControlLabel control={<Checkbox disableRipple />} label="Free cancellation" sx={{color: 'white', fontSize:"10px"}}/>
-            <FormControlLabel control={<Checkbox disableRipple />} label="4 stars" sx={{color: 'white', fontSize:"10px", textAlign:"center"}} />
-            <FormControlLabel control={<Checkbox disableRipple  />} label="3 stars" sx={{color: 'white', fontSize:"10px"}} />
+            <FormControlLabel control={<Checkbox disableRipple sx={{ color: '#626971', marginRight:"10px", '&.Mui-checked': { color: '#0062e3' }, '&.MuiButtonBase-root': {backgroundColor:"white", width:"18px", height:"10px"}  }} />} label="Free cancellation" componentsProps={{typography: {fontSize:"15px", color:"white", marginRight:"20px"}}}  />
+            <FormControlLabel control={<Checkbox disableRipple  sx={{ color: '#626971',marginRight:"10px", '&.Mui-checked': { color: '#0062e3' }, '&.MuiButtonBase-root': {backgroundColor:"white", width:"18px", height:"10px"}  }} />} label="4 stars" componentsProps={{typography: {fontSize:"15px", color:"white", marginRight:"20px"}}} />
+            <FormControlLabel control={<Checkbox disableRipple  sx={{ color: '#626971', marginRight:"10px", '&.Mui-checked': { color: '#0062e3' }, '&.MuiButtonBase-root': {backgroundColor:"white", width:"18px", height:"10px"}  }}  />} label="3 stars" componentsProps={{typography: {fontSize:"15px", color:"white"}}} />
         </Box>
+
+        <Box sx={{height:"48px", width:"165px",padding:"-10px 0px", borderRadius:"10px", backgroundColor:"#0062e3", display:"flex", alignItems:"center", gap:"10px", marginLeft:"1020px", marginTop:"-30px",'&:hover': {backgroundColor:"#024daf"}}}>
+                  <Typography sx={{textAlign:"center", paddingLeft:"20px", color:"white"}}>
+                    Search hotels
+                  </Typography>
+                  <ArrowForwardOutlinedIcon sx={{color:"white"}} />
+
+                </Box>
+                
 
 
 

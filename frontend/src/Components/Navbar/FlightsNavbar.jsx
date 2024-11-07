@@ -12,7 +12,7 @@ const navFlights = () => {
 
     return (
         
-            <AppBar position="static" sx={{backgroundColor:"primary.dark", padding:"20px 310px"}}>
+            <AppBar position="static" sx={{backgroundColor:"#05203c", padding:"20px 310px", height:"140px"}}>
                 <Toolbar   sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                         <IconButton>
@@ -25,43 +25,48 @@ const navFlights = () => {
                             }}>
                             <Button 
                             sx={{
-                                backgroundColor:"primary.dark",
-                                color:"text.primary",
+                                fontSize:"13.5px",
+                                backgroundColor:"#05203c",
+                                color:"white",
                                 textTransform:"none",
                                 '&:hover': {
-                                    backgroundColor:"rgba(21,70,121,255)"
+                                    backgroundColor:"#154679"
                                 },
                                 border: "0.5px solid white",
                                 borderRadius: "75px",
+                                padding:"5px 15px",
                                 mx: 0.5,}} 
-                                variant="contained" startIcon={<FlightIcon />}>
+                                variant="contained" startIcon={<FlightIcon sx={{width:"20px", height:"20px"}} />}>
                                     Flights
                             </Button>
                             <Button 
                             sx={{
-                                backgroundColor:"primary.dark",
-                                color:"text.primary",
+                                fontSize:"13.5px",
+                                backgroundColor:"#05203c",
+                                color:"white",
                                 textTransform:"none",
                                 '&:hover': {
-                                    backgroundColor:"primary.light"
+                                    backgroundColor:"#154679"
                                 },
                                 border: "0.5px solid white",
-                                borderRadius: "75px"
+                                borderRadius: "75px",
+                                padding:"5px 15px",
                             }} 
                             variant="contained" 
-                            startIcon={<HotelIcon />}>
+                            startIcon={<HotelIcon sx={{width:"17px", height:"20px"}} />}>
                                 Hotels
                             </Button>
                         </Box>
                         
                     </Box>
-                    <Box sx={{display:"flex", gap:"16px", alignItems:"center"}}>
+                    <Box sx={{display:"flex", gap:"6px", alignItems:"center"}}>
                         <Typography underLine="hover" sx={{fontSize:"14px",cursor:"pointer"}}>
                             Help
                         </Typography>
-                        <Typography variant="caption" sx={{border:"0.5px solid grey", 
+                        <Typography  sx={{border:"0.5px solid grey", 
                             padding:"8px 15px", 
-                            borderRadius:"5px", 
+                            borderRadius:"5px",
+                            fontSize:"11px", 
                             backgroundColor:"rgba(255, 255, 255, 0.11)",
                             '&:hover': {
                                 backgroundColor:"black"},
@@ -69,6 +74,7 @@ const navFlights = () => {
                             }}>
                             United Kingdom - English (UK) • £ GBP
                         </Typography>
+                        
                         <IconButton>
                             <FavoriteIcon sx={{
                                 color:"white", 
@@ -81,15 +87,19 @@ const navFlights = () => {
                         </IconButton>
                         <Box sx={{ 
                             border:"0.5px solid grey", 
-                            padding:"7px 25px", 
+                            padding:"7px 25px",
+                            color:"black",
+                            fontWeight:"bold",
+                            backgroundColor:"#e0e4e9", 
                             borderRadius:"10px",
                             '&:hover': {
-                                backgroundColor:"grey"},
+                                backgroundColor:"#c1c7cf"},
                                 cursor:"pointer"
                           }}>
                             Log in
 
                         </Box>
+                        
                     </Box>
 
 

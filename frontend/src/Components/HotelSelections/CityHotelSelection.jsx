@@ -41,81 +41,132 @@ const currentFabCityIndex = useSelector((state) => state.hotels.currentFabCityIn
             </Typography>
 
             <Box display="flex" justifyContent="center" alignItems="center" my={4}>
+  <Box display="flex" justifyContent="space-between" width="100%">
+    {visibleCities.map((hotel, index) => (
+      <Card
+        key={index}
+        sx={{
+          flex: 1,
+          margin: 1,
+          height: "300px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <CardMedia
+          component="img"
+          height="190px"
+          image={hotel.image}
+          alt={hotel.name}
+        />
+        <CardContent
+          sx={{
+            padding: "8px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+            }}
+          >
+            <Typography
+              sx={{
+                color: "black",
+                fontSize: "19px",
+                fontWeight: "bold",
+                marginBottom: "4px",
+              }}
+            >
+              {hotel.city}
+            </Typography>
 
-                <Box display="flex" justifyContent="space-between" width="100%">
-                {visibleCities.map((hotel, index) => (
-                  <Card key={index} sx={{ flex: 1, margin: 1, height: "300px", display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <CardMedia
-                    component="img"
-                    height="190px"
-                    image={hotel.image}
-                    alt={hotel.name}
-                  />
-                  <CardContent sx={{ padding: '8px', display: 'flex' }}>
-                    <Box sx={{display:"flex", flexDirection:"column", justifyContent:"flex-start", marginRight:"270px"}}>
-                    <Typography sx={{ color: 'black', fontSize: "19px", fontWeight: "bold", marginBottom: '4px' }}>
-                      {hotel.city}
-                    </Typography>
-                
-                    <Typography sx={{ color: 'black', fontSize: "11px", marginBottom: '8px' }}>
-                      {hotel.country}
-                    </Typography>
-                    </Box>
-                
-                    <Box sx={{ marginTop: '10px', display:"flex", flexDirection:"column", justifyContent:"flex-end" }}>
-                      <Typography sx={{ color: 'grey', fontSize: "11px" }}>
-                        From
-                      </Typography>
-                      <Typography sx={{ color: 'black', fontSize: "15px", fontWeight: "bold" }}>
-                        {hotel.price}
-                      </Typography>
-                      <Typography sx={{ color: 'grey', fontSize: "11px", }}>
-                        per night
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-                
+            <Typography
+              sx={{
+                color: "black",
+                fontSize: "11px",
+                marginBottom: "8px",
+              }}
+            >
+              {hotel.country}
+            </Typography>
+          </Box>
 
-                
+          
+          <Box
+            sx={{
+              marginTop: "10px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+            }}
+          >
+            <Typography sx={{ color: "grey", fontSize: "11px" }}>
+              From
+            </Typography>
+            <Typography
+              sx={{ color: "black", fontSize: "15px", fontWeight: "bold" }}
+            >
+              {hotel.price}
+            </Typography>
+            <Typography sx={{ color: "grey", fontSize: "11px" }}>
+              per night
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    ))}
+  </Box>
+</Box>
 
-          ))}
+            
 
-
-
-
-                </Box>
-
-
-
-            </Box>
-
-            <Box display="flex" justifyContent="center" alignItems="center" gap={1} my={2}>
+          <Box  sx={{display:"flex", justifyContent:"center", alignItems:"center", gap:1, my:2}}>
+            <Box sx={{flexGrow:1, display:"flex", justifyContent:"flex-start"}}>
         <IconButton 
           disabled={currentFabCityIndex === 0} 
           onClick={handlePrev}
-          sx={{}}
+          disableRipple
+          sx={{
+            color: currentFabCityIndex === 0 ? '#cccccc' : '#0062e3',
+          }}
         >
-          <KeyboardArrowLeftIcon fontSize="small" />
+          <KeyboardArrowLeftIcon sx={{fontSize:"35px"}} />
         </IconButton>
+        </Box>
+
+        <Box sx={{display: "flex", justifyContent: "center", gap: 1}}>
         {Array.from({ length: 3 }).map((_, index) => (
           <Box
             key={index}
             sx={{
-              width: 12,
-              height: 12,
+              width: 8,
+              height: 8,
               borderRadius: '50%',
               backgroundColor: currentFabCityIndex === index * 3 ? 'darkgrey' : 'lightgrey',
             }}
           />
         ))}
+        </Box>
+
+        <Box sx={{flexGrow: 1, display: "flex", justifyContent: "flex-end"}}>
         <IconButton 
           disabled={currentFabCityIndex + 3 >= fabCityHotelLocations.length} 
           onClick={handleNext}
-          sx={{}}
+          disableRipple
+          sx={{
+            color: currentFabCityIndex + 3 >= fabCityHotelLocations.length ? '#cccccc' : '#0062e3',
+          }}
+        
         >
-          <KeyboardArrowRightIcon fontSize="small" />
+          <KeyboardArrowRightIcon sx={{fontSize:"35px"}} />
         </IconButton>
+        </Box>
       </Box>
 
 

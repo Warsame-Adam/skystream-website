@@ -68,7 +68,7 @@ const HotelBanner = () => {
                         <Typography sx={{fontsize:"10px", color:"white", marginTop:"10px"}}>
                             We've pulled together some top hotel deals, so <br /> you can find an amazing room at an even better <br /> price.
                         </Typography>
-                        <Box sx={{color:"black", backgroundColor:"white", border:"1px solid white", display:"inline-block", padding:"6px 8px", marginTop:"10px", fontWeight:"bold", borderRadius:"5px" }}>
+                        <Box sx={{color:"black", backgroundColor:"white", border:"1px solid white", display:"inline-block", padding:"6px 8px", marginTop:"10px", fontWeight:"bold", borderRadius:"5px", cursor:"pointer", '&:hover': {backgroundColor:"#c1c7cf"}}}>
                             See hotel deals
                         </Box>
                 </Box>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Tab, Box, Card, CardMedia, CardContent, Typography, IconButton, Container } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import StarIcon from '@mui/icons-material/Star'; 
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { cities, hotels } from "../HotelData.js";
@@ -67,8 +67,8 @@ const currentIndex = useSelector((state) => state.hotels.currentIndex);
         {cities.map((city, index) => (
           <Tab key={index} label={city} disableRipple
           sx={{ '&.Mui-selected': {
-            backgroundColor: 'blue !important', // Override with blue background
-            color: 'white !important', // Override with white text
+            backgroundColor: '#05203c !important', 
+            color: 'white !important', 
           },}} />
         ))}
       </Tabs>
@@ -87,28 +87,28 @@ const currentIndex = useSelector((state) => state.hotels.currentIndex);
                 image={hotel.image} 
                 alt={hotel.name}
               />
-              <CardContent>
-                <Typography variant="h6" style={{ fontWeight: 'bold', color: 'black' }}>
+              <CardContent sx={{padding:0}}>
+                <Typography variant="h6" style={{ fontWeight: 'bold', color: 'black', fontSize:"20px", paddingLeft:"15px" }}>
                   {hotel.name}
-                  <span style={{ marginLeft: '5px' }}>
+                  <span style={{ marginLeft: '80px',  }}>
                     
                     {Array.from({ length: 5 }).map((_, starIndex) => (
                       starIndex < hotel.stars ? (
-                        <StarIcon key={starIndex} fontSize="small" style={{ color: 'gold' }} />
+                        <StarIcon key={starIndex} fontSize="small" style={{ color: '#f55d42' }} />
                       ) : (
-                        <StarBorderIcon key={starIndex} fontSize="small" style={{ color: 'gold' }} />
+                        <StarBorderIcon key={starIndex} fontSize="small" style={{ color: '#cccccc' }} />
                       )
                     ))}
                   </span>
                 </Typography>
-                <Typography variant="body2" style={{ color: 'black' }}>
+                <Typography variant="body2" style={{ color: 'black', fontSize:"13.5px", paddingLeft:"15px" }}>
                   x miles from city centre
                 </Typography>
                 <hr style={{ border: '1px solid lightgrey', margin: '10px 0' }} />
-                <Typography variant="body1" style={{ color: 'black', textAlign: 'right' }}>
+                <Typography variant="body1" style={{ color: 'black', textAlign: 'right', paddingRight:"15px", fontWeight:"bold" }}>
                   {hotel.price}
                 </Typography>
-                <Typography variant="body2" style={{ color: 'grey', textAlign: 'right' }}>
+                <Typography  style={{ color: 'grey', textAlign: 'right', paddingRight:"15px", fontSize:"12px" }}>
                   per night
                 </Typography>
               </CardContent>
@@ -118,30 +118,48 @@ const currentIndex = useSelector((state) => state.hotels.currentIndex);
       </Box>
 
       
-      <Box display="flex" justifyContent="center" alignItems="center" gap={1} my={2}>
+      <Box  sx={{display:"flex", alignItems:"center", gap:1, my:2, width:"100%", }}>
+        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
         <IconButton 
           disabled={currentIndex === 0} 
           onClick={handlePrev}
+          disableRipple
+          sx={{
+            color: currentIndex === 0 ? '#cccccc' : '#0062e3',
+          }}
+        
         >
-          <ArrowBackIcon fontSize="small" />
+          <KeyboardArrowLeftIcon sx={{fontSize:"35px"}}/>
         </IconButton>
+        </Box>
+
+        <Box sx={{display: "flex", justifyContent: "center", gap: 1  }}>
         {Array.from({ length: 2 }).map((_, index) => (
           <Box
             key={index}
             sx={{
-              width: 12,
-              height: 12,
+              width: 8,
+              height: 8,
               borderRadius: '50%',
               backgroundColor: currentIndex === index * 3 ? 'darkgrey' : 'lightgrey',
             }}
           />
         ))}
+        </Box>
+        <Box sx={{flexGrow: 1,  display: "flex", justifyContent: "flex-end"}}>
+
+        
         <IconButton 
           disabled={currentIndex + 3 >= hotels[selectedCity].hotels.length} 
           onClick={handleNext}
+          disableRipple
+          sx={{
+            color: currentIndex + 3 >= hotels[selectedCity].hotels.length ? '#cccccc' : '#0062e3',
+          }}
         >
-          <ArrowForwardIcon fontSize="small" />
+          <KeyboardArrowRightIcon sx={{fontSize:"35px"}} />
         </IconButton>
+        </Box>
       </Box>
     </Container>
   );

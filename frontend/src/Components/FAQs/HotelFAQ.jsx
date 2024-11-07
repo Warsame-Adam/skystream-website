@@ -40,11 +40,11 @@ const HotelFAQ = () => {
     return (
         <Container sx={{marginTop:"-60px"}}>
             
-        <Typography  sx={{fontWeight:"bold", paddingBottom:"10px", fontSize:"28px"}}>
+        <Typography  sx={{fontWeight:"bold", paddingBottom:"10px", fontSize:"32px"}}>
         FAQs
         </Typography>
 
-        <Box>
+        <Box sx={{width:"65%"}}>
             {faqArray.map((faq, index) => (
                 <Box>
                     <Box  onClick={() => handleToggleFAQ(index)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingBottom: '5px' }}>
@@ -55,7 +55,7 @@ const HotelFAQ = () => {
                             paddingBottom: '5px',
                             flexGrow: 1,
                             fontWeight: 'bold',
-                            FontSize:"20px"
+                            FontSize:"25px"
                         }}>
                             {faq.question}
                         </Typography>
@@ -70,7 +70,7 @@ const HotelFAQ = () => {
                     
                     
                     {visibleFAQs[index] && (
-                        <Typography  sx={{ marginTop: "10px", fontSize:"16px"}}>
+                        <Typography  sx={{ marginTop: "10px", fontSize:"16px", borderBottom:"1px solid #ccd1d8", marginBottom:"10px",}}>
                             {faq.answer}
                         </Typography>
                     )}
