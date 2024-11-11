@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { AppBar,Menu, Toolbar, Input, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 
 
 const inputStyle = {
     border: '1px solid #ccc',
-    borderRadius: '4px',
+    
     backgroundColor: "background.paper",
     color: "black",
     marginRight: "5px",
@@ -56,14 +57,24 @@ const MultiCitySearchBar = () => {
             <Box sx={{ width: '100%' }}>
                 {flights.map((_, index) => (
                     <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px', justifyContent: 'flex-start' }}>
-                        <Input placeholder="From" disableUnderline sx={{...inputStyle, width:"400px", height:"55px", borderRadius:"15px", marginRight:"15px"}} />
-                        <Input placeholder="To" disableUnderline sx={{...inputStyle, width:"400px", height:"55px", borderRadius:"15px", marginRight:"15px"}} />
-                        <Input placeholder="Depart" disableUnderline sx={{...inputStyle, width:"230px", height:"55px",borderRadius:"15px", marginRight:"15px"}} />
+                        <Input placeholder="From" disableUnderline sx={{...inputStyle, width:"400px", height:"52px", borderRadius:"10px", marginRight:"15px"}} />
+                        <Input placeholder="To" disableUnderline sx={{...inputStyle, width:"400px", height:"52px", borderRadius:"10px", marginRight:"15px"}} />
+                        <Input placeholder="Depart" disableUnderline sx={{...inputStyle, width:"230px", height:"52px",borderRadius:"10px", marginRight:"15px"}} />
 
                         <IconButton
-                            onClick={() => removeFlightRow(index)}
-                            disabled={index < 2}
-                            sx={{ color: index < 2 ? 'gray' : 'white' }} 
+                          onClick={(e) => {
+                            if (index < 2) {
+                              e.preventDefault();
+                            } else {
+                              removeFlightRow(index);
+                            }
+                          }}
+                          sx={{
+                            color: flights.length > 2 ? '#ffffff' : index < 2 ? '#44586d' : '#ffffff',
+                            cursor: index < 2 ? 'not-allowed' : 'pointer', // Change cursor for first two rows
+                          }}
+                        
+                            
                         >
                             <CloseIcon />
                         </IconButton>
@@ -71,56 +82,84 @@ const MultiCitySearchBar = () => {
                 ))}
             </Box>
 
-            {/* Add Another Flight Button */}
+            
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-start', padding: '10px 0' }}>
                 <Button
                     onClick={addFlightRow}
                     variant="contained"
                     sx={{
                         marginTop: '10px',
-                        color: 'white',
-                        backgroundColor: '#002540',
+                        fontSize:"16px",
+                        color: 'black',
+                        backgroundColor: '#e0e3e5',
                         textTransform: 'none',
-                        padding: '10px 15px',
-                        width: '220px',
+                        borderRadius:"11px",
+                        padding: '5px 15px',
+                        width: '185px',
                         display: "flex",
                         justifyContent: "flex-start",
-                        marginBottom: "20px"
+                        marginBottom: "20px",
+                        '&:Hover': {backgroundColor:"#c2c9cd"},
+                        
+                        
+                        
                     }}
                 >
-                    + Add another flight
+                    <AddIcon />
+                    <Typography sx={{whiteSpace: 'nowrap'}}>
+                        Add another flight
+                    </Typography>
                 </Button>
             </Box>
 
-            {/* Travellers and Class Input */}
-            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-start', padding: '10px 0' }}>
-                <Input
-                    disableUnderline
-                    defaultValue="1 adult, Economy"
-                    sx={{
-                        ...inputStyle,
-                        textAlign: 'center',
-                        backgroundColor: "white",
-                        color: "black",
-                        width: "220px",
-                    }}
-                />
-            </Box>
+            <Box 
+  sx={{ 
+    width: '100%', 
+    display: 'flex', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    marginTop: '20px' 
+  }}
+>
+    <Box sx={{ flex: '1' }}> {/* Input wrapped to keep its width dynamic */}
+        <Input
+            disableUnderline
+            defaultValue="1 adult, Economy"
+            sx={{
+                ...inputStyle,
+                textAlign: 'center',
+                backgroundColor: "white",
+                color: "black",
+                width: "410px", // Or use flex if dynamic width required
+                height: "55px",
+                borderRadius: "12px"
+            }}
+        />
+    </Box>
 
-            {/* Search Button */}
-            <Button
-                variant="contained"
-                sx={{
-                    marginTop: '20px',
-                    color: 'white',
-                    backgroundColor: "#0071c2",
-                    padding: '10px 20px',
-                    alignSelf: 'flex-end',
-                }}
-            >
-                Search
-            </Button>
-        </Box>
+    <Button
+        variant="contained"
+        sx={{
+            color: 'white',
+            backgroundColor: "#0062e3",
+            padding: '15px 20px',
+            textTransform: "none",
+            fontSize: "15px",
+            '&:Hover': { backgroundColor: "#024daf" },
+            marginRight:"50px"
+        }}
+    >
+        Search
+    </Button>
+</Box>
+
+
+</Box>
+
+
+
+
+
     );
 };
 

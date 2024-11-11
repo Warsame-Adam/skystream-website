@@ -170,7 +170,7 @@ const FlightLocations = () => {
 
     return (
         
-            <Container sx={{}}>
+            <Container sx={{ transform: 'translateX(-29px)',}}>
                 <Box sx={{display:"flex", justifyContent:"flex-start", alignItems:"center", marginTop:"40px"}}>
                     <Typography>
                         Home
@@ -181,7 +181,7 @@ const FlightLocations = () => {
                     </Typography>
                     </Box>
 
-                    <Box sx={{display:"flex", justifyContent:"flex-start", alignItems:"center", marginTop:"40px", gap:2}}>
+                    <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"40px", marginBottom:"90px" }}>
                         <FlightIcon/>
                         <Typography sx={{fontWeight:"bold", fontSize:"13px"}}>
                         Explore the best flight deals from anywhere, to <br /> everywhere, then book with no fees
@@ -189,12 +189,12 @@ const FlightLocations = () => {
                         
                         <CalendarMonthIcon />
                         <Typography sx={{fontWeight:"bold", fontSize:"13px"}}>
-                        Compare flight deals from over 1000 providers, and choose the cheapest, fastest or greenest tickets
+                        Compare flight deals from over 1000 providers and <br /> choose the cheapest, fastest or greenest tickets
                         </Typography>
 
                         <LocalOfferIcon/>
                         <Typography sx={{fontWeight:"bold", fontSize:"13px"}}>
-                        Find the cheapest month - or even day - to fly, and set up Price Alerts to book when the price is right
+                        Find the cheapest month - or even day - to fly, and set <br /> up Price Alerts to book when the price is right
                         </Typography>
                     </Box>
 
@@ -249,7 +249,7 @@ const FlightLocations = () => {
                       {deal.departDetails}
                     </Typography>
                   </Box>
-                  <Typography variant="body2" sx={{ marginLeft: 'auto', color:"black" }}>
+                  <Typography variant="body2" sx={{ marginLeft: 'auto', color:"black", fontWeight:"bold" }}>
                     Direct
                   </Typography>
                 </Box>
@@ -270,13 +270,13 @@ const FlightLocations = () => {
                       {deal.returnDetails}
                     </Typography>
                   </Box>
-                  <Typography variant="body2" sx={{ marginLeft: 'auto', color:"black" }}>
+                  <Typography variant="body2" sx={{ marginLeft: 'auto', color:"black", fontWeight:"bold" }}>
                     Direct
                   </Typography>
                 </Box>
 
                 {/* Price Tag */}
-                <Typography sx={{ textAlign: 'right', marginTop: 2, color: 'blue', fontWeight: 'bold', fontSize:"14.5px" }}>
+                <Typography sx={{ textAlign: 'right', marginTop: 2, color: '#0062e3', fontWeight: 'bold', fontSize:"14.5px" }}>
                   from {deal.price}
                 </Typography>
               </CardContent>

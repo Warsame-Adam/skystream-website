@@ -11,7 +11,7 @@ const CentredFooter = () => {
     return (
         
 
-        <Box sx={{ backgroundColor: '#002B49', color: 'white', padding: '50px', marginTop: '2rem' }}>
+        <Box sx={{ backgroundColor: '#05203c', color: 'white', padding: '50px', marginTop: '2rem', transform: 'translateX(-29px)', }}>
           <Container sx={{}} >
         
         <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: '2rem' }}>

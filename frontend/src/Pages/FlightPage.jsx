@@ -7,7 +7,7 @@ import MultiCitySearchBar from "../Components/SearchBar/MultiCitySearchBar";
 import FlightLocations  from "../Components/FlightLocations/FlightLocations";
 import FlightFAQ from "../Components/FAQs/FlightFAQ";
 import FlightInfoSection from "../Components/FlightInfoSection";
-import Footer from "../Components/Footer/Footer";
+import CentredFooter from "../Components/Footer/CentredFooter";
 
 
 
@@ -24,7 +24,7 @@ const FlightPage = () => {
         <FlightLocations />
         <FlightFAQ />
         <FlightInfoSection />
-        <Footer />
+        <CentredFooter />
         
         
         

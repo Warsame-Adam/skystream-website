@@ -34,8 +34,20 @@ const FlightInfoSection = () => {
   ];
 
   return (
-    <Container sx={{ marginTop: 4, marginBottom: 4 }}>
+    <Container sx={{ marginTop: 4, marginBottom: 4, transform: 'translateX(-29px)', }}>
       {/* Top Text and Icons */}
+
+      <Box sx={{}}>
+        <Typography sx={{fontSize:"25px", fontWeight:"bold", marginBottom:"10px"}}>
+        Plan your journey with peace of mind
+        </Typography>
+
+        <Typography sx={{marginBottom:"80px"}}>
+        We've made it our mission to help you travel with confidence and make your journey as smooth as possible.
+
+
+        </Typography>
+      </Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
         <Box sx={{ textAlign: 'center', maxWidth: '45%', alignItems:"center", display:"flex" }}>
           <Icon component={ChangeCircleIcon} sx={{ fontSize: 30 }} />
@@ -65,77 +77,49 @@ const FlightInfoSection = () => {
         <Typography variant="body2" sx={{ marginBottom: 3 }}>
           Find the cheapest flight deals to some of the most popular destinations, or pick your favorite airline below.
         </Typography>
-        <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" TabIndicatorProps={{ style: { display: 'none' } }}>
+        <Tabs value={selectedTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto" TabIndicatorProps={{ style: { display: 'none' } }} 
+        sx={{'& .MuiTabs-indicator': {
+            display: 'none'}, '& .MuiTab-root': {
+      padding: '5px 8px', 
+      minHeight: 'auto',
+      border:"1px solid grey",
+      marginRight:"10px",
+      borderRadius:"5px",
+      color:"black",
+      textTransform: 'none'
+    
+}, 
+} }>
           <Tab
-          label="Popular cities" 
-          sx={{
-            padding: '6px 16px',
-            borderRadius: '20px',
-            backgroundColor: selectedTab === 0 ? 'primary.main' : 'transparent',
-            color: selectedTab === 0 ? 'red' : 'black',
-            '&.Mui-selected': {
-                color: 'white !important',
-              },
-            
-            border: selectedTab === 0 ? 'none' : '1px solid #d3d3d3',
-            '&:hover': {
-                border: '1px solid #002f6c',
-            },
-            marginRight: '8px',
-            transition: 'all 0.3s ease',
-        }}/>
+          label="Popular cities"
+          sx={{ '&.Mui-selected': {
+            backgroundColor: '#05203c !important', 
+            color: 'white !important', 
+          },}} 
+          />
           <Tab 
           label="Popular countries"
-          sx={{
-            padding: '6px 16px',
-            borderRadius: '20px',
-            backgroundColor: selectedTab === 1 ? 'primary.main' : 'transparent',
-            color: selectedTab === 1 ? 'white' : 'black',
-            '&.Mui-selected': {
-                color: 'white !important',
-              },
-            border: selectedTab === 1 ? 'none' : '1px solid #d3d3d3',
-            '&:hover': {
-                border: '1px solid #002f6c',
-            },
-            marginRight: '8px',
-            transition: 'all 0.3s ease',
-          }} 
+          sx={{ '&.Mui-selected': {
+            backgroundColor: '#05203c !important', 
+            color: 'white !important', 
+          },}}
+ 
        />
           <Tab 
           label="Popular flight routes"
-          sx={{
-            padding: '6px 16px',
-            borderRadius: '20px',
-            backgroundColor: selectedTab === 2 ? 'primary.main' : 'transparent',
-            color: selectedTab === 2 ? 'white' : 'black',
-            '&.Mui-selected': {
-                color: 'white !important',
-              },
-            border: selectedTab === 2 ? 'none' : '1px solid #d3d3d3',
-            '&:hover': {
-                border: '1px solid #002f6c',
-            },
-            marginRight: '8px',
-            transition: 'all 0.3s ease',
-          }} 
+          sx={{ '&.Mui-selected': {
+            backgroundColor: '#05203c !important', 
+            color: 'white !important', 
+          },}}
+          
        />
           <Tab 
           label="Top airlines"
-          sx={{
-            padding: '6px 16px',
-            borderRadius: '20px',
-            backgroundColor: selectedTab === 3 ? 'primary.main' : 'transparent',
-            color: selectedTab === 3 ? 'white' : 'black',
-            '&.Mui-selected': {
-                color: 'white !important',
-              },
-            border: selectedTab === 3 ? 'none' : '1px solid #d3d3d3',
-            '&:hover': {
-                border: '1px solid #002f6c',
-            },
-            transition: 'all 0.3s ease',
-          }} 
+          sx={{ '&.Mui-selected': {
+            backgroundColor: '#05203c !important', 
+            color: 'white !important', 
+          },}}
+
        />
         </Tabs>
 
@@ -145,7 +129,7 @@ const FlightInfoSection = () => {
             <Grid container spacing={2}>
               {popularCities.map((city, index) => (
                 <Grid item xs={6} sm={4} key={index}>
-                  <Link href="#" underline="hover">
+                  <Link href="#" underline="hover" sx={{color:"#1868e5"}}>
                     Flights to {city}
                   </Link>
                 </Grid>
@@ -156,7 +140,7 @@ const FlightInfoSection = () => {
             <Grid container spacing={2}>
               {popularCountries.map((country, index) => (
                 <Grid item xs={6} sm={4} key={index}>
-                  <Link href="#" underline="hover">
+                  <Link href="#" underline="hover" sx={{color:"#1868e5"}}>
                     Flights to {country}
                   </Link>
                 </Grid>
@@ -167,7 +151,7 @@ const FlightInfoSection = () => {
             <Grid container spacing={2}>
               {popularFlightRoutes.map((route, index) => (
                 <Grid item xs={12} sm={6} key={index}>
-                  <Link href="#" underline="hover">
+                  <Link href="#" underline="hover" sx={{color:"#1868e5"}}>
                     {route}
                   </Link>
                 </Grid>
@@ -178,7 +162,7 @@ const FlightInfoSection = () => {
             <Grid container spacing={2}>
               {topAirlines.map((airline, index) => (
                 <Grid item xs={6} sm={4} key={index}>
-                  <Link href="#" underline="hover">
+                  <Link href="#" underline="hover" sx={{color:"#1868e5"}}>
                     {airline}
                   </Link>
                 </Grid>

@@ -48,7 +48,7 @@ const HeroFlights = () => {
 
 
       <Box sx={{
-        height: '700px',
+        height: '550px',
         overflow: 'hidden',
       }}>
           <img
@@ -73,22 +73,43 @@ const HeroFlights = () => {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '90%',
-          maxWidth: '1200px',
-          backgroundColor: '#002540',
+          maxWidth: '1170px',
+          backgroundColor: '#05203c',
           padding: '20px',
           borderRadius: '8px',
       }}>
                 
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-start',  }}>
               <RadioGroup
                   row
                   value={searchType}
                   onChange={(e) => dispatch(setSearchType(e.target.value))}
               >
-                  <FormControlLabel value="return" control={<Radio color="primary" />} label="Return" />
-                  <FormControlLabel value="oneway" control={<Radio color="primary" />} label="One Way" />
-                  <FormControlLabel value="multiCity" control={<Radio color="primary" />} label="Multi-City" />
+                  <FormControlLabel value="return" control={<Radio sx={{
+        color: searchType === "return" ? "#0062e3" : "#52565f", 
+        '&.Mui-checked': {
+          color: "#0062e3", 
+        },
+      }}
+
+
+     />} label="Return" componentsProps={{typography: {fontSize:"15px", color:"white", marginRight:"5px"}}} />
+
+                  <FormControlLabel value="oneway" control={<Radio sx={{
+        color: searchType === "oneway" ? "#0062e3" : "#52565f", 
+        '&.Mui-checked': {
+          color: "#0062e3", 
+        },
+        
+        }}  />} label="One Way" componentsProps={{typography: {fontSize:"15px", color:"white", marginRight:"5px"}}}  />
+
+                  <FormControlLabel value="multiCity" control={<Radio sx={{
+        color: searchType === "multiCity" ? "#0062e3" : "#52565f", 
+        '&.Mui-checked': {
+          color: "#0062e3", 
+        },
+      }} />} label="Multi-City" componentsProps={{typography: {fontSize:"15px", color:"white", marginRight:"5px"}}} />
               </RadioGroup>
           </Box>
 

@@ -77,7 +77,7 @@ const HeroHotel = () => {
 
         </Box>
         
-        <Box sx={{marginTop:"20px", display:"flex", alignItems:"center"}}>
+        <Box  sx={{marginTop:"20px", display:"flex", alignItems:"center"}}>
             <Typography sx={{marginRight:"30px", color:"white", fontSize:"13px", fontWeight:"bold"}}>
                 Popular Filters:
             </Typography>
@@ -86,7 +86,7 @@ const HeroHotel = () => {
             <FormControlLabel control={<Checkbox disableRipple  sx={{ color: '#626971', marginRight:"10px", '&.Mui-checked': { color: '#0062e3' }, '&.MuiButtonBase-root': {backgroundColor:"white", width:"18px", height:"10px"}  }}  />} label="3 stars" componentsProps={{typography: {fontSize:"15px", color:"white"}}} />
         </Box>
 
-        <Box sx={{height:"48px", width:"165px",padding:"-10px 0px", borderRadius:"10px", backgroundColor:"#0062e3", display:"flex", alignItems:"center", gap:"10px", marginLeft:"1020px", marginTop:"-30px",'&:hover': {backgroundColor:"#024daf"}}}>
+        <Box sx={{height:"48px", width:"165px",padding:"-10px 0px", borderRadius:"10px", backgroundColor:"#0062e3", display:"flex", alignItems:"center", gap:"10px", pointer:"clicker", marginLeft:"1020px", marginTop:"-30px",'&:Hover': {backgroundColor:"#024daf"}}}>
                   <Typography sx={{textAlign:"center", paddingLeft:"20px", color:"white"}}>
                     Search hotels
                   </Typography>

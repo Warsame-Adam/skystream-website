@@ -39,13 +39,13 @@ const  FlightFAQ = () => {
 
 
     return (
-        <Container sx={{marginTop:4}}>
+        <Container sx={{marginTop:4, transform: 'translateX(-30px)', }}>
             
-            <Typography variant="h6" sx={{fontWeight:"bold", paddingBottom:"10px"}}>
+            <Typography  sx={{fontWeight:"bold", paddingBottom:"10px", fontSize:"32px"}}>
             Finding flight deals: frequently asked questions
             </Typography>
 
-            <Box>
+            <Box sx={{width:"65%"}}>
                 {faqData.map((faq, index) => (
                     <Box>
                         <Box  onClick={() => handleToggleFAQ(index)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingBottom: '5px' }}>
@@ -56,7 +56,7 @@ const  FlightFAQ = () => {
                                 paddingBottom: '5px',
                                 flexGrow: 1,
                                 fontWeight: 'bold',
-                                FontSize:"20px"
+                                
                             }}>
                                 {faq.question}
                             </Typography>
