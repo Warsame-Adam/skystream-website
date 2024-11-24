@@ -28,11 +28,11 @@ const monthsSlice  = createSlice({
             let newFirstMonth = new Date(state.firstMonth);
             let newSecondMonth = new Date(state.secondMonth);
         
-            // Correct month change, ensure year adjustments for rollovers
+            
             newFirstMonth.setMonth(newFirstMonth.getMonth() + monthChange);
             newSecondMonth.setMonth(newSecondMonth.getMonth() + monthChange);
         
-            // Log both to check if the year rolls over correctly
+            
             console.log('New First Month:', newFirstMonth); 
             console.log('New Second Month:', newSecondMonth); 
         

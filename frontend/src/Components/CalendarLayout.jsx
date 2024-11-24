@@ -226,18 +226,16 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
                   </Typography>
               </Box>
               <CustomStaticDatePicker
-                disableHighlightToday={true}
-              
-                displayStaticWrapperAs="desktop"
-                value={departureDateObjectMemo || null}
-                onChange={(date) => { 
-                  console.log("Date selected from DatePicker:", date);
-                  handleDateChange(date)}}
-                  minDate={new Date()}
-                
-                
-                renderInput={(params) => null}
-              />
+  disableHighlightToday={true}
+  displayStaticWrapperAs="desktop"
+  value={firstMonth} // Set value to firstMonth state
+  onChange={(date) => { 
+    console.log("Date selected from DatePicker:", date);
+    handleDateChange(date);
+  }}
+  minDate={new Date()}
+  renderInput={(params) => null}
+/>
             </Grid>
             <Grid item xs={6}>
             <Box>
@@ -245,18 +243,17 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
                   {secondMonth.toLocaleString('default', {month:"long"})}
                   </Typography>
             </Box>
-              <CustomStaticDatePicker
-                disableHighlightToday={true}
-                displayStaticWrapperAs="desktop"
-                value={returnDateObjectMemo || null}
-                onChange={(date) => { 
-                  console.log("Date selected from DatePicker:", date);
-                  handleDateChange(date)}}
-                   
-                
-                
-                renderInput={(params) => null}
-              />
+            <CustomStaticDatePicker
+  disableHighlightToday={true}
+  displayStaticWrapperAs="desktop"
+  value={secondMonth} // Set value to secondMonth state
+  onChange={(date) => { 
+    console.log("Date selected from DatePicker:", date);
+    handleDateChange(date);
+  }}
+  minDate={new Date()}
+  renderInput={(params) => null}
+/>
             </Grid>
           </Grid>
         </Box>
