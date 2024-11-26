@@ -145,7 +145,8 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
           console.log('Setting Departure Date:', selectedTimestamp);
   
           dispatch(setDepartureDate(selectedTimestamp));
-          dispatch(setReturnDate(null)); 
+          dispatch(setReturnDate(null));
+          
   
           dispatch(setIsSelectingDepartDate(false));
       } else if (isSelectingDepartDate) {

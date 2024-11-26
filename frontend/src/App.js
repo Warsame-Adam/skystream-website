@@ -11,6 +11,7 @@ import FlightPage from "./Pages/FlightPage.jsx";
 import HotelPage from "./Pages/HotelPage.jsx";
 import IndividualHotelPage from "./Pages/IndividualHotelPage.jsx";
 import CityHotelsPage from "./Pages/CityHotelsPage.jsx"
+import FlightSearchResultsPage from "./Pages/FlightSearchResultsPage.jsx";
 
 
 
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path = "/flights" element={<FlightPage />} />
+        <Route path = "/flights/:origin/:destination/:departureDate/:returnDate" element={<FlightSearchResultsPage />} />
         <Route path = "/hotels" element ={<HotelPage />} />
         <Route path="/hotels/:country/:city/:hotelName/:hotelId" element={<IndividualHotelPage />} />
         <Route path="/hotels/:country/:city" element={<CityHotelsPage />} />

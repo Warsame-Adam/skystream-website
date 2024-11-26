@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { AppBar,Menu, Toolbar, Input, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,6 +8,17 @@ import { useSelector, useDispatch } from 'react-redux';
 
 
 const ReturnSearchBar = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const currentDate = new Date();
+        const departure = new Date(currentDate.setDate(currentDate.getDate() + 7)); // Departure: one week from today
+        dispatch(setDepartureDate(departure.toDateString()));
+
+        const returnD = new Date(departure);
+        returnD.setDate(departure.getDate() + 7); // Return: one week after departure
+        dispatch(setReturnDate(returnD.toDateString()));
+    }, [dispatch]);
 
     
     

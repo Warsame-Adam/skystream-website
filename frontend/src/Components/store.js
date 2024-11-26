@@ -5,6 +5,7 @@ import dateSelector from "./Slices/dateStore";
 import faqVisibility from "./Slices/FAQVisible";
 import SearchBarReducer from './Slices/SearchBarSlice';
 import hotelSelectionReducer from './Slices/hotelSlice'; 
+import flightSearchState from "./Slices/FlightSearchUI";
 
 
 
@@ -17,6 +18,7 @@ const store  = configureStore({
         faqVisible: faqVisibility,
         search: SearchBarReducer,
         hotels: hotelSelectionReducer,
+        flightSearch: flightSearchState
 
 
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {Input, AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
 import FlightIcon from '@mui/icons-material/Flight';
 import HotelIcon from '@mui/icons-material/Hotel';
@@ -26,6 +26,17 @@ const HomeSearchbar = () => {
     const departureDate = useSelector((state) => state.dates.departureDate);
     const returnDate = useSelector((state) => state.dates.returnDate);
     const isSelectingDepartDate = useSelector((state) => state.dates.isSelectingDepartDate);
+
+    useEffect(() => {
+      const currentDate = new Date();
+      const departure = new Date(currentDate.setDate(currentDate.getDate() + 7)); // Departure: one week from today
+      dispatch(setDepartureDate(departure.toDateString()));
+
+      const returnD = new Date(departure);
+      returnD.setDate(departure.getDate() + 7); // Return: one week after departure
+      dispatch(setReturnDate(returnD.toDateString()));
+  }, [dispatch]);
+
 
     const formattedDepartureDate = departureDate 
   ? format(new Date(departureDate), 'dd/MM/yyyy') 
