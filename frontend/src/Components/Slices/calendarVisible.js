@@ -18,6 +18,7 @@ const calendarVisible = createSlice({
         hideCalendar: (state) => {
             state.isCalendarVisible = false
         },
+        
     }
 })
 

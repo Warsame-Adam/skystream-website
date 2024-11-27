@@ -89,7 +89,7 @@ const FlightSearchUI = () => {
                         sx={{
                             color: "white",
                             marginLeft: "20px",
-                            flexGrow: 1
+                            flexGrow: 1,
                             textAlign: "center", 
                         }}
                     >
@@ -155,7 +155,7 @@ const FlightSearchUI = () => {
                         justifyContent: "space-between", 
                         alignItems: "center",
                         width: "250px",
-                        marginLeft: "10px"
+                        marginLeft: "10px",
                         flexShrink: 0, 
                     }}
                 >

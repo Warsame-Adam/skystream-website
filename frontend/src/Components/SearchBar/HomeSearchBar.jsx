@@ -29,11 +29,11 @@ const HomeSearchbar = () => {
 
     useEffect(() => {
       const currentDate = new Date();
-      const departure = new Date(currentDate.setDate(currentDate.getDate() + 7)); // Departure: one week from today
+      const departure = new Date(currentDate.setDate(currentDate.getDate() + 7)); 
       dispatch(setDepartureDate(departure.toDateString()));
 
       const returnD = new Date(departure);
-      returnD.setDate(departure.getDate() + 7); // Return: one week after departure
+      returnD.setDate(departure.getDate() + 7); 
       dispatch(setReturnDate(returnD.toDateString()));
   }, [dispatch]);
 
