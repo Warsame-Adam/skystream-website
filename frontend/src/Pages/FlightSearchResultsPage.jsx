@@ -18,6 +18,7 @@ const FlightSearchResultsPage = () => {
 
         <FlightSearchResultsNavbar />
         <FlightSearchUI />
+        <FlightSearchResults />
         
 
 

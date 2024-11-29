@@ -91,7 +91,7 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
 
  
 
-  const [view, setView] = useState("Specific");
+  
 
   const calendarRef = useRef(null);
 
@@ -174,7 +174,9 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
     
     
 
-    const isPreviousMonthDisabled = firstMonth.getMonth() <= new Date().getMonth() && firstMonth.getFullYear === new Date().getFullYear
+    const isPreviousMonthDisabled = firstMonth.getMonth() === new Date().getFullYear() && firstMonth.getMonth() < new Date().getMonth()
+
+    const maxForward = secondMonth.getFullYear() === new Date().getFullYear() + 1 && secondMonth.getMonth() === new Date().getMonth()
 
     
 
@@ -184,28 +186,19 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
       <Box ref={calendarRef} sx={{ padding: 2, maxWidth: '800px', margin: 'auto' }}>
       <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:"2", marginRight:"20px"}}>
         <Button
-          variant={view === 'specific' ? 'contained' : 'outlined'}
-          onClick={() => setView('specific')}
+          
+          
           sx={{
-            backgroundColor: view === 'specific' ? '#1976d2' : 'transparent',
-            color: view === 'specific' ? '#fff' : '#1976d2',
+            backgroundColor: '#1976d2',
+            color: '#1976d2',
           }}
         >
           Specific dates
         </Button>
-        <Button
-          variant={view === 'flexible' ? 'contained' : 'outlined'}
-          onClick={() => setView('flexible')}
-          sx={{
-            backgroundColor: view === 'flexible' ? '#1976d2' : 'transparent',
-            color: view === 'flexible' ? '#fff' : '#1976d2',
-          }}
-        >
-          Flexible dates
-        </Button>
+
       </Box>
 
-      {view === 'specific' ? (
+      
         <Box>
           <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", mb:2}}>
             <IconButton
@@ -214,7 +207,7 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
               <ArrowBack />
             </IconButton>
 
-            <IconButton onClick={() => handleMonthChange(1)}>
+            <IconButton onClick={() => handleMonthChange(1)} disabled={maxForward}>
               <ArrowForward />
             </IconButton>
           </Box>
@@ -258,43 +251,11 @@ console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo)
             </Grid>
           </Grid>
         </Box>
-      ) : (
-        <Grid container spacing={3} justifyContent="center">
-        {months.map((monthInfo, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-            <Button 
-              variant="outlined" 
-              sx={{ 
-                width: "100%", 
-                padding: "20px", 
-                textAlign: "center", 
-                display: "block", 
-                backgroundColor: "#f5f5f5",
-                borderColor: "#ccc",
-                color: "#333",
-                borderRadius: "10px",
-                fontWeight: "bold"
-              }}
-            >
-              <Typography variant="subtitle1">
-                {monthInfo.year}
-              </Typography>
-              <Typography variant="h6">
-                {monthInfo.month}
-              </Typography>
-            </Button>
-          </Grid>
-        ))}
-      </Grid>
+
+        </Box>
+      ) 
+
   
-      )}
-      <Box mt={4}>
-        <Button variant="contained" color="primary" fullWidth>
-          Apply
-        </Button>
-      </Box>
-    </Box>
-  );
 
 
   

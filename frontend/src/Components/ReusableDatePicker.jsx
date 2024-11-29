@@ -103,6 +103,17 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
     dispatch(setCurrentMonth(newMonth));
   };
 
+
+  const isPreviousMonthDisabled =
+  currentMonth.getFullYear() === new Date().getFullYear() &&
+  currentMonth.getMonth() <= new Date().getMonth();
+  
+  const maxForward =
+  currentMonth.getFullYear() === new Date().getFullYear() + 1 &&
+  currentMonth.getMonth() === new Date().getMonth();
+
+  
+
   return (
     <Box
       ref={calendarRef}
@@ -118,7 +129,8 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
         padding: "16px",
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        
       }}
     >
       <Box
@@ -132,7 +144,7 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
           boxSizing: 'border-box'
         }}
       >
-        <IconButton onClick={() => handleMonthChange(-1)}>
+        <IconButton onClick={() => handleMonthChange(-1)} disabled={isPreviousMonthDisabled}>
           <ArrowLeftIcon />
         </IconButton>
         <Select
@@ -163,7 +175,7 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
             <MenuItem key={index} value={month}>{month}</MenuItem>
           ))}
         </Select>
-        <IconButton onClick={() => handleMonthChange(1)}>
+        <IconButton onClick={() => handleMonthChange(1)} disabled={maxForward}>
           <ArrowRightIcon />
         </IconButton>
       </Box>
@@ -175,6 +187,7 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
         disablePast={true}
         minDate={new Date()}
         maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
+        
         componentsProps={{
           actionBar: {
             actions: ['cancel']
