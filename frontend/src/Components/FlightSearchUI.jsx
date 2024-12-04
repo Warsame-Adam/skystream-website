@@ -203,11 +203,33 @@ const FlightSearchUI = () => {
             </Box>
 
             {showInputs && (
-                <Box sx={{ display: "flex", flexDirection: "column", width: "100%", marginTop: "20px", backgroundColor: "#1e3750" }}>
-                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px', alignItems: "center" }}>
-                        <Input placeholder="From" disableUnderline sx={{ ...inputStyle, borderRadius: "10px 0px 0px 10px" }} />
-                        <Input placeholder="To" disableUnderline sx={{ ...inputStyle }} />
-                        <Input placeholder="Depart Add date" value={departureDate} disableUnderline sx={{ ...inputStyle }} />
+                <Box sx={{  position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    width: '100vw', 
+                    marginLeft: 0, 
+                    paddingLeft: '220px', 
+                    paddingRight: '200px',
+                    backgroundColor: "#05203c",
+                    paddingBottom: '20px',
+                    paddingTop: '50px',
+                    boxSizing: 'border-box',
+                    zIndex: 1,
+                          
+             
+                  
+                 }}>
+                    <Box sx={{ display: 'flex',
+        width: '100%',
+        justifyContent: 'flex-start',
+        alignItems: "center",
+        marginBottom: '10px',
+        gap: '5px', 
+        
+ }}>
+                        <Input placeholder="From" disableUnderline sx={{ ...inputStyle, borderRadius: "13px 0px 0px 13px", width:"340px" }} />
+                        <Input placeholder="To" disableUnderline sx={{ ...inputStyle, width:"340px" }} />
+                        <Input placeholder="Depart Add date" value={departureDate} disableUnderline sx={{ ...inputStyle,  }} />
                         <Input placeholder="Return Add date" value={returnDate} disableUnderline sx={{ ...inputStyle }} />
                         <Input placeholder="Travellers and cabin class" disableUnderline sx={{ ...inputStyle, borderRadius: "0px 10px 10px 0px", marginRight: "15px" }} />
                         <Button variant="contained" sx={{ marginLeft: "10px", padding: "25px 20px", backgroundColor: "#0062e3", textTransform: "none", borderRadius: "10px", '&:hover': { backgroundColor: "#024daf" } }}>Search</Button>
