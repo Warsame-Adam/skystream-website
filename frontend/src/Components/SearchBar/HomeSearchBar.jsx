@@ -1,265 +1,207 @@
-import React, { useState, useEffect } from "react"
-import {Input, AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
-import FlightIcon from '@mui/icons-material/Flight';
-import HotelIcon from '@mui/icons-material/Hotel';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { format } from 'date-fns';
+import React, { useEffect, useState } from "react";
+import {
+  Input,
+  Button,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import FlightIcon from "@mui/icons-material/Flight";
+import HotelIcon from "@mui/icons-material/Hotel";
+import CloseIcon from "@mui/icons-material/Close";
+import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  setDepartureDate,
+  setReturnDate,
+  clearDepartureDate,
+  clearReturnDate,
+  setIsSelectingDepartDate,
+} from "../Slices/dateStore";
 import { showCalendar } from "../Slices/calendarVisible";
-import {  setDepartureDate,
-    setReturnDate,
-    clearDepartureDate,
-    clearReturnDate,
-    setIsSelectingDepartDate,
-  } from '../Slices/dateStore';
-
-
-
-
-
-
+import CalandarLayout from "../CalendarLayout";
 
 const HomeSearchbar = () => {
+  const dispatch = useDispatch();
+  const departureDate = useSelector((state) => state.dates.departureDate);
+  const returnDate = useSelector((state) => state.dates.returnDate);
 
-    
-    const dispatch = useDispatch();
-    const departureDate = useSelector((state) => state.dates.departureDate);
-    const returnDate = useSelector((state) => state.dates.returnDate);
-    const isSelectingDepartDate = useSelector((state) => state.dates.isSelectingDepartDate);
+  
+  const [showCrossIcons, setShowCrossIcons] = useState(false);
 
-    useEffect(() => {
-      const currentDate = new Date();
-      const departure = new Date(currentDate.setDate(currentDate.getDate() + 7)); 
-      dispatch(setDepartureDate(departure.toDateString()));
+  useEffect(() => {
+    const currentDate = new Date();
+    const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
+    dispatch(setDepartureDate(departure.toDateString()));
 
-      const returnD = new Date(departure);
-      returnD.setDate(departure.getDate() + 7); 
-      dispatch(setReturnDate(returnD.toDateString()));
+    const returnD = new Date(departure);
+    returnD.setDate(departure.getDate() + 7);
+    dispatch(setReturnDate(returnD.toDateString()));
+
+    setShowCrossIcons(false); 
   }, [dispatch]);
 
+  const formattedDepartureDate = departureDate
+    ? format(new Date(departureDate), "dd/MM/yyyy")
+    : "";
+  const formattedReturnDate = returnDate
+    ? format(new Date(returnDate), "dd/MM/yyyy")
+    : "";
 
-    const formattedDepartureDate = departureDate 
-  ? format(new Date(departureDate), 'dd/MM/yyyy') 
-  : ''; 
+  
+  const handleInputFocus = () => {
+    setShowCrossIcons(true);
+  };
 
-const formattedReturnDate = returnDate 
-  ? format(new Date(returnDate), 'dd/MM/yyyy') 
-  : ''; 
+  
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      if (!departureDate && !returnDate) {
+        setShowCrossIcons(false);
+      }
+    }, 150);
+  };
 
+  
+  const handleClearDeparture = () => {
+    dispatch(clearDepartureDate());
+  };
 
-    const handleClearDeparture = () => {
-        dispatch(clearDepartureDate());
-      };
-    
-      const handleClearReturn = () => {
-        dispatch(clearReturnDate());
-      };
-    
-      const handleClickDepart = () => {
-        dispatch(setIsSelectingDepartDate(true));
-        handleClick(); 
-      };
+  
+  const handleClearReturn = () => {
+    dispatch(clearReturnDate());
+  };
 
-      const handleClickReturn = () => {
-        console.log('Clicking Return. Current Departure Date:', departureDate); 
-        if (!departureDate) {
-          
-          dispatch(setIsSelectingDepartDate(true));
-        } else {
-          
-          dispatch(setIsSelectingDepartDate(false));
-        }
-        handleClick();  
-      };
-    
+  
+  const handleClickDepart = () => {
+    setShowCrossIcons(true);
+    dispatch(setIsSelectingDepartDate(true));
+    dispatch(showCalendar());
+  };
+
+  const handleClickReturn = () => {
+    setShowCrossIcons(true);
+    dispatch(setIsSelectingDepartDate(false));
+    dispatch(showCalendar());
+  };
+
+  return (
+    <Container>
       
-    
-      const handleClick = () => {
-        dispatch(showCalendar());
-      };
-    
+      <Box sx={{ display: "flex", gap: 2, marginTop: "-320px" }}>
+        <Button
+          variant="contained"
+          startIcon={<FlightIcon />}
+          sx={{
+            backgroundColor: "#05203c",
+            color: "white",
+            textTransform: "none",
+            borderRadius: "75px",
+          }}
+        >
+          Flights
+        </Button>
+        <Button
+          variant="contained"
+          startIcon={<HotelIcon />}
+          sx={{
+            backgroundColor: "#05203c",
+            color: "white",
+            textTransform: "none",
+            borderRadius: "75px",
+          }}
+        >
+          Hotels
+        </Button>
+      </Box>
+
       
+      <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
+        <Typography sx={{ fontSize: "30px", color: "white", fontWeight: "bold" }}>
+          Millions of cheap flights. One simple search.
+        </Typography>
+      </Box>
 
-return (
-        <>
-        <Box sx={{display: "flex",
-            alignItems:"center",
-            mt:-31,
-            mx:4
-        }}>
-            <Button 
-              sx={{
-                backgroundColor:"primary.dark",
-                color:"text.primary",
-                textTransform:"none",
-                '&:hover': {
-                    backgroundColor:"rgba(21,70,121,255)"
-                },
-                border: "0.5px solid white",
-                borderRadius: "75px",
-                mx: 0.5
+      
+      <Box sx={{ display: "flex", gap: 1 }}>
+        <Input placeholder="From" disableUnderline sx={inputStyle} />
+        <Input placeholder="To" disableUnderline sx={inputStyle} />
 
-               }} 
-              variant="contained" startIcon={<FlightIcon />}>
-                Flights
-              </Button>
-              <Button 
-              sx={{
-                backgroundColor:"primary.dark",
-                color:"text.primary",
-                textTransform:"none",
-                '&:hover': {
-                    backgroundColor:"primary.light"
-                },
-                border: "0.5px solid white",
-                borderRadius: "75px"
-
-              }} 
-              variant="contained" 
-              startIcon={<HotelIcon />}>
-                Hotels
-            </Button>
-            </Box>
-            <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '20px',
-        
-        
-        
-      }}
-    >
-        <Input
-        placeholder="From"
-        disableUnderline 
-        sx={{
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor:"background.paper",
-            color:"black",
-            marginRight:"5px",
-            padding: '20px 15px',
-            '&:focus': {
-                borderColor: 'primary.main',
-            },
-            }}
-        />
-
-<Input
-        placeholder="To"
-        disableUnderline 
-        sx={{
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor:"background.paper",
-            color:"black",
-            marginRight:"5px",
-            padding: '20px 15px',
-            '&:focus': {
-                borderColor: 'primary.main',
-            },
-            }}
-        />
-      <Box>
-        <Input
-        placeholder="Depart Add date"
-        
-        disableUnderline
-        sx={{
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor:"background.paper",
-            color:"black",
-            marginRight:"5px",
-            padding: '20px 15px',
-            '&:focus': {
-                borderColor: 'primary.main',
-            },
-            }}
+      
+        <Box className="date-input" sx={{ position: "relative" }}>
+          <Input
+            placeholder="Depart Add date"
+            disableUnderline
             value={formattedDepartureDate}
-        onClick = {handleClickDepart}
-      
-        endAdornment={
-          departureDate ? (
-            <button onClick={handleClearDeparture}>✕</button>
-          ) : null
-        }
+            onClick={handleClickDepart}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            sx={inputStyle}
+          />
+          {showCrossIcons && departureDate && (
+            <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
+          )}
+        </Box>
 
-    
-            
-    
-        />
-<Input
-        placeholder="Return Add date"
-        disableUnderline 
-        sx={{
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor:"background.paper",
-            color:"black",
-            marginRight:"5px",
-            padding: '20px 15px',
-            '&:focus': {
-                borderColor: 'primary.main',
-            },
-            }}
+        
+        <Box className="date-input" sx={{ position: "relative" }}>
+          <Input
+            placeholder="Return Add date"
+            disableUnderline
             value={formattedReturnDate}
-            onClick = {handleClickReturn}
-          
-          
-            endAdornment={
-              returnDate ? (
-                <button onClick={handleClearReturn}>✕</button>
-              ) : null
-            }
-            />
-
-
-     </Box>
+            onClick={handleClickReturn}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            sx={inputStyle}
+          />
+          {showCrossIcons && returnDate && (
+            <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
+          )}
+        </Box>
 
         <Input
-        placeholder="Travellers and cabin class"
-        disableUnderline 
-        sx={{
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            backgroundColor:"background.paper",
-            color:"black",
-            marginRight:"5px",
-            padding: '20px 15px',
-            '&:focus': {
-                borderColor: 'primary.main',
-            },
-            }}
-
-          
-            
+          placeholder="Travellers and cabin class"
+          disableUnderline
+          sx={inputStyle}
         />
-
-
-        
-
-        
-
-
+        <Button variant="contained" sx={searchButtonStyle}>
+          Search
+        </Button>
+      </Box>
 
       
-      <Button variant="contained" color="primary">
-        Search
-      </Button>
-    </Box>
-            </>
-            
-            
+      <CalandarLayout />
+    </Container>
+  );
+};
 
-          
+const inputStyle = {
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+  backgroundColor: "background.paper",
+  padding: "20px 15px",
+  color: "black",
+};
 
+const crossIconStyle = {
+  position: "absolute",
+  right: "5px",
+  top: "50%",
+  transform: "translateY(-50%)",
+  width: "25px",
+  height: "25px",
+  backgroundColor: "#f0f0f0",
+  borderRadius: "50%",
+  color: "#555",
+  cursor: "pointer",
+};
 
+const searchButtonStyle = {
+  backgroundColor: "#0062e3",
+  padding: "25px 20px",
+  borderRadius: "10px",
+  "&:hover": { backgroundColor: "#024daf" },
+};
 
-    )
-}
+export default HomeSearchbar; 
 
-
-export default HomeSearchbar;

@@ -15,19 +15,79 @@ import { setCurrentMonth, updateMonth } from "./Slices/singleMonthSlice";
 import { styled } from '@mui/material/styles';
 
 const CustomStaticDatePicker = styled(StaticDatePicker)({
-  '& .MuiPickersCalendarHeader-root': {
-    display: 'none',
+
+'& .MuiPickersCalendarHeader-root': {
+    display: 'none', 
   },
   '& .MuiDayCalendar-weekDayLabel': {
-    color: "black"
+    color: 'black',
+    width: '14.28%', 
+    textAlign: 'center',
+    margin: 0,
+    fontSize: '12px',
+    marginBottom:"-190px",
+    
+  },
+  '& .MuiDateCalendar-root': {
+    width: '350px',
+    height: '480px',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden', 
+  },
+  '& .MuiPickersLayout-contentWrapper': {
+    display: 'flex',
+    flexDirection: 'column',
+    flex: '1 1 auto',
+    height: '100%',
+    overflow: 'hidden', 
+    backgroundColor:"white",
+    
+  },
+  '& .MuiPickersFadeTransitionGroup-root': {
+    height: '100%', 
+    overflow: 'hidden',
+  },
+  '& .MuiDayCalendar-root': {
+    flex: '1 1 auto',
+    display: 'grid',
+    gridTemplateRows: 'repeat(6, 1fr)', 
+    
+    justifyContent: 'stretch',
+    alignItems: 'stretch',
+    height: '100%',
+    margin: 0,
+    padding: 0,
+    overflow: 'hidden',
+    marginTop:"-190px"
+  },
+  '& .MuiDayCalendar-weekContainer': {
+    display: 'flex',
+    flex: '1 1 auto',
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
   },
   '& .MuiPickersDay-root': {
-    color: "black"
+    flex: '1 1 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 0, 
+    padding: '10px',
+    fontSize: '15px',
+    height: '100%',
+    color: 'black',
+    
   },
   '& .MuiPickersDay-root.Mui-selected': {
     backgroundColor: 'primary.main',
     color: '#ffffff',
   },
+
+  '& .MuiBox-root css-7fiw7d': {
+    zIndex:9999
+  }
+  
 });
 
 const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }) => {
@@ -121,15 +181,21 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
         position: 'absolute',
         top: `${calendarPosition.top}px`,
         left: `${calendarPosition.left}px`,
-        maxWidth: "300px",
-        width: "100%",
-        backgroundColor: "#ffffff",
+        width: "350px",
+        height:"400px",
+        Zindex:9999,
+        backgroundColor: "red",
         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         borderRadius: "8px",
         padding: "16px",
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        overflow: "visible",
+
+        
+        
+        
         
       }}
     >
@@ -141,7 +207,8 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
           paddingBottom: "8px",
           borderBottom: "1px solid #e0e0e0",
           width: '100%',
-          boxSizing: 'border-box'
+          boxSizing: 'border-box',
+          
         }}
       >
         <IconButton onClick={() => handleMonthChange(-1)} disabled={isPreviousMonthDisabled}>
@@ -172,7 +239,7 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
           }}
         >
           {months.map((month, index) => (
-            <MenuItem key={index} value={month}>{month}</MenuItem>
+            <MenuItem sx={{color:"black"}} key={index} value={month}>{month}</MenuItem>
           ))}
         </Select>
         <IconButton onClick={() => handleMonthChange(1)} disabled={maxForward}>
@@ -192,11 +259,20 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
           actionBar: {
             actions: ['cancel']
           },
+         day : {
+          dayOfWeekFormatter: (day) => {
+            const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            return weekDays[new Date(day).getDay()];
+          },
+            
+          },
         }}
         renderInput={(params) => null}
+        sx={{color:"pink"}}
+       
       />
     </Box>
   );
 };
 
-export default ReusableDatePicker;
+export default ReusableDatePicker; 

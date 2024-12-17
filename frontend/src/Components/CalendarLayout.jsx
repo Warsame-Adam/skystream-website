@@ -1,14 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import {Input, AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box,Grid, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
+import { Input, AppBar, Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, Grid, TextField, ClickAwayListener  } from '@mui/material';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
-
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import { setFirstMonth, setSecondMonth, updateMonths} from "./Slices/monthsSlice.js";
+import { setFirstMonth, setSecondMonth, updateMonths } from "./Slices/monthsSlice.js";
 import { hideCalendar } from "./Slices/calendarVisible.js";
-import {setDepartureDate, setReturnDate,setIsSelectingDepartDate} from "./Slices/dateStore.js"
+import { setDepartureDate, setReturnDate, setIsSelectingDepartDate } from "./Slices/dateStore.js"
+
 
 
 
@@ -16,268 +15,254 @@ import {setDepartureDate, setReturnDate,setIsSelectingDepartDate} from "./Slices
 
 
 const CustomStaticDatePicker = styled(StaticDatePicker)({
-    
-    '& .MuiPickersCalendarHeader-root': {
-        display: 'none',
-    },
 
-    '& .MuiDayCalendar-weekDayLabel': {
-        color:"black"
-    },
-    '& .MuiPickersDay-root': {
-        color:"black"
-    },
-    '& .MuiPickersDay-root.Mui-selected': {
-        backgroundColor: 'primary.main', 
-        color: '#ffffff', 
-    },
+'& .MuiDateCalendar-root': {
+  minHeight: '420px', 
+  height: 'auto',
+  overflow: 'visible',
+},
 
-    
+
+'& .MuiPickersSlideTransition-root': {
+  height: '100%',
+  overflow: 'visible',
+},
+
+
+'& .MuiDayCalendar-weekDayLabel': {
+  height: '44px', 
+  width: "50px", 
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '14px', 
+  fontWeight: '500',
+  color: 'black',
+  margin: '0', 
+},
+
+
+'& .MuiDayCalendar-weekContainer': {
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-around', 
+  marginBottom: '20px', 
+  gap: '8px',
+},
+
+
+'& .MuiPickersDay-root': {
+  height: '44px', 
+  width: '38px', 
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '14px', 
+  borderRadius: '50%',
+  fontWeight: 'bold',
+  color: 'black',
+  margin: '0',
+  
+},
+
+
+'& .MuiPickersCalendarHeader-root': {
+  display: 'none',
+},
+
 
 
   
+
+  
+
+  
+  
+  
+  
+  
+
+
+
 });
 
 
 
-
-
-
-
-const getNext12Months = () => {
-    const months = [];
-    const currentDate = new Date()
-
-    for (let i = 0; i < 12; i++) {
-        const date = new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 1);
-        months.push({
-          month: date.toLocaleString('default', { month: 'long' }),
-          year: date.getFullYear()
-        });
-      }
-    
-      return months;
-
-
-    
-}
-
-
-
-
-
-
 const CalandarLayout = () => {
-
-  const firstMonth = useSelector((state)=> state.months.firstMonth)
-  const secondMonth = useSelector((state)=> state.months.secondMonth)
-  const isCalendarVisible = useSelector((state) => state.visible.isCalendarVisible)
+  const firstMonth = useSelector((state) => state.months.firstMonth);
+  const secondMonth = useSelector((state) => state.months.secondMonth);
+  const isCalendarVisible = useSelector((state) => state.visible.isCalendarVisible);
   const isSelectingDepartDate = useSelector((state) => state.dates.isSelectingDepartDate);
   const departureDate = useSelector((state) => state.dates.departureDate);
-const returnDate = useSelector((state) => state.dates.returnDate);
+  const returnDate = useSelector((state) => state.dates.returnDate);
 
-const departureDateObjectMemo = useMemo(() => departureDate ? new Date(departureDate) : null, [departureDate]);
-const returnDateObjectMemo = useMemo(() => returnDate ? new Date(returnDate) : null, [returnDate]);
-
-console.log("Rendering DatePicker with departureDateObject:", departureDateObjectMemo);
-console.log("Rendering DatePicker with returnDateObject:", returnDateObjectMemo);
-
-
-
-
+  
 
   const dispatch = useDispatch()
-  
-
- 
-
-  
-
   const calendarRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-        dispatch(hideCalendar());
+      
+      if (calendarRef.current) {
+        
+        
+        const isClickInsideCalendar = calendarRef.current.contains(event.target);
+        const isArrowButton = event.target.closest('.MuiIconButton-root');
+        const isDateElement = event.target.closest('.MuiPickersDay-root');
+        
+      
+        if (!isClickInsideCalendar && !isArrowButton && !isDateElement) {
+          if (isCalendarVisible) {
+            dispatch(hideCalendar());
+          }
+        }
       }
     };
 
-    if (isCalendarVisible) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [dispatch, isCalendarVisible]);
+  }, [isCalendarVisible, dispatch]);
 
 
+  
+  
 
-  if (!isCalendarVisible) {
-    return null;
-  };
-
+  
+  
   if (!firstMonth || !secondMonth) {
-    return <div>Loading...</div>; 
-}
+    return <div>Loading...</div>;
+  }
 
- const months = getNext12Months();
-
-  
 
   
+
   const handleMonthChange = (monthChange) => {
-        dispatch(updateMonths({ monthChange }));
-    };
-
-    const handleDateChange = (date) => {
-      const selectedTimestamp = date.getTime();  
-      const selectedMonth = date.getMonth();  
-      const selectedYear = date.getFullYear();  
-  
-      
-      console.log("Raw Selected Date:", date);
-      console.log("Timestamp:", selectedTimestamp);
-      console.log("Month:", selectedMonth);
-      console.log("Year:", selectedYear);
-  
-      if (departureDate && returnDate) {
-          console.log('Setting Departure Date:', selectedTimestamp);
-  
-          dispatch(setDepartureDate(selectedTimestamp));
-          dispatch(setReturnDate(null));
-          
-  
-          dispatch(setIsSelectingDepartDate(false));
-      } else if (isSelectingDepartDate) {
-          console.log('Setting Departure Date:', selectedTimestamp);
-  
-          dispatch(setDepartureDate(selectedTimestamp));
-          dispatch(setIsSelectingDepartDate(false));
-      } else {
-          console.log('Setting Return Date:', selectedTimestamp);
-  
-          dispatch(setReturnDate(selectedTimestamp));
-          dispatch(setIsSelectingDepartDate(true));
-      }
-  
-      console.log('Selected Date:', date);
+    dispatch(updateMonths({ monthChange }));
   };
 
-   
-    
+  const handleDateChange = (date) => {
+    const selectedTimestamp = date.getTime();
   
-    
-
-
-
-    
-    
-
-    const isPreviousMonthDisabled = firstMonth.getMonth() === new Date().getFullYear() && firstMonth.getMonth() < new Date().getMonth()
-
-    const maxForward = secondMonth.getFullYear() === new Date().getFullYear() + 1 && secondMonth.getMonth() === new Date().getMonth()
-
-    
-
-
-
-    return (
-      <Box ref={calendarRef} sx={{ padding: 2, maxWidth: '800px', margin: 'auto' }}>
-      <Box sx={{ display:"flex", justifyContent:"space-between", alignItems:"center", my:"2", marginRight:"20px"}}>
-        <Button
-          
-          
-          sx={{
-            backgroundColor: '#1976d2',
-            color: '#1976d2',
-          }}
-        >
-          Specific dates
-        </Button>
-
-      </Box>
-
+    if (departureDate && returnDate) {
       
-        <Box>
-          <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", mb:2}}>
-            <IconButton
-            disabled={isPreviousMonthDisabled}
-             onClick={() => handleMonthChange(-1)}>
-              <ArrowBack />
-            </IconButton>
+      dispatch(setDepartureDate(selectedTimestamp));
+      dispatch(setReturnDate(null));
+      dispatch(setIsSelectingDepartDate(false));
+    } else if (isSelectingDepartDate) {
+      
+      dispatch(setDepartureDate(selectedTimestamp));
+      dispatch(setIsSelectingDepartDate(false));
+    } else {
+      
+      if (departureDate && selectedTimestamp < departureDate) {
+       
+      
+        dispatch(setDepartureDate(selectedTimestamp));
+       
+      } else {
+        
+        dispatch(setReturnDate(selectedTimestamp));
+        dispatch(setIsSelectingDepartDate(true));
+      }
+    }
+  };
+  
 
-            <IconButton onClick={() => handleMonthChange(1)} disabled={maxForward}>
-              <ArrowForward />
-            </IconButton>
-          </Box>
-          <Grid container spacing={3}>
-            {/* Render two months side by side */}
-            <Grid item xs={6}>
-              <Box>
-                <Typography variant="h6">
-                  {firstMonth.toLocaleString('default', {month:"long"})}
-                  </Typography>
-              </Box>
-              <CustomStaticDatePicker
-  disableHighlightToday={true}
-  displayStaticWrapperAs="desktop"
-  value={firstMonth} // Set value to firstMonth state
-  onChange={(date) => { 
-    console.log("Date selected from DatePicker:", date);
-    handleDateChange(date);
-  }}
-  minDate={new Date()}
-  renderInput={(params) => null}
-/>
-            </Grid>
-            <Grid item xs={6}>
+  const isPreviousMonthDisabled = firstMonth.getMonth() === new Date().getFullYear() && firstMonth.getMonth() < new Date().getMonth();
+  const maxForward = secondMonth.getFullYear() === new Date().getFullYear() + 1 && secondMonth.getMonth() === new Date().getMonth();
+
+  return (
+
+    <Box
+      ref={calendarRef}
+      sx={{
+        position: 'absolute',
+        top: '345px',
+        left: '575px',
+        backgroundColor: 'white',
+        zIndex: 9999,
+        display: isCalendarVisible ? 'block' : 'none',
+        padding: 4,
+        width: '810px',
+        height:"550px",
+        margin: 'auto',
+        boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+        borderRadius: "8px"
+      }}
+    >
+
+
+      <Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+          <IconButton
+            disabled={isPreviousMonthDisabled}
+            onClick={() => handleMonthChange(-1)}
+          >
+            <ArrowBack />
+          </IconButton>
+
+          <IconButton onClick={() => handleMonthChange(1)} disabled={maxForward}>
+            <ArrowForward />
+          </IconButton>
+        </Box>
+        <Grid container spacing={3} alignItems="stretch" justifyContent="center">
+          <Grid item xs={6} sx={{ height: 'auto', minHeight: '500px' }}>
             <Box>
-                <Typography variant="h6">
-                  {secondMonth.toLocaleString('default', {month:"long"})}
-                  </Typography>
+              <Typography variant="h6">
+                {firstMonth.toLocaleString('default', { month: "long" })}
+              </Typography>
             </Box>
             <CustomStaticDatePicker
-  disableHighlightToday={true}
-  displayStaticWrapperAs="desktop"
-  value={secondMonth} // Set value to secondMonth state
-  onChange={(date) => { 
-    console.log("Date selected from DatePicker:", date);
-    handleDateChange(date);
-  }}
-  minDate={new Date()}
-  renderInput={(params) => null}
-/>
-            </Grid>
+              disableHighlightToday={true}
+              displayStaticWrapperAs="desktop"
+              value={firstMonth}
+              onChange={(date) => {
+                handleDateChange(date);
+              }}
+              minDate={new Date()}
+              renderInput={(params) => null}
+              slotProps={{
+                calendar: {
+                  sx: {
+                    height: 'auto', 
+                    minHeight: '380px', 
+                  },
+                },
+              }}
+            
+             
+             
+            
+
+            
+            />
           </Grid>
-        </Box>
-
-        </Box>
-      ) 
-
-  
-
-
-  
-
-
-
-
-
-  
-      
-  
-  
+          <Grid item xs={6} sx={{ height: 'auto', minHeight: '500px' }}>
+            <Box>
+              <Typography variant="h6">
+                {secondMonth.toLocaleString('default', { month: "long" })}
+              </Typography>
+            </Box>
+            <CustomStaticDatePicker
+              disableHighlightToday={false}
+              displayStaticWrapperAs="desktop"
+              value={secondMonth}
+              onChange={(date) => {
+                handleDateChange(date);
+              }}
+              minDate={new Date()}
+              renderInput={(params) => null}
+              sx={{}}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
+    
+  )
 }
 
-    
-
-              
-
-
-
-                
-                
-                
-                        
-      export default CalandarLayout;
+export default CalandarLayout;

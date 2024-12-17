@@ -170,7 +170,7 @@ const FlightLocations = () => {
 
     return (
         
-            <Container sx={{ transform: 'translateX(-29px)',}}>
+            <Container sx={{ transform: 'translateX(-29px)', }}>
                 <Box sx={{display:"flex", justifyContent:"flex-start", alignItems:"center", marginTop:"40px"}}>
                     <Typography>
                         Home
@@ -181,7 +181,7 @@ const FlightLocations = () => {
                     </Typography>
                     </Box>
 
-                    <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"40px", marginBottom:"90px" }}>
+                    <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", marginTop:"40px", marginBottom:"90px",  }}>
                         <FlightIcon/>
                         <Typography sx={{fontWeight:"bold", fontSize:"13px"}}>
                         Explore the best flight deals from anywhere, to <br /> everywhere, then book with no fees

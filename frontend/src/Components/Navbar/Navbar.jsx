@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
+import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, TextField, MenuItem, Checkbox, FormControlLabel, Container } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import LanguageIcon from '@mui/icons-material/Language';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -56,9 +56,9 @@ const Navbar = ({ open, onClose}) =>{
     ];
     const iconButtonStyles = {
         color: "white",
-        mx: 2,
+        mx: 0.3,
         width: 'auto',        
-        height: '40px',
+        height: '35px',
         borderRadius:"10px",       
         '&:hover': {
           
@@ -76,8 +76,10 @@ const Navbar = ({ open, onClose}) =>{
 
 
     return (
-        <AppBar position="static" sx={{padding:"0", backgroundColor:"primary.dark"}}>
-        <Toolbar disableGutters sx={{ display:"flex", justifyContent: 'space-between', alignItems: 'flex-start', height: "300px", mx:3, padding: "25px 16px" }}>
+      
+        <AppBar position="static" sx={{padding:"0", backgroundColor:"#05203c"}}>
+        <Toolbar disableGutters sx={{display:"flex", justifyContent: 'space-between', alignItems: 'flex-start', height: "390px", mx:3, padding: "25px 330px" }}>
+          
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
               <Avatar src={companyLogo} sx={{ mx: 2 }} />
@@ -86,7 +88,7 @@ const Navbar = ({ open, onClose}) =>{
               SkyStream
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', }}>
             {links.slice(0,2).map((item) => (
                 <IconButton key={item.key} sx={iconButtonStyles} onClick={item.key === "language"? handleOpenLanguageMenu: null}>
                     {item.icon}
@@ -103,8 +105,8 @@ const Navbar = ({ open, onClose}) =>{
                 )}
             <IconButton sx={iconButtonStyles}>
                 <PersonIcon />
-                <Typography variant="body1" sx={{mx:2, color:"background.paper"}}>
-                    Login
+                <Typography variant="body1" sx={{mx:0.2, color:"background.paper"}}>
+                    Log in
                 </Typography>
             </IconButton>
             {links.slice(3).map((item)=>(
@@ -152,9 +154,10 @@ const Navbar = ({ open, onClose}) =>{
             </Menu>
             </Box>
             
-
+      
         </Toolbar>
       </AppBar>
+      
     )
 }
 

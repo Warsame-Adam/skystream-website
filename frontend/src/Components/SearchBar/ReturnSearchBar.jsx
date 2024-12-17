@@ -55,12 +55,15 @@ const ReturnSearchBar = () => {
     const handlePositionCalendar = () => {
         if (activeInput === "depart" && departInputRef.current) {
             const { top, left, height } = departInputRef.current.getBoundingClientRect();
-            setCalendarPosition({ top: top + height - 200, left: left - 400 });
+            setCalendarPosition({ top: top + height - 300, left: left - 420 });
         } else if (activeInput === "return" && returnInputRef.current) {
             const { top, left, height } = returnInputRef.current.getBoundingClientRect();
-            setCalendarPosition({ top: top + height - 200, left: left - 400 });
+            setCalendarPosition({ top: top + height - 300, left: left - 340 });
         }
-    };
+    }; 
+    
+    
+    
 
     useEffect(() => {
         handlePositionCalendar();
@@ -123,4 +126,4 @@ const inputStyle = {
     },
 };
 
-export default ReturnSearchBar;
+export default ReturnSearchBar; 
