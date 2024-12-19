@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AppBar,Menu, Toolbar, Input, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel, RadioGroup, Radio } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Hotelimg from "../../Components/Assets/HotelHeroimg.jpg";
 import ArrowForwardOutlinedIcon from '@mui/icons-material/ArrowForwardOutlined';
+import { useDispatch, useSelector } from "react-redux";
+import {
+    setDepartureDate,
+    setReturnDate,
+    clearDepartureDate,
+    clearReturnDate,
+    setIsSelectingDepartDate,
+  } from "../Slices/dateStore";
+import { format } from "date-fns";
 
 
 const inputStyle = {
@@ -25,6 +34,31 @@ const inputStyle = {
 
 
 const HeroHotel = () => {
+
+    const dispatch = useDispatch();
+  const departureDate = useSelector((state) => state.dates.departureDate);
+  const returnDate = useSelector((state) => state.dates.returnDate);
+
+
+
+    useEffect(() => {
+        const currentDate = new Date();
+        const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
+        dispatch(setDepartureDate(departure.toDateString()));
+    
+        const returnD = new Date(departure);
+        returnD.setDate(departure.getDate() + 7);
+        dispatch(setReturnDate(returnD.toDateString()));
+    
+        
+      }, [dispatch]);
+
+      const formattedDepartureDate = departureDate
+          ? format(new Date(departureDate), "dd/MM/yyyy")
+          : "";
+        const formattedReturnDate = returnDate
+          ? format(new Date(returnDate), "dd/MM/yyyy")
+          : "";
 
 
     return (
@@ -71,8 +105,8 @@ const HeroHotel = () => {
 
         <Box sx={{display:"flex", alignItems:"center"}}>
             <Input placeholder="Enter destination or hotel name" disableUnderline sx={{ ...inputStyle,width:"590px", height:"55px", borderRadius: '8px 0 0 8px',}} />
-            <Input placeholder="Date" disableUnderline sx={{ ...inputStyle, width:"148px", height:"55px" }} />
-            <Input placeholder="Date" disableUnderline sx={{ ...inputStyle, width:"148px", height:"55px" }} />
+            <Input value={formattedDepartureDate} placeholder="Date" disableUnderline sx={{ ...inputStyle, width:"148px", height:"55px" }} />
+            <Input value={formattedReturnDate} placeholder="Date" disableUnderline sx={{ ...inputStyle, width:"148px", height:"55px" }} />
             <Input placeholder="Rooms" disableUnderline sx={{ ...inputStyle, width:"300px", height:"55px",borderRadius: '0 8px 8px 0', }} />
 
         </Box>

@@ -48,7 +48,7 @@ const  FlightFAQ = () => {
             <Box sx={{width:"65%"}}>
                 {faqData.map((faq, index) => (
                     <Box>
-                        <Box  onClick={() => handleToggleFAQ(index)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingBottom: '5px' }}>
+                        <Box  onClick={() => handleToggleFAQ(index)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingBottom: '5px', cursor:"pointer" }}>
                             <Typography
                             
                             sx={{

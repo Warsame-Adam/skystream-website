@@ -25,22 +25,23 @@ const faqData = [
     };
   
     return (
-        <Container sx={{marginTop:4}}>
-            <Typography variant="h6" sx={{fontWeight:"bold", paddingBottom:"10px"}}>
-                Frequently asked questions
+        <Container sx={{marginTop:3, transform:"translateX(-45px)"}}>
+            <Typography variant="h6" sx={{fontWeight:"bold", paddingBottom:"20px"}}>
+                Booking flights with SkyStream
             </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{width:"1250px"}}>
       {faqData.map((faq, index) => (
         <Grid item xs={12} md={6} key={index}>
           <Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '5px' }}>
+            <Box onClick={() => handleToggleFAQ(index)} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '5px', cursor:"pointer" }}>
               <Typography
-                variant="subtitle1"
+                
                 sx={{
-                  borderBottom: '0.5px solid grey',
-                  paddingBottom: '5px',
+                  borderBottom: '0.5px solid #c1c7cf',
+                  paddingBottom: '10px',
                   flexGrow: 1,
-                  fontWeight: 'bold'
+                  fontWeight: 'bold',
+                  fontSize:"15px"
 
                 }}
               >
@@ -48,16 +49,16 @@ const faqData = [
               </Typography>
               
               <IconButton
-                onClick={() => handleToggleFAQ(index)}
-                sx={{color:"black", marginLeft:-3.5, transform: visibleFAQs[index] ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }}
+                
+                sx={{color:"black", marginLeft:-3.5, transform: visibleFAQs[index] ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s', }}
               >
-                <ExpandMoreIcon />
+                <ExpandMoreIcon sx={{fontSize:"20px"}} />
               </IconButton>
             </Box>
 
             
             {visibleFAQs[index] && (
-              <Typography variant="subtitle1" sx={{ marginTop: '10px', fontStyle: 'italic'}}>
+              <Typography  sx={{ marginTop: '10px', fontStyle: 'italic', fontSize:"14px"}}>
                 {faq.answer}
               </Typography>
             )}

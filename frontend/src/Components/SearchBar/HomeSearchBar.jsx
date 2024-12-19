@@ -86,34 +86,50 @@ const HomeSearchbar = () => {
   };
 
   return (
-    <Container>
+    <Container sx={{transform:"translateX(-35px)" }}>
+
+<Box sx={{
+                            display: "flex",
+                            marginTop:"-320px",
+                            gap:0.5
+                            
+                            }}>
+                            <Button 
+                            sx={{
+                                fontSize:"13.5px",
+                                backgroundColor:"#05203c",
+                                color:"white",
+                                textTransform:"none",
+                                '&:hover': {
+                                    backgroundColor:"#154679"
+                                },
+                                border: "0.5px solid #6a7b8b",
+                                borderRadius: "75px",
+                                padding:"5px 15px",
+                                mx: 0.5,}} 
+                                variant="contained" startIcon={<FlightIcon sx={{width:"20px", height:"20px"}} />}>
+                                    Flights
+                            </Button>
+                            <Button 
+                            sx={{
+                                fontSize:"13.5px",
+                                backgroundColor:"#05203c",
+                                color:"white",
+                                textTransform:"none",
+                                '&:hover': {
+                                    backgroundColor:"#154679"
+                                },
+                                border: "0.5px solid #6a7b8b",
+                                borderRadius: "75px",
+                                padding:"5px 15px",
+                            }} 
+                            variant="contained" 
+                            startIcon={<HotelIcon sx={{width:"17px", height:"20px"}} />}>
+                                Hotels
+                            </Button>
+                        </Box>
       
-      <Box sx={{ display: "flex", gap: 2, marginTop: "-320px" }}>
-        <Button
-          variant="contained"
-          startIcon={<FlightIcon />}
-          sx={{
-            backgroundColor: "#05203c",
-            color: "white",
-            textTransform: "none",
-            borderRadius: "75px",
-          }}
-        >
-          Flights
-        </Button>
-        <Button
-          variant="contained"
-          startIcon={<HotelIcon />}
-          sx={{
-            backgroundColor: "#05203c",
-            color: "white",
-            textTransform: "none",
-            borderRadius: "75px",
-          }}
-        >
-          Hotels
-        </Button>
-      </Box>
+
 
       
       <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
@@ -123,9 +139,9 @@ const HomeSearchbar = () => {
       </Box>
 
       
-      <Box sx={{ display: "flex", gap: 1 }}>
-        <Input placeholder="From" disableUnderline sx={inputStyle} />
-        <Input placeholder="To" disableUnderline sx={inputStyle} />
+      <Box sx={{ display: "flex", justifyContent:"flex-start", gap: 0.5,  }}>
+        <Input placeholder="From" disableUnderline sx={{...inputStyle, borderRadius:"10px 0px 0px 10px", width:"242px",}} />
+        <Input placeholder="To" disableUnderline sx={{...inputStyle, width:"242px" }} />
 
       
         <Box className="date-input" sx={{ position: "relative" }}>
@@ -136,7 +152,7 @@ const HomeSearchbar = () => {
             onClick={handleClickDepart}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
-            sx={inputStyle}
+            sx={{...inputStyle, width:"210px"}}
           />
           {showCrossIcons && departureDate && (
             <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
@@ -152,7 +168,7 @@ const HomeSearchbar = () => {
             onClick={handleClickReturn}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
-            sx={inputStyle}
+            sx={{...inputStyle, width:"210px"}}
           />
           {showCrossIcons && returnDate && (
             <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
@@ -162,9 +178,9 @@ const HomeSearchbar = () => {
         <Input
           placeholder="Travellers and cabin class"
           disableUnderline
-          sx={inputStyle}
+          sx={{...inputStyle, borderRadius:"0px 10px 10px 0px", marginRight:"8px", width:"210px"}}
         />
-        <Button variant="contained" sx={searchButtonStyle}>
+        <Button variant="contained" sx={{...searchButtonStyle, textTransform:"none"}}>
           Search
         </Button>
       </Box>
@@ -177,10 +193,13 @@ const HomeSearchbar = () => {
 
 const inputStyle = {
   border: "1px solid #ccc",
-  borderRadius: "4px",
+  
   backgroundColor: "background.paper",
   padding: "20px 15px",
   color: "black",
+  cursor:"pointer",
+  
+  flex: "1 0 auto",
 };
 
 const crossIconStyle = {
@@ -201,6 +220,7 @@ const searchButtonStyle = {
   padding: "25px 20px",
   borderRadius: "10px",
   "&:hover": { backgroundColor: "#024daf" },
+  width:"70px"
 };
 
 export default HomeSearchbar; 

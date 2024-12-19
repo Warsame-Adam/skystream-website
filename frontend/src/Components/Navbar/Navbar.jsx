@@ -77,8 +77,8 @@ const Navbar = ({ open, onClose}) =>{
 
     return (
       
-        <AppBar position="static" sx={{padding:"0", backgroundColor:"#05203c"}}>
-        <Toolbar disableGutters sx={{display:"flex", justifyContent: 'space-between', alignItems: 'flex-start', height: "390px", mx:3, padding: "25px 330px" }}>
+        <AppBar position="static" sx={{padding:"0", backgroundColor:"#05203c",}}>
+        <Toolbar disableGutters sx={{display:"flex", justifyContent: 'space-between', alignItems: 'flex-start', height: "390px", mx:4, padding: "25px 330px", transform:"translateX(-29px)" }}>
           
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton>
@@ -88,7 +88,7 @@ const Navbar = ({ open, onClose}) =>{
               SkyStream
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', }}>
+          <Box sx={{ display: 'flex', alignItems: 'center',}}>
             {links.slice(0,2).map((item) => (
                 <IconButton key={item.key} sx={iconButtonStyles} onClick={item.key === "language"? handleOpenLanguageMenu: null}>
                     {item.icon}
@@ -118,13 +118,13 @@ const Navbar = ({ open, onClose}) =>{
                 
             ))}
             <Menu 
-            sx={{my:0.5, ml:-5, borderRadius:"10px" }} 
+            sx={{my:0.2, ml:-1, borderRadius:"10px" }} 
             id="menu-appbar"
             PaperProps={{
                 sx: {
-                  width: "350px",
+                  width: "280px",
                   maxWidth: "none",
-                  minWidth: "300px",
+                  
                    
                 },
             }}
@@ -135,18 +135,18 @@ const Navbar = ({ open, onClose}) =>{
             keepMounted 
             transformOrigin={{
                 vertical:"top", 
-                horizontal:"left"
+                horizontal:"right"
                 }} 
             anchorEl={anchorElUser} 
             open={Boolean(anchorElUser)} 
             onClose={handleCloseUserMenu}>
                 {pages.map((page)=> (
                     <MenuItem key = {page.label} onClick={handleCloseUserMenu}>
-                        <IconButton sx={{color:"primary.main", mr:1}}>
+                        <IconButton sx={{color:"#0665e3", mr:1}}>
                             {page.icon}
                         </IconButton>
                         
-                        <Typography sx={{color:"black"}}>{page.label}</Typography>
+                        <Typography sx={{color:"black", fontSize:"15px", marginLeft:"5px"}}>{page.label}</Typography>
                     </MenuItem>
 
                 ))}

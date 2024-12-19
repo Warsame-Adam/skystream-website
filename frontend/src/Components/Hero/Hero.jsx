@@ -21,13 +21,14 @@ const Hero = () => {
         padding:"15px 180px 15px 10px",
         borderRadius:"10px",
         flexGrow:1,
-        minWidth: "200px",
+        minWidth: "205px",
+        cursor:"pointer",
         marginLeft:-3.5,
-        marginRight: 6,
-        backgroundColor:"primary.dark",
+        marginRight: 5,
+        backgroundColor:"#05203c",
         color:"white",
         '&:hover': {
-            backgroundColor:"primary.main"
+            backgroundColor:"#054184"
         },
 
 
@@ -35,7 +36,7 @@ const Hero = () => {
 
     return (
         <Container sx={{marginTop:16.5,  display: "flex", justifyContent: "space-evenly", flexDirection:"column", marginBottom:"15px"}}>
-            <Box sx={{display:"flex", alignItems:"center", marginBottom:"30px"}}>
+            <Box sx={{display:"flex", alignItems:"center", marginBottom:"30px", transform:"translate(-13px)"}}>
             <Box sx={{...HeroStyles}}>
                 <IconButton disabled>
                     <TravelExploreIcon sx={{ color: "white" }}/>
@@ -70,21 +71,37 @@ const Hero = () => {
             <Box sx={{position:"relative"}}>
 
             <Box 
-            sx={{ display: 'flex', justifyContent: 'center', padding: '20px 0', width:"100%"}}>
-                <img 
-                src={HeroImage}
-                alt="Hero" 
-                style={{width: "100%" ,maxWidth: '1200px', height: '500px', borderRadius: '10px', objectFit: 'cover' }} />
-                
-            </Box>
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    padding: '20px 0',
+    width: '100%',
+    
+    
+  }}
+>
+  <img 
+    src={HeroImage}
+    alt="Hero" 
+    style={{
+      width: '100%',
+      height: '460px',
+      borderRadius: '10px',
+      objectFit: 'cover',
+      minWidth:"1220px",
+      marginRight:"20px"
+      
+    }}
+  />
+</Box>
 
-            <Box sx={{position:"absolute",  top: "40%", left: "20%", transform: "translate(-40%, -20%)", color: 'white', zIndex:1 }}>
+            <Box sx={{position:"absolute",  top: "30%", left: "15%", transform: "translate(-40%, -20%)", color: 'white', zIndex:1 }}>
                 <Typography sx={{paddingBottom:"25px"}}>
                     <span style={{fontWeight:"bold", fontSize:"45px"}}>Go further, get <br /> closer</span>
                     <br />
                     <span style={{}}>Sneak off for a romantic hotel stay with prices <br/> you'll love. </span>
                 </Typography>
-                <Box sx={{backgroundColor:"white", color:"black", fontWeight:"bold", borderRadius:"5px", padding:"5px 15px", display:"inline-block", '&:hover': {
+                <Box sx={{backgroundColor:"white", color:"black", fontWeight:"bold", cursor:"pointer", borderRadius:"5px", padding:"5px 15px", display:"inline-block", '&:hover': {
                             backgroundColor: 'lightgrey',
                             
                         },}}>
