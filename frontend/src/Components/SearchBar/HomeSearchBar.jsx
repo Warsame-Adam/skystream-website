@@ -5,10 +5,15 @@ import {
   Box,
   Typography,
   Container,
+  Autocomplete,
+  TextField, 
+  Popper
 } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,13 +23,47 @@ import {
   clearReturnDate,
   setIsSelectingDepartDate,
 } from "../Slices/dateStore";
+import { setTo } from "../Slices/flightSearchSlice";
+
 import { showCalendar } from "../Slices/calendarVisible";
 import CalandarLayout from "../CalendarLayout";
+
+
+
+const cities = [
+  { city: "Paris", code: "CDG", country: "France" },
+  { city: "Athens", code: "ATH", country: "Greece" },
+  { city: "Sydney", code: "SYD", country: "Australia" },
+  { city: "Antalya", code: "AYT", country: "Turkey" },
+  { city: "Rome", code: "FCO", country: "Italy" },
+  { city: "Cardiff", code: "CWL", country: "Wales" },
+  { city: "Edinburgh", code: "EDI", country: "Scotland" },
+  { city: "Dublin", code: "DUB", country: "Ireland" },
+  { city: "Dubai", code: "DXB", country: "UAE" },
+  { city: "Amsterdam", code: "AMS", country: "Netherlands" },
+  { city: "Istanbul", code: "IST", country: "Turkey" },
+  { city: "Bangkok", code: "BKK", country: "Thailand" },
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const HomeSearchbar = () => {
   const dispatch = useDispatch();
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
+  
+  const { from, to } = useSelector((state) => state.flightSearch);
 
   
   const [showCrossIcons, setShowCrossIcons] = useState(false);
@@ -140,8 +179,105 @@ const HomeSearchbar = () => {
 
       
       <Box sx={{ display: "flex", justifyContent:"flex-start", gap: 0.5,  }}>
-        <Input placeholder="From" disableUnderline sx={{...inputStyle, borderRadius:"10px 0px 0px 10px", width:"242px",}} />
-        <Input placeholder="To" disableUnderline sx={{...inputStyle, width:"242px" }} />
+        <Input   value={`${from.city} (${from.code}), ${from.country}`} placeholder="From" disableUnderline sx={{...inputStyle, borderRadius:"10px 0px 0px 10px", width:"242px", fontSize:"15px"}} />
+        <Autocomplete
+        freeSolo
+        options={cities}
+        getOptionLabel={(option) =>
+          option && option.city && option.code
+            ? `${option.city} (${option.code})`
+            : ""
+        }
+        filterOptions={(options, state) => {
+          const inputValue = state.inputValue.trim().toLowerCase();
+
+          if (inputValue === "") {
+            return options.slice(0, 5); 
+          }
+
+          return options.filter(
+            (option) =>
+              option.city.toLowerCase().includes(inputValue) ||
+              option.code.toLowerCase().includes(inputValue) ||
+              option.country.toLowerCase().includes(inputValue)
+          );
+        }}
+        onChange={(event, value) => {
+          dispatch(setTo(value)); 
+        }}
+        value={to} 
+        renderOption={(props, option) => (
+          <li
+            {...props}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "12px",
+            }}
+          >
+            <FlightTakeoffIcon style={{ color: "#5a5a5a" }} />
+            <div style={{ width: "100%" }}>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  color: "black",
+                  fontSize: "14px",
+                }}
+              >
+                {option.city} ({option.code})
+              </div>
+              <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
+                {option.country}
+              </div>
+            </div>
+          </li>
+        )}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            InputProps={{
+              ...params.InputProps,
+              disableUnderline: true,
+              style: {
+                border: "1px solid #ccc",
+                backgroundColor: "white",
+                padding: "20px 15px",
+                color: "black",
+                cursor: "pointer",
+                height: "74.5px",
+              },
+            }}
+            placeholder="To"
+            variant="standard"
+            sx={{
+              width: "242px",
+              "& .MuiAutocomplete-input": {
+                padding: "0 !important",
+              },
+            }}
+          />
+        )}
+        PopperComponent={({ style, ...props }) => (
+          <Popper
+            {...props}
+            style={{
+              ...style,
+              width: "400px",
+              maxHeight: "400px",
+              overflowY: "auto", 
+              zIndex: 10,
+            }}
+          />
+        )}
+        sx={{ width: "242px" }}
+      />
+
+
+       
+
+        
+
 
       
         <Box className="date-input" sx={{ position: "relative" }}>

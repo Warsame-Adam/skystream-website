@@ -8,6 +8,7 @@ import hotelSelectionReducer from './Slices/hotelSlice';
 import flightSearchState from "./Slices/FlightSearchUI";
 import ReusableCalendar from "./Slices/ReusableCalendar";
 import singleMonthReducer from "./Slices/singleMonthSlice";
+import flightSearchSlice from "./Slices/flightSearchSlice";
 
 
 
@@ -23,6 +24,7 @@ const store  = configureStore({
         flightSearch: flightSearchState,
         CalendarVisible: ReusableCalendar,
         singleMonth: singleMonthReducer,
+        flightSearch: flightSearchSlice,
 
 
 
