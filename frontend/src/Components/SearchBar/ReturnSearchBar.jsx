@@ -7,7 +7,7 @@ import { calendarShow, setActiveInput } from "../Slices/ReusableCalendar";
 import { setTo } from "../Slices/flightSearchSlice";
 import { format } from 'date-fns';
 import ReusableDatePicker from '../ReusableDatePicker'; 
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import FlightIcon from '@mui/icons-material/Flight';
 
 
 const cities = [
@@ -135,7 +135,7 @@ const ReturnSearchBar = () => {
               padding: "12px",
             }}
           >
-            <FlightTakeoffIcon style={{ color: "#5a5a5a" }} />
+            <FlightIcon style={{ color: "#5a5a5a", transform:"rotate(45deg)" }} />
             <div style={{ width: "100%" }}>
               <div
                 style={{
@@ -218,6 +218,7 @@ const ReturnSearchBar = () => {
                 />
                 <Input placeholder="Travellers and cabin class" disableUnderline sx={{ ...inputStyle, borderRadius: "0px 10px 10px 0px", marginRight: "15px" }} />
                 <Button variant="contained" sx={{ marginLeft: "10px", padding: "25px 20px", backgroundColor: "#0062e3", pointer: "clicker", textTransform: "none", borderRadius: "10px", '&:Hover': { backgroundColor: "#024daf" } }}>Search</Button>
+           
                 {isCalendarVisible && (
                     <ReusableDatePicker
                         departInputRef={departInputRef}

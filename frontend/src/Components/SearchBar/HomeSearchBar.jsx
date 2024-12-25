@@ -12,7 +12,7 @@ import {
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+
 
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
@@ -216,7 +216,7 @@ const HomeSearchbar = () => {
               padding: "12px",
             }}
           >
-            <FlightTakeoffIcon style={{ color: "#5a5a5a" }} />
+            <FlightIcon style={{ color: "#5a5a5a", transform:"rotate(45deg)" }} />
             <div style={{ width: "100%" }}>
               <div
                 style={{
