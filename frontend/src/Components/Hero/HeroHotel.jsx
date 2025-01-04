@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import {
   Box,
   Checkbox,
@@ -8,7 +8,8 @@ import {
   Popper,
   Autocomplete,
   Input,
-  Paper
+  Paper,
+  ClickAwayListener
 } from "@mui/material";
 
 import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
@@ -21,6 +22,7 @@ import {
   setDepartureDate,
   setReturnDate
 } from "../Slices/dateStore";
+import HotelTravellersDropDown from "../HotelTravellersDropDown";
 import { format } from "date-fns";
 
 import Hotelimg from "../../Components/Assets/HotelHeroimg.jpg";
@@ -90,6 +92,50 @@ const HeroHotel = () => {
   
   const [inputValue, setInputValue] = useState("");
 
+  const [travellersOpen, setTravellersOpen] = useState(false);
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
+  const [childAges, setChildAges] = useState([]);
+  const [rooms, setRooms] = useState(1);
+
+  const travellersLabel = useMemo(() => {
+    const parts = [];
+    if (adults === 1) {
+      parts.push("1 Adult");
+    } else {
+      parts.push(`${adults} Adults`);
+    }
+
+    if (children > 0) {
+      if (children === 1) {
+        parts.push("1 Child");
+      } else {
+        parts.push(`${children} Children`);
+      }
+    }
+
+    if (rooms === 1) {
+      parts.push("1 Room");
+    } else {
+      parts.push(`${rooms} Rooms`);
+    }
+
+    return parts.join(", ");
+  }, [adults, children, rooms]);
+
+  const handleTravellersInputClick = () => {
+    setTravellersOpen(true);
+  };
+
+  const handleChangeTravellers = ({ adults, children, childAges, rooms }) => {
+    setAdults(adults);
+    setChildren(children);
+    setChildAges(childAges);
+    setRooms(rooms);
+  };
+
+
+
   
   useEffect(() => {
     const currentDate = new Date();
@@ -147,18 +193,20 @@ const HeroHotel = () => {
 
       
       <Box
-        sx={{
+        sx={{  
           position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "90%",
-          maxWidth: "1200px",
-          backgroundColor: "#002540",
-          padding: "20px",
-          borderRadius: "8px",
-          height: "130px",
+  top: "50%",
+  left: "50%",
+  marginTop: "-65px", // Half of the height (130px / 2)
+  marginLeft: "-600px", // Half of the width (1200px / 2) or adjust dynamically
+  width: "90%",
+  maxWidth: "1200px",
+  backgroundColor: "#002540",
+  padding: "20px",
+  borderRadius: "8px",
+  height: "130px",
         }}
+         
       >
         
         <Typography
@@ -175,6 +223,7 @@ const HeroHotel = () => {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           
           <Autocomplete
+          disableUnderline
             freeSolo
             options={Locations}
             getOptionLabel={(option) => (option?.name ? option.name : "")}
@@ -190,7 +239,7 @@ const HeroHotel = () => {
               "& .MuiInputBase-root": {
                 width: "590px !important",
                 backgroundColor: "white",
-                "&:hover": { backgroundColor: "white" },
+                
                 
                 paddingRight: "0px !important", 
               },
@@ -376,16 +425,48 @@ const HeroHotel = () => {
             disableUnderline
             sx={{ ...inputStyle, width: "148px", height: "55px" }}
           />
-          <Input
-            placeholder="Rooms"
-            disableUnderline
-            sx={{
-              ...inputStyle,
-              width: "300px",
-              height: "55px",
-              borderRadius: "0 8px 8px 0",
-            }}
-          />
+
+<ClickAwayListener    onClickAway={() => setTravellersOpen(false)}
+>
+            <Box sx={{ position: "relative" }}>
+              <Input
+                placeholder="Rooms"
+                disableUnderline
+                sx={{
+                  ...inputStyle,
+                  width: "300px",
+                  height: "55px",
+                  borderRadius: "0 8px 8px 0",
+                }}
+                value={travellersLabel}
+                onClick={handleTravellersInputClick}
+              />
+              {travellersOpen && (
+                <Box
+                 id="hotel-travellers-dropdown"
+              
+                  sx={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    left: 0,
+                    zIndex: 9999,
+                  }}
+                >
+                  <HotelTravellersDropDown
+                    open={travellersOpen}
+                    adults={adults}
+                    children={children}
+                    childAges={childAges}
+                    rooms={rooms}
+                    onChange={handleChangeTravellers}
+                    onClose={() => setTravellersOpen(false)}
+                  />
+                </Box>
+              )}
+            </Box>
+          </ClickAwayListener>
+
+
         </Box>
 
         

@@ -35,8 +35,8 @@ const Hero = () => {
     }
 
     return (
-        <Container sx={{marginTop:16.5,  display: "flex", justifyContent: "space-evenly", flexDirection:"column", marginBottom:"15px"}}>
-            <Box sx={{display:"flex", alignItems:"center", marginBottom:"30px", transform:"translate(-13px)"}}>
+        <Container sx={{marginTop:16.5,  display: "flex", justifyContent: "space-evenly", flexDirection:"column", marginBottom:"15px", zIndex: 1 }}>
+            <Box sx={{display:"flex", alignItems:"center", marginBottom:"30px",transform:"translate(-13px)" }}>
             <Box sx={{...HeroStyles}}>
                 <IconButton disabled>
                     <TravelExploreIcon sx={{ color: "white" }}/>
@@ -68,7 +68,7 @@ const Hero = () => {
             </Box>
             </Box>
 
-            <Box sx={{position:"relative"}}>
+            <Box sx={{position:"relative", zIndex: 1}}>
 
             <Box 
   sx={{
@@ -76,6 +76,7 @@ const Hero = () => {
     justifyContent: 'center',
     padding: '20px 0',
     width: '100%',
+    zIndex: 1
     
     
   }}
@@ -89,13 +90,14 @@ const Hero = () => {
       borderRadius: '10px',
       objectFit: 'cover',
       minWidth:"1220px",
-      marginRight:"20px"
+      marginRight:"20px",
+      
       
     }}
   />
 </Box>
 
-            <Box sx={{position:"absolute",  top: "30%", left: "15%", transform: "translate(-40%, -20%)", color: 'white', zIndex:1 }}>
+            <Box sx={{position:"absolute",  top: "30%", left: "15%",transform: "translate(-40%, -20%)", color: 'white', zIndex: 2  }}>
                 <Typography sx={{paddingBottom:"25px"}}>
                     <span style={{fontWeight:"bold", fontSize:"45px"}}>Go further, get <br /> closer</span>
                     <br />

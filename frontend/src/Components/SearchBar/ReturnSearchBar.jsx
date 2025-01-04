@@ -29,8 +29,6 @@ const cities = [
 
 
 
-
-
 const ReturnSearchBar = () => {
     const dispatch = useDispatch();
     const departureDate = useSelector((state) => state.dates.departureDate);
@@ -39,8 +37,8 @@ const ReturnSearchBar = () => {
     const isCalendarVisible = useSelector((state) => state.CalendarVisible.isCalendarVisible);
     const activeInput = useSelector((state) => state.CalendarVisible.activeInput);
     const { from, to } = useSelector((state) => state.flightSearch);
-    
 
+ 
     const handleClickDepart = () => {
         dispatch(setActiveInput("depart"));
         handleClick();
@@ -253,4 +251,4 @@ const inputStyle = {
     },
 };
 
-export default ReturnSearchBar; 
+export default ReturnSearchBar;

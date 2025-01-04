@@ -217,21 +217,14 @@ const CalandarLayout = () => {
             </Box>
             <CustomStaticDatePicker
               disableHighlightToday={true}
-              displayStaticWrapperAs="desktop"
+               displayStaticWrapperAs="desktop"
               value={firstMonth}
               onChange={(date) => {
                 handleDateChange(date);
               }}
               minDate={new Date()}
               renderInput={(params) => null}
-              slotProps={{
-                calendar: {
-                  sx: {
-                    height: 'auto', 
-                    minHeight: '380px', 
-                  },
-                },
-              }}
+              
             
              
              
