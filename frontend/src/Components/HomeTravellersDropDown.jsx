@@ -10,15 +10,17 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useDispatch, useSelector } from "react-redux";
+import { setTravellersOpen, handleChangeTravellers } from "./Slices/HomeTravellersddSlice";
 
 
 const HomeTravellersDropDown = ({
-  open,
+  
   anchorEl,
-  adults,
-  children,
-  childAges,
-  onChange,
+  
+  
+  
+
   cabinClass = "Economy",
 }) => {
   
@@ -34,17 +36,23 @@ const HomeTravellersDropDown = ({
     opacity: 0.5,
   };
 
+  const dispatch = useDispatch();
+
+
+  const { travellersOpen, adults, children, childAges } = useSelector((state) => state.travellers);
+
   const [position, setPosition] = useState({ top: 0, left: 0 });
   useEffect(() => {
-    if (anchorEl && open) {
+    if (anchorEl && travellersOpen) {
       const rect = anchorEl.getBoundingClientRect();
-      // Slight offset below the input
+      
       setPosition({
         top: rect.bottom + window.scrollY + 8,
         left: rect.left + window.scrollX,
       });
     }
-  }, [anchorEl, open]);
+  }, [anchorEl, travellersOpen]);
+  
   
   
 
@@ -56,41 +64,45 @@ const HomeTravellersDropDown = ({
       for (let i = 0; i < diff; i++) {
         newAges.push(0);
       }
-      onChange({ adults, children, childAges: newAges });
+      dispatch(handleChangeTravellers({ adults, children, childAges: newAges }));
     } else if (childAges.length > children) {
       const newAges = [...childAges].slice(0, children);
-      onChange({ adults, children, childAges: newAges });
+      dispatch(handleChangeTravellers({ adults, children, childAges: newAges }));
     }
     
   }, [children]);
 
-  if (!open) return null;
+  if (!travellersOpen) return null;
 
   
   const handlePlusAdult = () => {
     if (adults < maxAdults) {
-      onChange({ adults: adults + 1, children, childAges });
+      dispatch(handleChangeTravellers({ adults: adults + 1, children, childAges }));
     }
   };
+
   const handleMinusAdult = () => {
     if (adults > minAdults) {
-      onChange({ adults: adults - 1, children, childAges });
+      dispatch(handleChangeTravellers({ adults: adults - 1, children, childAges }));
     }
   };
+
   const handlePlusChild = () => {
     if (children < maxChildren) {
-      onChange({ adults, children: children + 1, childAges });
+      dispatch(handleChangeTravellers({ adults, children: children + 1, childAges }));
     }
   };
+
   const handleMinusChild = () => {
     if (children > minChildren) {
-      onChange({ adults, children: children - 1, childAges });
+      dispatch(handleChangeTravellers({ adults, children: children - 1, childAges }));
     }
   };
+
   const handleChildAgeChange = (index, newValue) => {
     const newAges = [...childAges];
     newAges[index] = newValue;
-    onChange({ adults, children, childAges: newAges });
+    dispatch(handleChangeTravellers({ adults, children, childAges: newAges }));
   };
 
   return (

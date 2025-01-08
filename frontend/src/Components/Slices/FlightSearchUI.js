@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const FlightSearchUI = createSlice({
-    name: 'flightSearch',
+    name: 'flightSearchui',
     initialState,
     reducers: {
         setDepartureDate: (state, action) => {

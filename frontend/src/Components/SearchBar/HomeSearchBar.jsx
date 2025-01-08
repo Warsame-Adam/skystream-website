@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   setDepartureDate,
   setReturnDate,
@@ -24,6 +25,8 @@ import {
   setIsSelectingDepartDate,
 } from "../Slices/dateStore";
 import { setTo } from "../Slices/flightSearchSlice";
+import { setAdults, setChildAges, setChildren, handleChangeTravellers, setTravellersOpen } from "../Slices/HomeTravellersddSlice";
+
 
 import { showCalendar } from "../Slices/calendarVisible";
 
@@ -45,27 +48,58 @@ const cities = [
 ];
 
 const HomeSearchbar = () => {
+
+  const navigate = useNavigate(); 
   const dispatch = useDispatch();
+
+  const origin  = useSelector((state) => state.flightSearch.from);
+  const destination = useSelector((state) => state.flightSearch.to);
 
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
-  const { from, to } = useSelector((state) => state.flightSearch);
+  
+  const {adults, children, childAges, travellersOpen} = useSelector((state) => state.travellers )
+
+
+  const formatDateToYYMMDD = (date) => {
+    const d = new Date(date);
+    const year = String(d.getFullYear()).slice(-2); 
+    const month = String(d.getMonth() + 1).padStart(2, '0'); 
+    const day = String(d.getDate()).padStart(2, '0'); 
+    return `${year}${month}${day}`;
+  };
+  
+
+
+
+  const handleSearch = () => {
+
+    const originCode = origin?.code || origin; 
+    const destinationCode = destination?.code || destination;
+
+
+    const formattedDepDate = formatDateToYYMMDD(departureDate);
+    const formattedRetDate = formatDateToYYMMDD(returnDate);
+
+    const path  = `/flights/${originCode}/${destinationCode}/${formattedDepDate}/${formattedRetDate}`
+
+    navigate(path)
+  }
+  
 
   const [showCrossIcons, setShowCrossIcons] = useState(false);
 
-  // -----------------------------
-  // 1) ADD STATE AND REF FOR TRAVELLERS POPUP
-  // -----------------------------
-  const [travellersOpen, setTravellersOpen] = useState(false);
+
+  
   
 
-  // By default: 1 adult, 0 children, empty childAges array
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [childAges, setChildAges] = useState([]);
-  const [cabinClass] = useState("Economy"); // or allow user to select
+  
 
-  // A label to display in the travellers input
+  
+  
+  const [cabinClass] = useState("Economy"); 
+
+  
   const travellersLabel = React.useMemo(() => {
     const total = adults + children;
     if (total === 1 && adults === 1) {
@@ -130,22 +164,13 @@ const HomeSearchbar = () => {
     dispatch(showCalendar());
   };
 
-  // -----------------------------
-  // 2) SHOW/HIDE LOGIC: WHEN INPUT CLICKED, TOGGLE; WHEN CLICK OUTSIDE, CLOSE
-  // -----------------------------
-  
-
-  // Modified useEffect for click outside handling
+ 
   
   const handleTravellersInputClick = () => {
-    setTravellersOpen(true);
+    dispatch(setTravellersOpen(true)); 
   };
 
-  const handleChangeTravellers = ({ adults, children, childAges }) => {
-    setAdults(adults);
-    setChildren(children);
-    setChildAges(childAges);
-  };
+  
 
 
 
@@ -206,7 +231,7 @@ const HomeSearchbar = () => {
 
       <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 0.5 }}>
         <Input
-          value={`${from.city} (${from.code}), ${from.country}`}
+          value={`${origin.city} (${origin.code}), ${origin.country}`}
           placeholder="From"
           disableUnderline
           sx={{
@@ -216,6 +241,7 @@ const HomeSearchbar = () => {
             fontSize: "15px",
           }}
         />
+
         <Autocomplete
           freeSolo
           options={cities}
@@ -239,7 +265,7 @@ const HomeSearchbar = () => {
           onChange={(event, value) => {
             dispatch(setTo(value));
           }}
-          value={to}
+          value={destination}
           renderOption={(props, option) => (
             <li
               {...props}
@@ -338,7 +364,7 @@ const HomeSearchbar = () => {
         </Box>
 
        
-            <ClickAwayListener onClickAway={() => setTravellersOpen(false)}>
+            <ClickAwayListener onClickAway={() => dispatch(setTravellersOpen(false))}>
             <Box  sx={{ position: "relative" }}>
           <Input
             
@@ -350,35 +376,20 @@ const HomeSearchbar = () => {
               marginRight: "8px",
               width: "210px",
             }}
-            
             onClick={handleTravellersInputClick}
-            
             value={travellersLabel}
           />
-
           {travellersOpen && (
-
-<Box
-sx={{
-  position: "absolute",
-  top: "calc(100% + 8px)", 
-  left: 0,               
-  zIndex: 9999,          
-}}
->
-
-
-
-            <HomeTravellersDropDown
-              open={travellersOpen}
-              
-              adults={adults}
-              children={children}
-              childAges={childAges}
-              cabinClass={cabinClass}
-              onChange={handleChangeTravellers}
-              
-            />
+            <Box
+            sx={{
+              position: "absolute",
+              top: "calc(100% + 8px)", 
+              left: 0,               
+              zIndex: 9999,          
+              }}>
+                <HomeTravellersDropDown
+                cabinClass={cabinClass}
+                />
             </Box>
           )}
         </Box>
@@ -386,7 +397,7 @@ sx={{
        
 
 
-        <Button variant="contained" sx={{ ...searchButtonStyle, textTransform: "none" }}>
+        <Button onClick={handleSearch} disabled={!origin || !destination || !departureDate || !returnDate} variant="contained" sx={{ ...searchButtonStyle, textTransform: "none" }}>
           Search
         </Button>
       </Box>
