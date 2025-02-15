@@ -349,7 +349,11 @@ const CalandarMenu = ({ anchorEl, handleClose }) => {
 };
 const HomeSearchbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
+
   const departureDateRef = useRef();
+  const destinationRef = useRef();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -508,118 +512,163 @@ const HomeSearchbar = () => {
       </Box>
 
       <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 0.5 }}>
-        <Input
-          value={`${origin.city} (${origin.code}), ${origin.country}`}
-          placeholder='From'
-          disableUnderline
-          sx={{
-            ...inputStyle,
-            borderRadius: "10px 0px 0px 10px",
-            width: "242px",
-            fontSize: "15px",
-          }}
-        />
+        <Box sx={{ position: "relative" }}>
+          <Typography
+            variant='subtitle2'
+            sx={{
+              ...inputLableStyle,
+            }}
+          >
+            From
+          </Typography>
+          <Input
+            value={`${origin.city} (${origin.code}), ${origin.country}`}
+            placeholder='From'
+            disableUnderline
+            sx={{
+              ...inputStyle,
+              borderRadius: "10px 0px 0px 10px",
+              width: "242px",
+            }}
+          />
+        </Box>
+        <Box sx={{ position: "relative" }}>
+          <Typography
+            variant='subtitle2'
+            sx={{
+              ...inputLableStyle,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setIsOpenDestinationPopup(true);
+              destinationRef.current.click();
+            }}
+          >
+            To
+          </Typography>
 
-        <Autocomplete
-          freeSolo
-          options={cities}
-          getOptionLabel={(option) =>
-            option && option.city && option.code
-              ? `${option.city} (${option.code})`
-              : ""
-          }
-          filterOptions={(options, state) => {
-            const inputValue = state.inputValue.trim().toLowerCase();
-            if (inputValue === "") {
-              return options.slice(0, 5);
+          <Autocomplete
+            open={isOpenDestinationPopup}
+            onOpen={() => setIsOpenDestinationPopup(true)}
+            onClose={() => setIsOpenDestinationPopup(false)}
+            ref={destinationRef}
+            freeSolo
+            options={cities}
+            getOptionLabel={(option) =>
+              option && option.city && option.code
+                ? `${option.city} (${option.code})`
+                : ""
             }
-            return options.filter(
-              (option) =>
-                option.city.toLowerCase().includes(inputValue) ||
-                option.code.toLowerCase().includes(inputValue) ||
-                option.country.toLowerCase().includes(inputValue)
-            );
-          }}
-          onChange={(event, value) => {
-            dispatch(setTo(value));
-          }}
-          value={destination}
-          renderOption={(props, option) => (
-            <li
-              {...props}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "12px",
-              }}
-            >
-              <FlightIcon
-                style={{ color: "#5a5a5a", transform: "rotate(45deg)" }}
-              />
-              <div style={{ width: "100%" }}>
-                <div
-                  style={{
-                    fontWeight: "bold",
-                    color: "black",
-                    fontSize: "14px",
-                  }}
-                >
-                  {option.city} ({option.code})
+            filterOptions={(options, state) => {
+              const inputValue = state.inputValue.trim().toLowerCase();
+              if (inputValue === "") {
+                return options.slice(0, 5);
+              }
+              return options.filter(
+                (option) =>
+                  option.city.toLowerCase().includes(inputValue) ||
+                  option.code.toLowerCase().includes(inputValue) ||
+                  option.country.toLowerCase().includes(inputValue)
+              );
+            }}
+            onChange={(event, value) => {
+              dispatch(setTo(value));
+            }}
+            value={destination}
+            renderOption={(props, option) => (
+              <li
+                {...props}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px",
+                }}
+              >
+                <FlightIcon
+                  style={{ color: "#5a5a5a", transform: "rotate(45deg)" }}
+                />
+                <div style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      color: "black",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {option.city} ({option.code})
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
+                    {option.country}
+                  </div>
                 </div>
-                <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
-                  {option.country}
-                </div>
-              </div>
-            </li>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              InputProps={{
-                ...params.InputProps,
-                disableUnderline: true,
-                style: {
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  disableUnderline: true,
+                  style: {},
+                  sx: {
+                    ...inputStyle,
+                  },
+                }}
+                placeholder='Country, city or airport'
+                variant='standard'
+                sx={{
+                  width: "242px",
+                  pb: "13.9px",
                   border: "1px solid #ccc",
-                  backgroundColor: "white",
-                  padding: "20px 15px",
-                  color: "black",
-                  cursor: "pointer",
-                  height: "74.5px",
-                },
-              }}
-              placeholder='To'
-              variant='standard'
-              sx={{
-                width: "242px",
-                "& .MuiAutocomplete-input": {
-                  padding: "0 !important",
-                },
-              }}
-            />
-          )}
-          PopperComponent={({ style, ...props }) => (
-            <Popper
-              {...props}
-              style={{
-                ...style,
-                width: "400px",
-                maxHeight: "400px",
-                overflowY: "auto",
-                zIndex: 10,
-              }}
-            />
-          )}
-          sx={{ width: "242px" }}
-        />
+                  backgroundColor: "background.paper",
+                  "& .MuiAutocomplete-input": {
+                    // padding: "0 !important",
+                  },
+                }}
+              />
+            )}
+            PopperComponent={({ style, ...props }) => (
+              <Popper
+                {...props}
+                style={{
+                  ...style,
+                  width: "400px",
+                  maxHeight: "400px",
+                  overflowY: "auto",
+                  zIndex: 10,
+                }}
+              />
+            )}
+            sx={{
+              width: "242px",
+
+              "& .MuiAutocomplete-endAdornment": {
+                right: "10px",
+                bottom: "30%",
+              },
+            }}
+          />
+        </Box>
         <CalandarMenu
           anchorEl={anchorEl}
           handleClose={() => setAnchorEl(null)}
         />
         <Box className='date-input' sx={{ position: "relative" }}>
+          <Typography
+            variant='subtitle2'
+            sx={{
+              ...inputLableStyle,
+              cursor: "pointer",
+            }}
+            onClick={() => departureDateRef.current?.click()}
+          >
+            Depart
+          </Typography>
           <Input
             ref={departureDateRef}
             placeholder='Depart Add date'
+            readOnly
             disableUnderline
             value={formattedDepartureDate}
             onClick={(e) => {
@@ -628,7 +677,7 @@ const HomeSearchbar = () => {
             }}
             //onFocus={handleInputFocus}
             //onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "210px" }}
+            sx={{ ...inputStyle, width: "210px", cursor: "pointer" }}
           />
           {showCrossIcons && departureDate && (
             <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
@@ -636,14 +685,25 @@ const HomeSearchbar = () => {
         </Box>
 
         <Box className='date-input' sx={{ position: "relative" }}>
+          <Typography
+            variant='subtitle2'
+            sx={{
+              ...inputLableStyle,
+              cursor: "pointer",
+            }}
+            onClick={() => departureDateRef.current?.click()}
+          >
+            Return
+          </Typography>
           <Input
             placeholder='Return Add date'
             disableUnderline
+            readOnly
             value={formattedReturnDate}
             onClick={() => departureDateRef.current.click()}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "210px" }}
+            sx={{ ...inputStyle, width: "210px", cursor: "pointer" }}
           />
           {showCrossIcons && returnDate && (
             <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
@@ -683,6 +743,17 @@ const HomeSearchbar = () => {
           onClickAway={() => dispatch(setTravellersOpen(false))}
         >
           <Box sx={{ position: "relative" }}>
+            <Typography
+              variant='subtitle2'
+              sx={{
+                ...inputLableStyle,
+                cursor: "pointer",
+              }}
+              onClick={handleTravellersInputClick}
+            >
+              Travellers and cabin class
+            </Typography>
+
             <Input
               placeholder='Travellers and cabin class'
               disableUnderline
@@ -723,13 +794,26 @@ const HomeSearchbar = () => {
   );
 };
 
+const inputLableStyle = {
+  fontWeight: "700",
+  position: "absolute",
+  color: "#626971",
+  px: "16px",
+  pt: "14px",
+  zIndex: 1,
+};
+
 const inputStyle = {
   border: "1px solid #ccc",
   backgroundColor: "background.paper",
-  padding: "20px 15px",
-  color: "black",
+  color: "#161616",
   cursor: "pointer",
   flex: "1 0 auto",
+  fontWeight: 500,
+  fontSize: "15px",
+  p: "16px",
+  pb: "13.9px",
+  pt: "27px",
 };
 
 const crossIconStyle = {
