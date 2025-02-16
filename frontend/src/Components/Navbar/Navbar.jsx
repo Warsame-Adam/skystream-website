@@ -1,164 +1,193 @@
-import React, { useState } from "react"
-import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, TextField, MenuItem, Checkbox, FormControlLabel, Container } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import LanguageIcon from '@mui/icons-material/Language';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import PersonIcon from '@mui/icons-material/Person';
-import MenuIcon from '@mui/icons-material/Menu';
-import FlightIcon from '@mui/icons-material/Flight';
-import HotelIcon from '@mui/icons-material/Hotel';
-import FlagIcon from '@mui/icons-material/Flag';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import companyLogo from '../../Components/Assets/company-logo.png';
-import RSMenu from "../RSMenu"
+import React, { useState } from "react";
+import {
+  AppBar,
+  Menu,
+  Toolbar,
+  IconButton,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  TextField,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Container,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import LanguageIcon from "@mui/icons-material/Language";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import PersonIcon from "@mui/icons-material/Person";
+import MenuIcon from "@mui/icons-material/Menu";
+import FlightIcon from "@mui/icons-material/Flight";
+import HotelIcon from "@mui/icons-material/Hotel";
+import FlagIcon from "@mui/icons-material/Flag";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import companyLogo from "../../Components/Assets/company-logo.png";
+import RSMenu from "../RSMenu";
 
+const Navbar = ({ open, onClose }) => {
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
-const Navbar = ({ open, onClose}) =>{
+  const [anchorElLanguage, setAnchorElLanguage] = useState(null);
 
-    const [anchorElUser, setAnchorElUser] = useState(null)
+  const handleOpenLanguageMenu = (event) => {
+    console.log("Event Target (anchorEl):", event.currentTarget);
+    setAnchorElLanguage(event.currentTarget);
+  };
 
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget)
+  const handleCloseLanguageMenu = () => {
+    setAnchorElLanguage(null);
+  };
 
-    }
+  const pages = [
+    { icon: <FlightIcon />, label: "Flights" },
+    { icon: <HotelIcon />, label: "Hotels" },
+    { icon: <FlagIcon />, label: "Regional settings" },
+    { icon: <LocalOfferIcon />, label: "Explore Everywhere" },
+    { icon: <HelpOutlineIcon />, label: "Help" },
+  ];
+  const links = [
+    { key: "language", icon: <LanguageIcon /> },
+    { key: "favorite", icon: <FavoriteIcon /> },
+    { key: "person", icon: <PersonIcon /> },
+    { key: "menu", icon: <MenuIcon /> },
+  ];
+  const iconButtonStyles = {
+    color: "white",
+    mx: 0.3,
+    width: "auto",
+    height: "35px",
+    borderRadius: "10px",
+    "&:hover": {
+      backgroundColor: "rgba(74,86,99,255)",
+    },
+    "&:active": {
+      outline: "2px solid rgba(rgba(74,86,99,255))",
+      backgroundColor: "rgba(rgba(74,86,99,255))",
+    },
+  };
 
-    const handleCloseUserMenu =  () => {
-        setAnchorElUser(null)
-    }
-
-    const [anchorElLanguage, setAnchorElLanguage] = useState(null);
-
-    const handleOpenLanguageMenu = (event) => {
-      console.log("Event Target (anchorEl):", event.currentTarget);
-      setAnchorElLanguage(event.currentTarget);
-      
-    };
-  
-    const handleCloseLanguageMenu = () => {
-      setAnchorElLanguage(null);
-    };
-
-    const pages = [
-       {icon: <FlightIcon />, label: "Flights"},
-       {icon:<HotelIcon/>, label:"Hotels"},
-       {icon:<FlagIcon />, label:"Regional settings"},
-       {icon:<LocalOfferIcon />, label:"Explore Everywhere"},
-       {icon: <HelpOutlineIcon />, label:"Help"}
-    ];
-    const links = [
-        {key: 'language',icon:<LanguageIcon/>},
-        {key: 'favorite',icon:<FavoriteIcon />},
-        { key: 'person',icon:<PersonIcon />},
-        { key: 'menu',icon: <MenuIcon />}
-    ];
-    const iconButtonStyles = {
-        color: "white",
-        mx: 0.3,
-        width: 'auto',        
-        height: '35px',
-        borderRadius:"10px",       
-        '&:hover': {
-          
-          backgroundColor:"rgba(74,86,99,255)"
-        },
-        '&:active': {
-          
-          outline: '2px solid rgba(rgba(74,86,99,255))',
-          backgroundColor:"rgba(rgba(74,86,99,255))"
-        }
-      };
-
-
-    
-
-
-    return (
-      
-        <AppBar position="static" sx={{padding:"0", backgroundColor:"#05203c",}}>
-        <Toolbar disableGutters sx={{display:"flex", justifyContent: 'space-between', alignItems: 'flex-start', height: "390px", mx:4, padding: "25px 330px", transform:"translateX(-29px)" }}>
-          
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton>
-              <Avatar src={companyLogo} sx={{ mx: 2 }} />
+  return (
+    <AppBar
+      position='static'
+      sx={{ padding: "0", backgroundColor: "common.blue" }}
+    >
+      <Container className='container'>
+        <Toolbar
+          disableGutters
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            height: "390px",
+            // mx: 4,
+            padding: "25px 0px",
+            //  transform: "translateX(-29px)",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton sx={{ p: 0 }}>
+              <Avatar src={companyLogo} sx={{ mr: 2 }} />
             </IconButton>
-            <Typography variant="h6" sx={{ fontFamily: "Roboto", letterSpacing: ".1rem" }}>
+            <Typography
+              variant='h6'
+              sx={{ fontFamily: "Roboto", letterSpacing: ".1rem" }}
+            >
               SkyStream
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center',}}>
-            {links.slice(0,2).map((item) => (
-                <IconButton key={item.key} sx={iconButtonStyles} onClick={item.key === "language"? handleOpenLanguageMenu: null}>
-                    {item.icon}
-                </IconButton>
-                ))}
-                {links.some(link => link.key ==="language") && (
-                  anchorElLanguage && (
-                  <RSMenu 
-                  
-                  open={Boolean(anchorElLanguage)}
-                  onClose={handleCloseLanguageMenu} 
-                  />
-                )
-                )}
-            <IconButton sx={iconButtonStyles}>
-                <PersonIcon />
-                <Typography variant="body1" sx={{mx:0.2, color:"background.paper"}}>
-                    Log in
-                </Typography>
-            </IconButton>
-            {links.slice(3).map((item)=>(
-                <IconButton onClick={handleOpenUserMenu} key={item.key} sx={iconButtonStyles}>
-                    {item.icon}
-                </IconButton>
-                
-
-                
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {links.slice(0, 2).map((item) => (
+              <IconButton
+                key={item.key}
+                sx={iconButtonStyles}
+                onClick={
+                  item.key === "language" ? handleOpenLanguageMenu : null
+                }
+              >
+                {item.icon}
+              </IconButton>
             ))}
-            <Menu 
-            sx={{my:0.2, ml:-1, borderRadius:"10px" }} 
-            id="menu-appbar"
-            PaperProps={{
+            {links.some((link) => link.key === "language") &&
+              anchorElLanguage && (
+                <RSMenu
+                  open={Boolean(anchorElLanguage)}
+                  onClose={handleCloseLanguageMenu}
+                />
+              )}
+            <IconButton sx={iconButtonStyles}>
+              <PersonIcon />
+              <Typography
+                variant='body1'
+                sx={{ mx: 0.2, color: "background.paper" }}
+              >
+                Log in
+              </Typography>
+            </IconButton>
+            {links.slice(3).map((item, i) => (
+              <IconButton
+                onClick={handleOpenUserMenu}
+                key={item.key}
+                sx={{
+                  ...iconButtonStyles,
+
+                  mr: links.slice(3).length === i + 1 ? "-8px" : "0.3",
+                }}
+              >
+                {item.icon}
+              </IconButton>
+            ))}
+            <Menu
+              sx={{ my: 0.2, ml: -1, borderRadius: "10px" }}
+              id='menu-appbar'
+              PaperProps={{
                 sx: {
                   width: "280px",
                   maxWidth: "none",
-                  
-                   
                 },
-            }}
-            anchorOrigin={{
-                vertical:"bottom", 
-                horizontal:"right",
-                }} 
-            keepMounted 
-            transformOrigin={{
-                vertical:"top", 
-                horizontal:"right"
-                }} 
-            anchorEl={anchorElUser} 
-            open={Boolean(anchorElUser)} 
-            onClose={handleCloseUserMenu}>
-                {pages.map((page)=> (
-                    <MenuItem key = {page.label} onClick={handleCloseUserMenu}>
-                        <IconButton sx={{color:"#0665e3", mr:1}}>
-                            {page.icon}
-                        </IconButton>
-                        
-                        <Typography sx={{color:"black", fontSize:"15px", marginLeft:"5px"}}>{page.label}</Typography>
-                    </MenuItem>
+              }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              anchorEl={anchorElUser}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.label} onClick={handleCloseUserMenu}>
+                  <IconButton sx={{ color: "#0665e3", mr: 1 }}>
+                    {page.icon}
+                  </IconButton>
 
-                ))}
-
+                  <Typography
+                    sx={{ color: "black", fontSize: "15px", marginLeft: "5px" }}
+                  >
+                    {page.label}
+                  </Typography>
+                </MenuItem>
+              ))}
             </Menu>
-            </Box>
-            
-      
+          </Box>
         </Toolbar>
-      </AppBar>
-      
-    )
-}
+      </Container>
+    </AppBar>
+  );
+};
 
 export default Navbar;

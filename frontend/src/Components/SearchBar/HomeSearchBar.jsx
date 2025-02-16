@@ -456,7 +456,7 @@ const HomeSearchbar = () => {
   };
 
   return (
-    <Container sx={{}}>
+    <Container className='container'>
       <Box
         sx={{
           display: "flex",
@@ -467,8 +467,8 @@ const HomeSearchbar = () => {
         <Button
           sx={{
             fontSize: "13.5px",
-            backgroundColor: "#05203c",
-            color: "white",
+            backgroundColor: "transparent",
+            color: "text.primary",
             textTransform: "none",
             "&:hover": {
               backgroundColor: "#154679",
@@ -486,8 +486,8 @@ const HomeSearchbar = () => {
         <Button
           sx={{
             fontSize: "13.5px",
-            backgroundColor: "#05203c",
-            color: "white",
+            backgroundColor: "transparent",
+            color: "text.primary",
             textTransform: "none",
             "&:hover": {
               backgroundColor: "#154679",
@@ -505,14 +505,24 @@ const HomeSearchbar = () => {
 
       <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
         <Typography
-          sx={{ fontSize: "30px", color: "white", fontWeight: "bold" }}
+          variant='h3'
+          sx={{ color: "text.primary", fontSize: "30px", fontWeight: "bold" }}
         >
           Millions of cheap flights. One simple search.
         </Typography>
       </Box>
 
-      <Box sx={{ display: "flex", justifyContent: "flex-start", gap: 0.5 }}>
-        <Box sx={{ position: "relative" }}>
+      <Grid
+        container
+        alignItems='center'
+        gap={0.5}
+        sx={{ flexWrap: { md: "nowrap", xs: "wrap" } }}
+      >
+        {/* From */}
+        <Grid
+          item
+          sx={{ position: "relative", width: { md: "242px", xs: "100%" } }}
+        >
           <Typography
             variant='subtitle2'
             sx={{
@@ -527,12 +537,16 @@ const HomeSearchbar = () => {
             disableUnderline
             sx={{
               ...inputStyle,
-              borderRadius: "10px 0px 0px 10px",
-              width: "242px",
+              borderRadius: { md: "10px 0px 0px 10px", xs: "0" },
+              width: "100%",
             }}
           />
-        </Box>
-        <Box sx={{ position: "relative" }}>
+        </Grid>
+        {/* To */}
+        <Grid
+          item
+          sx={{ position: "relative", width: { md: "242px", xs: "100%" } }}
+        >
           <Typography
             variant='subtitle2'
             sx={{
@@ -548,6 +562,7 @@ const HomeSearchbar = () => {
           </Typography>
 
           <Autocomplete
+            fullWidth
             open={isOpenDestinationPopup}
             onOpen={() => setIsOpenDestinationPopup(true)}
             onClose={() => setIsOpenDestinationPopup(false)}
@@ -606,6 +621,7 @@ const HomeSearchbar = () => {
             )}
             renderInput={(params) => (
               <TextField
+                fullWidth
                 {...params}
                 InputProps={{
                   ...params.InputProps,
@@ -613,16 +629,19 @@ const HomeSearchbar = () => {
                   style: {},
                   sx: {
                     ...inputStyle,
+                    border: 0,
                   },
                 }}
                 placeholder='Country, city or airport'
                 variant='standard'
                 sx={{
-                  width: "242px",
-                  pb: "13.9px",
+                  width: "100%",
+                  pb: "10.9px",
                   border: "1px solid #ccc",
                   backgroundColor: "background.paper",
+
                   "& .MuiAutocomplete-input": {
+                    mt: "-4px",
                     // padding: "0 !important",
                   },
                 }}
@@ -641,7 +660,7 @@ const HomeSearchbar = () => {
               />
             )}
             sx={{
-              width: "242px",
+              width: "100%",
 
               "& .MuiAutocomplete-endAdornment": {
                 right: "10px",
@@ -649,12 +668,17 @@ const HomeSearchbar = () => {
               },
             }}
           />
-        </Box>
+        </Grid>
         <CalandarMenu
           anchorEl={anchorEl}
           handleClose={() => setAnchorEl(null)}
         />
-        <Box className='date-input' sx={{ position: "relative" }}>
+        {/* depart */}
+        <Grid
+          item
+          className='date-input'
+          sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+        >
           <Typography
             variant='subtitle2'
             sx={{
@@ -677,14 +701,18 @@ const HomeSearchbar = () => {
             }}
             //onFocus={handleInputFocus}
             //onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "210px", cursor: "pointer" }}
+            sx={{ ...inputStyle, width: "100%", cursor: "pointer" }}
           />
           {showCrossIcons && departureDate && (
             <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
           )}
-        </Box>
-
-        <Box className='date-input' sx={{ position: "relative" }}>
+        </Grid>
+        {/* return  */}
+        <Grid
+          item
+          className='date-input'
+          sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+        >
           <Typography
             variant='subtitle2'
             sx={{
@@ -703,46 +731,19 @@ const HomeSearchbar = () => {
             onClick={() => departureDateRef.current.click()}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "210px", cursor: "pointer" }}
+            sx={{ ...inputStyle, width: "100%", cursor: "pointer" }}
           />
           {showCrossIcons && returnDate && (
             <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
           )}
-        </Box>
-        {/* <Box className='date-input' sx={{ position: "relative" }}>
-          <Input
-            placeholder='Depart Add date'
-            disableUnderline
-            value={formattedDepartureDate}
-            onClick={handleClickDepart}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "210px" }}
-          />
-          {showCrossIcons && departureDate && (
-            <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
-          )}
-        </Box>
-
-        <Box className='date-input' sx={{ position: "relative" }}>
-          <Input
-            placeholder='Return Add date'
-            disableUnderline
-            value={formattedReturnDate}
-            onClick={handleClickReturn}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "210px" }}
-          />
-          {showCrossIcons && returnDate && (
-            <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
-          )}
-        </Box> */}
-
+        </Grid>
         <ClickAwayListener
           onClickAway={() => dispatch(setTravellersOpen(false))}
         >
-          <Box sx={{ position: "relative" }}>
+          <Grid
+            item
+            sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+          >
             <Typography
               variant='subtitle2'
               sx={{
@@ -759,9 +760,9 @@ const HomeSearchbar = () => {
               disableUnderline
               sx={{
                 ...inputStyle,
-                borderRadius: "0px 10px 10px 0px",
+                borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
                 marginRight: "8px",
-                width: "210px",
+                width: "100%",
               }}
               onClick={handleTravellersInputClick}
               value={travellersLabel}
@@ -778,18 +779,27 @@ const HomeSearchbar = () => {
                 <HomeTravellersDropDown cabinClass={cabinClass} />
               </Box>
             )}
-          </Box>
+          </Grid>
         </ClickAwayListener>
-
-        <Button
-          onClick={handleSearch}
-          disabled={!origin || !destination || !departureDate || !returnDate}
-          variant='contained'
-          sx={{ ...searchButtonStyle, textTransform: "none" }}
+        <Grid
+          item
+          sx={{
+            display: "flex",
+            width: { md: "unset", xs: "100%" },
+            ml: { md: "6px", xs: 0 },
+          }}
         >
-          Search
-        </Button>
-      </Box>
+          <Button
+            fullWidth
+            onClick={handleSearch}
+            disabled={!origin || !destination || !departureDate || !returnDate}
+            variant='contained'
+            sx={{ ...searchButtonStyle, textTransform: "none" }}
+          >
+            Search
+          </Button>
+        </Grid>
+      </Grid>
     </Container>
   );
 };
@@ -799,7 +809,7 @@ const inputLableStyle = {
   position: "absolute",
   color: "#626971",
   px: "16px",
-  pt: "14px",
+  pt: "15px",
   zIndex: 1,
 };
 
@@ -810,10 +820,15 @@ const inputStyle = {
   cursor: "pointer",
   flex: "1 0 auto",
   fontWeight: 500,
-  fontSize: "15px",
+  fontSize: "16px",
   p: "16px",
-  pb: "13.9px",
-  pt: "27px",
+  pt: "33.4px",
+  "& input": {
+    p: 0,
+    height: "unset",
+    border: "none",
+    lineHeight: "21px",
+  },
 };
 
 const crossIconStyle = {
@@ -831,10 +846,10 @@ const crossIconStyle = {
 
 const searchButtonStyle = {
   backgroundColor: "#0062e3",
-  padding: "25px 20px",
+  padding: { md: "23px 20px", xs: "10px" },
   borderRadius: "10px",
   "&:hover": { backgroundColor: "#024daf" },
-  width: "70px",
+  minWidth: "70px",
 };
 
 export default HomeSearchbar;

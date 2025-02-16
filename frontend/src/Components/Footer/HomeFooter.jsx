@@ -1,168 +1,378 @@
-import React from "react"
-import {Input, AppBar,Menu, Toolbar, IconButton, Container, Avatar, Typography, Button, Box, TextField, MenuItem, Checkbox, FormControlLabel,Accordion, AccordionSummary, AccordionDetails, Link  } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-
-
+import React from "react";
+import {
+  Input,
+  AppBar,
+  Menu,
+  Toolbar,
+  IconButton,
+  Container,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  TextField,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Link,
+  Grid,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const HomeFooter = () => {
-
-
-    return (
-        
-
-        <Box sx={{ backgroundColor: '#05203c', color: 'white', padding: '50px', marginTop: '2rem', }}>
-          <Container sx={{ transform: 'translateX(-47px)' }} >
-        
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', marginBottom: '2rem', width:"1225px" }}>
-
-
-        <Box 
-  sx={{flex: '1', minWidth: '150px',}}>
-  <Typography variant="body2">
-    United Kingdom - English (UK) • £ GBP
-  </Typography>
-</Box>
-
-
-            
-       
-
-
-       
-
-          
-
-
-
-          <Box sx={{ flex: '1', minWidth: '150px', }}>
-            <Typography variant="body2" sx={{ marginBottom: '0.5rem' }}> 
-                <Link href="#" color="inherit" underline="hover" sx={{ textDecoration: 'none' }}>
-                Help
-                </Link>
+  return (
+    <Box
+      sx={{
+        backgroundColor: "common.blue",
+        color: "text.primary",
+        py: "50px",
+        mt: "2rem",
+      }}
+    >
+      <Container className='container'>
+        <Grid
+          container
+          sx={{
+            flexDirection: { md: "row", xs: "column" },
+            justifyContent: "space-between",
+            marginBottom: "2rem",
+            gap: "20px",
+          }}
+        >
+          <Grid md={4} item sx={{ flex: "1" }}>
+            <Typography
+              variant='subtitle1'
+              sx={{ fontSize: "12px", fontWeight: 700 }}
+            >
+              United Kingdom - English (UK) • £ GBP
             </Typography>
-            <Link href="#" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '0.5rem' }}>
-            Privacy Settings
-            </Link>
-            <Link href="#" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '0.5rem' }}>
-            Log in
-            </Link>
-        </Box>
+          </Grid>
 
-
-        <Box sx={{ flex: '1', minWidth: '150px' }}>
-            <Link href="#" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '0.5rem' }}>
-              Cookie policy
+          <Box sx={{ flex: "1" }}>
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, pb: "8px" }}>
+                Help
+              </Typography>
             </Link>
-            <Link href="#" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '0.5rem' }}>
-              Privacy policy
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, py: "8px" }}>
+                Privacy Settings
+              </Typography>
             </Link>
-            <Link href="#" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '0.5rem' }}>
-              Terms of service
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, py: "8px" }}>
+                Log in
+              </Typography>
             </Link>
-            <Link href="#" color="inherit" underline="hover" sx={{ display: 'block', marginBottom: '0.5rem' }}>
-              Company Details
+          </Box>
+
+          <Box sx={{ flex: "1" }}>
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, pb: "8px" }}>
+                Cookie policy
+              </Typography>
             </Link>
-        </Box>
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, py: "8px" }}>
+                Privacy policy
+              </Typography>
+            </Link>
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, py: "8px" }}>
+                Terms of service
+              </Typography>
+            </Link>
+            <Link
+              href='#'
+              color='inherit'
+              underline='hover'
+              style={{ textDecoration: "none" }}
+            >
+              <Typography variant='body2' sx={{ fontWeight: 700, py: "8px" }}>
+                Company Details
+              </Typography>
+            </Link>
+          </Box>
 
+          <Box sx={{ flex: "1" }}>
+            <Accordion
+              elevation={0}
+              sx={{
+                mt: "0 !important",
 
-  
-          
-
-          
-          
-  
-          
-          <Box sx={{ flex: '1', minWidth: '200px', }}>
-            <Accordion sx={{ backgroundColor: 'transparent', color: 'white', boxShadow: 'none', border: 'none' }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}     sx={{
-      padding: 0,
-      borderBottom: 'none',
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-      '& .MuiAccordionSummary-content': {
-        margin: 0,
-      },
-    }}
->
-                <Typography variant="h7">Explore</Typography>
+                backgroundColor: "transparent",
+                color: "white",
+                boxShadow: "none",
+                border: "none",
+                "&:before": { height: "0px" },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={
+                  <ExpandMoreIcon
+                    fontSize='small'
+                    sx={{ color: "text.primary" }}
+                  />
+                }
+                sx={{
+                  mb: "18px",
+                  mt: "0 !important",
+                  minHeight: "unset !important",
+                  padding: 0,
+                  borderBottom: "none",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                  "& .MuiAccordionSummary-content": {
+                    m: "0 !important",
+                  },
+                }}
+              >
+                <Typography variant='body2' sx={{ fontWeight: 700 }}>
+                  Explore
+                </Typography>
               </AccordionSummary>
-              <AccordionDetails>
-                <Link href="#" color="inherit" underline="hover">Domestic flights</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Cities</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Airports</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Flights</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Hotels</Link>
+              <AccordionDetails sx={{ py: 0 }}>
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Domestic flights
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Cities
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Airports
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Flights
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Hotels
+                  </Typography>
+                </Link>
               </AccordionDetails>
             </Accordion>
-  
-            <Accordion sx={{ backgroundColor: 'transparent', color: 'white', boxShadow: 'none', border: 'none' }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}     sx={{
-      padding: 0,
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-      '& .MuiAccordionSummary-content': {
-        margin: 0,
-      },
-    }}
->
-                <Typography variant="h7">Company</Typography>
+
+            <Accordion
+              elevation={0}
+              sx={{
+                backgroundColor: "transparent",
+                color: "text.primary",
+                boxShadow: "none",
+                border: "none",
+                mt: "0 !important",
+
+                "&:before": { height: "0px" },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={
+                  <ExpandMoreIcon fontSize='small' sx={{ color: "white" }} />
+                }
+                sx={{
+                  mb: "18px",
+                  mt: "0 !important",
+                  minHeight: "unset !important",
+                  padding: 0,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                  "& .MuiAccordionSummary-content": {
+                    m: "0 !important",
+                  },
+                }}
+              >
+                <Typography variant='body2' sx={{ fontWeight: 700 }}>
+                  Company
+                </Typography>
               </AccordionSummary>
-              <AccordionDetails>
-                <Link href="#" color="inherit" underline="hover">About us</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Jobs</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Sustainability</Link>
+              <AccordionDetails sx={{ py: 0 }}>
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    About us
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Jobs
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Sustainability
+                  </Typography>
+                </Link>
               </AccordionDetails>
             </Accordion>
-  
-            <Accordion sx={{ backgroundColor: 'transparent', color: 'white', boxShadow: 'none', border: 'none' }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}     sx={{
-      padding: 0,
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-      '& .MuiAccordionSummary-content': {
-        margin: 0,
-      },
-    }}
->
-                <Typography variant="h7">Partners</Typography>
+
+            <Accordion
+              elevation={0}
+              sx={{
+                mt: "0 !important",
+
+                backgroundColor: "transparent",
+                color: "white",
+                boxShadow: "none",
+                border: "none",
+                "&:before": { height: "0px" },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={
+                  <ExpandMoreIcon
+                    fontSize='small'
+                    sx={{ color: "text.primary" }}
+                  />
+                }
+                sx={{
+                  mb: "18px",
+                  mt: "0 !important",
+
+                  minHeight: "unset !important",
+                  padding: 0,
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                  "& .MuiAccordionSummary-content": {
+                    m: "0 !important",
+                  },
+                }}
+              >
+                <Typography variant='body2' sx={{ fontWeight: 700 }}>
+                  Partners
+                </Typography>
               </AccordionSummary>
-              <AccordionDetails>
-                <Link href="#" color="inherit" underline="hover">Work with us</Link>
-                <br />
-                <Link href="#" color="inherit" underline="hover">Travel APIs</Link>
+              <AccordionDetails sx={{ py: 0 }}>
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Work with us
+                  </Typography>
+                </Link>
+
+                <Link
+                  href='#'
+                  color='inherit'
+                  underline='hover'
+                  style={{ textDecoration: "none" }}
+                >
+                  <Typography variant='body2' sx={{ py: "8px" }}>
+                    Travel APIs
+                  </Typography>
+                </Link>
               </AccordionDetails>
             </Accordion>
           </Box>
-        </Box>
-  
-        
-        <Box sx={{ textAlign: 'center', padding: '1rem 0', borderTop: '1px solid #ffffff40' }}>
-          <Typography variant="caption">
+        </Grid>
+
+        <Box
+          sx={{
+            textAlign: "center",
+            padding: "1rem 0",
+            borderTop: "1px solid #ffffff40",
+          }}
+        >
+          <Typography variant='caption'>
             Compare and book cheap flights from anywhere, to everywhere
           </Typography>
-          <Typography variant="caption" display="block">
+          <Typography variant='caption' display='block'>
             © SkyStream ltd 2002-2024
           </Typography>
         </Box>
-        </Container>
-      </Box>
-      
-  
+      </Container>
+    </Box>
+  );
+};
 
-
-
-    )
-}
-
-
-export default  HomeFooter;
+export default HomeFooter;
