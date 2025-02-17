@@ -9,17 +9,12 @@ import {
   TextField,
   Popper,
   ClickAwayListener,
-  Menu,
   styled,
   Grid,
-  IconButton,
-  Divider,
 } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,20 +26,12 @@ import {
   setIsSelectingDepartDate,
 } from "../Slices/dateStore";
 import { setTo } from "../Slices/flightSearchSlice";
-import {
-  setAdults,
-  setChildAges,
-  setChildren,
-  handleChangeTravellers,
-  setTravellersOpen,
-} from "../Slices/HomeTravellersddSlice";
+import { setTravellersOpen } from "../Slices/HomeTravellersddSlice";
 
 import { showCalendar } from "../Slices/calendarVisible";
 
 import HomeTravellersDropDown from "../HomeTravellersDropDown";
-import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { updateMonths } from "../Slices/monthsSlice.js";
-
+import CalandarMenu from "../CalandarMenu";
 const cities = [
   { city: "Paris", code: "CDG", country: "France" },
   { city: "Athens", code: "ATH", country: "Greece" },
@@ -60,292 +47,6 @@ const cities = [
   { city: "Bangkok", code: "BKK", country: "Thailand" },
 ];
 
-const CustomStaticDatePicker = styled(StaticDatePicker)({
-  "& .MuiDateCalendar-root": {
-    minHeight: "318px",
-    height: "auto",
-    overflow: "visible",
-  },
-  "& .MuiPickersCalendarHeader-root": {
-    display: "none",
-  },
-  "& .MuiPickersSlideTransition-root": {
-    height: "100%",
-    overflow: "visible",
-  },
-
-  "& .MuiDayCalendar-header": {
-    gap: "0",
-  },
-  "& .MuiDayCalendar-weekDayLabel": {
-    height: "44px",
-    width: "42px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "14px",
-    fontWeight: "500",
-    color: "black",
-    margin: "0",
-  },
-
-  "& .MuiDayCalendar-weekContainer": {
-    display: "flex",
-    flexDirection: "row",
-    // justifyContent: "space-around",
-    marginBottom: "20px",
-    gap: "0px",
-  },
-  [`& .MuiPickersDay-root`]: {
-    minHeight: "36px",
-    minWidth: "42px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "14px",
-    fontWeight: "bold",
-    borderRadius: 0,
-    color: "#000",
-    margin: "0px",
-  },
-  "& .MuiPickersDay-root.Mui-selected ": {
-    backgroundColor: "transparent",
-  },
-  "& .MuiPickersDay-root.selected-range": {
-    zIndex: 1,
-    color: "#fff",
-    paddingLeft: "3px",
-    "& .MuiTouchRipple-root": {
-      zIndex: "-1",
-      borderRadius: "50%",
-      backgroundColor: "#0062e3 !important",
-      height: "36px",
-      width: "36px",
-      marginLeft: "4px",
-    },
-  },
-  ["& .MuiPickersDay-root.selected-range-start"]: {
-    background: "linear-gradient(to right, #fff 50%,#e3f0ff 50%)",
-  },
-  ["& .MuiPickersDay-root.selected-range-end"]: {
-    background: "linear-gradient(to left, #fff 50%,#e3f0ff 50%)",
-  },
-});
-
-const CalandarMenu = ({ anchorEl, handleClose }) => {
-  const firstMonth = useSelector((state) => state.months.firstMonth);
-  const secondMonth = useSelector((state) => state.months.secondMonth);
-  const departureDate = useSelector((state) => state.dates.departureDate);
-  const returnDate = useSelector((state) => state.dates.returnDate);
-  const isSelectingDepartDate = useSelector(
-    (state) => state.dates.isSelectingDepartDate
-  );
-  const dispatch = useDispatch();
-
-  const handleMonthChange = (monthChange) => {
-    dispatch(updateMonths({ monthChange }));
-  };
-
-  const handleDateChange = (date) => {
-    const selectedTimestamp = date.getTime();
-
-    if (departureDate && returnDate) {
-      dispatch(setDepartureDate(selectedTimestamp));
-      dispatch(setReturnDate(null));
-      dispatch(setIsSelectingDepartDate(false));
-    } else if (isSelectingDepartDate) {
-      dispatch(setDepartureDate(selectedTimestamp));
-      dispatch(setIsSelectingDepartDate(false));
-    } else {
-      if (departureDate && selectedTimestamp < departureDate) {
-        dispatch(setDepartureDate(selectedTimestamp));
-      } else {
-        dispatch(setReturnDate(selectedTimestamp));
-        dispatch(setIsSelectingDepartDate(true));
-      }
-    }
-  };
-
-  const isPreviousMonthDisabled =
-    firstMonth.getMonth() === new Date().getFullYear() &&
-    firstMonth.getMonth() < new Date().getMonth();
-  const maxForward =
-    secondMonth.getFullYear() === new Date().getFullYear() + 1 &&
-    secondMonth.getMonth() === new Date().getMonth();
-
-  useEffect(() => {
-    const applyStyles = () => {
-      // Get all the date elements
-      const dateElements = document.querySelectorAll(".MuiPickersDay-root");
-
-      dateElements.forEach((el) => {
-        const timestamp = parseInt(el.getAttribute("data-timestamp"), 10);
-        const d = new Date(departureDate);
-        d.setHours(0, 0, 0, 0);
-        const e = new Date(returnDate);
-        e.setHours(0, 0, 0, 0);
-        const start = d.getTime();
-        const end = e.getTime();
-
-        // Check if the date is between departure and return
-        if (returnDate && timestamp > start && timestamp < end) {
-          el.style.backgroundColor = "#e3f0ff";
-        } else {
-          el.style.backgroundColor = "transparent";
-        }
-        if (timestamp === start) {
-          if (returnDate) {
-            el.classList.add("selected-range", "selected-range-start");
-          } else {
-            el.classList.add("selected-range");
-          }
-        } else if (timestamp === end) {
-          el.classList.add("selected-range", "selected-range-end");
-        } else {
-          el.classList.remove(
-            "selected-range",
-            "selected-range-start",
-            "selected-range-end"
-          );
-        }
-      });
-    };
-    // Apply styles after MUI renders
-    const timeout = setTimeout(applyStyles, 50);
-
-    // Cleanup on unmount or dependency change
-    return () => clearTimeout(timeout);
-  }, [departureDate, returnDate, firstMonth, anchorEl]);
-
-  return (
-    <Menu
-      id='basic-menu'
-      anchorEl={anchorEl}
-      open={Boolean(anchorEl)}
-      onClose={handleClose}
-      MenuListProps={{
-        "aria-labelledby": "basic-button",
-      }}
-      slotProps={{
-        paper: {
-          sx: {
-            "&.MuiPaper-root": {
-              mt: "3px",
-              //top: "10px !important",
-              left: "28% !important",
-            },
-          },
-        },
-      }}
-    >
-      <Grid
-        container
-        wrap={{ md: "nowrap", xs: "wrap" }}
-        sx={{ p: "24px", gap: { lg: "80px", xs: "60px" } }}
-        alignItems='stretch'
-        justifyContent='center'
-      >
-        <Grid item xs={6} sx={{ height: "auto" }}>
-          <Box sx={{ position: "relative", mb: "24px" }}>
-            <Box sx={{ position: "absolute", top: "4px", left: "20px" }}>
-              <IconButton
-                disabled={isPreviousMonthDisabled}
-                onClick={() => handleMonthChange(-1)}
-                sx={{ p: 0, color: "#161616", background: "transparent" }}
-              >
-                <ArrowBackIosIcon fontSize='small' />
-              </IconButton>
-            </Box>
-            <Typography
-              variant='h6'
-              align='center'
-              sx={{ color: "#000", fontWeight: "bold" }}
-            >
-              {firstMonth.toLocaleString("default", { month: "long" })}
-            </Typography>
-          </Box>
-          <CustomStaticDatePicker
-            disableHighlightToday={true}
-            displayStaticWrapperAs='desktop'
-            value={firstMonth}
-            onChange={(date) => {
-              handleDateChange(date);
-            }}
-            minDate={new Date()}
-            renderInput={(params) => null}
-          />
-        </Grid>
-        <Grid item xs={6} sx={{ height: "auto" }}>
-          <Box sx={{ position: "relative", mb: "24px" }}>
-            <Box sx={{ position: "absolute", top: "4px", right: "20px" }}>
-              <IconButton
-                onClick={() => handleMonthChange(1)}
-                disabled={maxForward}
-                sx={{ p: 0, color: "#161616", background: "transparent" }}
-              >
-                <ArrowForwardIosIcon fontSize='small' />
-              </IconButton>
-            </Box>
-            <Typography
-              variant='h6'
-              align='center'
-              sx={{ color: "#000", fontWeight: "bold" }}
-            >
-              {secondMonth.toLocaleString("default", { month: "long" })}
-            </Typography>
-          </Box>
-
-          <CustomStaticDatePicker
-            disableHighlightToday={false}
-            displayStaticWrapperAs='desktop'
-            value={secondMonth}
-            onChange={(date) => {
-              handleDateChange(date);
-            }}
-            minDate={new Date()}
-            renderInput={(params) => null}
-            sx={{}}
-          />
-        </Grid>
-      </Grid>
-
-      <Divider />
-      <Grid
-        container
-        alignItems='center'
-        justifyContent='space-between'
-        sx={{ flex: 1, p: "16px 24px" }}
-      >
-        <Grid item>
-          <Typography variant='subtitle1' sx={{ color: "#000" }}>
-            {returnDate
-              ? "Search for return"
-              : departureDate
-              ? "Add a return date"
-              : "Select a departure date"}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Button
-            variant='contained'
-            sx={{
-              ...searchButtonStyle,
-              textTransform: "none",
-              p: "12px 16px",
-              width: "unset",
-              fontWeight: 700,
-              boxShadow: "none",
-              borderRadius: "8px",
-            }}
-            onClick={handleClose}
-          >
-            Apply
-          </Button>
-        </Grid>
-      </Grid>
-    </Menu>
-  );
-};
 const HomeSearchbar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
@@ -455,304 +156,244 @@ const HomeSearchbar = () => {
   };
 
   return (
-    <Container className='container'>
-      <Box
-        sx={{
-          display: "flex",
-          marginTop: "-320px",
-          gap: 0.5,
-        }}
-      >
-        <Link to='/flights'>
-          <Button
-            sx={{
-              boxSizing: "border-box",
-              fontSize: "13.5px",
-              backgroundColor: "transparent",
-              color: "text.primary",
-              textTransform: "none",
-              "&:hover": {
-                border: "0.5px solid #154679",
-                backgroundColor: "#154679",
-              },
-              border: "0.5px solid #6a7b8b",
-              borderRadius: "75px",
-              padding: "5px 15px",
-              mx: 0.5,
-            }}
-            variant='contained'
-            startIcon={
-              <FlightIcon
-                sx={{ rotate: "45deg", width: "20px", height: "20px" }}
-              />
-            }
-          >
-            Flights
-          </Button>
-        </Link>
-        <Link to='/hotels'>
-          <Button
-            sx={{
-              fontSize: "13.5px",
-              backgroundColor: "transparent",
-              color: "text.primary",
-              textTransform: "none",
-              border: "0.5px solid #6a7b8b",
-              "&:hover": {
-                border: "0.5px solid #154679",
-
-                backgroundColor: "#154679",
-              },
-              borderRadius: "75px",
-              padding: "5px 15px",
-            }}
-            variant='contained'
-            startIcon={<HotelIcon sx={{ width: "17px", height: "20px" }} />}
-          >
-            Hotels
-          </Button>
-        </Link>
-      </Box>
-
-      <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
-        <Typography
-          variant='h3'
-          sx={{ color: "text.primary", fontSize: "30px", fontWeight: "bold" }}
+    <Box
+      sx={{ width: "100%", backgroundColor: "common.blue", minHeight: "390px" }}
+    >
+      <Container className='container' sx={{ py: "16px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            //     marginTop: "-320px",
+            gap: 0.5,
+          }}
         >
-          Millions of cheap flights. One simple search.
-        </Typography>
-      </Box>
-
-      <Grid
-        container
-        alignItems='center'
-        gap={0.5}
-        sx={{ flexWrap: { md: "nowrap", xs: "wrap" } }}
-      >
-        {/* From */}
-        <Grid
-          item
-          sx={{ position: "relative", width: { md: "242px", xs: "100%" } }}
-        >
-          <Typography
-            variant='subtitle2'
-            sx={{
-              ...inputLableStyle,
-            }}
-          >
-            From
-          </Typography>
-          <Input
-            value={`${origin.city} (${origin.code}), ${origin.country}`}
-            placeholder='From'
-            disableUnderline
-            sx={{
-              ...inputStyle,
-              borderRadius: { md: "10px 0px 0px 10px", xs: "0" },
-              width: "100%",
-            }}
-          />
-        </Grid>
-        {/* To */}
-        <Grid
-          item
-          sx={{ position: "relative", width: { md: "242px", xs: "100%" } }}
-        >
-          <Typography
-            variant='subtitle2'
-            sx={{
-              ...inputLableStyle,
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              setIsOpenDestinationPopup(true);
-              destinationRef.current.click();
-            }}
-          >
-            To
-          </Typography>
-
-          <Autocomplete
-            fullWidth
-            open={isOpenDestinationPopup}
-            onOpen={() => setIsOpenDestinationPopup(true)}
-            onClose={() => setIsOpenDestinationPopup(false)}
-            ref={destinationRef}
-            freeSolo
-            options={cities}
-            getOptionLabel={(option) =>
-              option && option.city && option.code
-                ? `${option.city} (${option.code})`
-                : ""
-            }
-            filterOptions={(options, state) => {
-              const inputValue = state.inputValue.trim().toLowerCase();
-              if (inputValue === "") {
-                return options.slice(0, 5);
-              }
-              return options.filter(
-                (option) =>
-                  option.city.toLowerCase().includes(inputValue) ||
-                  option.code.toLowerCase().includes(inputValue) ||
-                  option.country.toLowerCase().includes(inputValue)
-              );
-            }}
-            onChange={(event, value) => {
-              dispatch(setTo(value));
-            }}
-            value={destination}
-            renderOption={(props, option) => (
-              <li
-                {...props}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "12px",
-                }}
-              >
+          <Link to='/flights'>
+            <Button
+              sx={{
+                boxSizing: "border-box",
+                fontSize: "13.5px",
+                backgroundColor: "transparent",
+                color: "text.primary",
+                textTransform: "none",
+                "&:hover": {
+                  border: "0.5px solid #154679",
+                  backgroundColor: "#154679",
+                },
+                border: "0.5px solid #6a7b8b",
+                borderRadius: "75px",
+                padding: "5px 15px",
+                mx: 0.5,
+              }}
+              variant='contained'
+              startIcon={
                 <FlightIcon
-                  style={{ color: "#5a5a5a", transform: "rotate(45deg)" }}
+                  sx={{ rotate: "45deg", width: "20px", height: "20px" }}
                 />
-                <div style={{ width: "100%" }}>
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      color: "black",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {option.city} ({option.code})
-                  </div>
-                  <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
-                    {option.country}
-                  </div>
-                </div>
-              </li>
-            )}
-            renderInput={(params) => (
-              <TextField
-                fullWidth
-                {...params}
-                InputProps={{
-                  ...params.InputProps,
-                  disableUnderline: true,
-                  style: {},
-                  sx: {
-                    ...inputStyle,
-                    border: 0,
-                  },
-                }}
-                placeholder='Country, city or airport'
-                variant='standard'
-                sx={{
-                  width: "100%",
-                  pb: "10.9px",
-                  border: "1px solid #ccc",
-                  backgroundColor: "background.paper",
+              }
+            >
+              Flights
+            </Button>
+          </Link>
+          <Link to='/hotels'>
+            <Button
+              sx={{
+                fontSize: "13.5px",
+                backgroundColor: "transparent",
+                color: "text.primary",
+                textTransform: "none",
+                border: "0.5px solid #6a7b8b",
+                "&:hover": {
+                  border: "0.5px solid #154679",
 
-                  "& .MuiAutocomplete-input": {
-                    mt: "-4px",
-                    // padding: "0 !important",
-                  },
-                }}
-              />
-            )}
-            PopperComponent={({ style, ...props }) => (
-              <Popper
-                {...props}
-                style={{
-                  ...style,
-                  width: "400px",
-                  maxHeight: "400px",
-                  overflowY: "auto",
-                  zIndex: 10,
-                }}
-              />
-            )}
-            sx={{
-              width: "100%",
+                  backgroundColor: "#154679",
+                },
+                borderRadius: "75px",
+                padding: "5px 15px",
+              }}
+              variant='contained'
+              startIcon={<HotelIcon sx={{ width: "17px", height: "20px" }} />}
+            >
+              Hotels
+            </Button>
+          </Link>
+        </Box>
 
-              "& .MuiAutocomplete-endAdornment": {
-                right: "10px",
-                bottom: "30%",
-              },
-            }}
-          />
-        </Grid>
-        <CalandarMenu
-          anchorEl={anchorEl}
-          handleClose={() => setAnchorEl(null)}
-        />
-        {/* depart */}
-        <Grid
-          item
-          className='date-input'
-          sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
-        >
+        <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
           <Typography
-            variant='subtitle2'
-            sx={{
-              ...inputLableStyle,
-              cursor: "pointer",
-            }}
-            onClick={() => departureDateRef.current?.click()}
+            variant='h3'
+            sx={{ color: "text.primary", fontSize: "30px", fontWeight: "bold" }}
           >
-            Depart
+            Millions of cheap flights. One simple search.
           </Typography>
-          <Input
-            ref={departureDateRef}
-            placeholder='Depart Add date'
-            readOnly
-            disableUnderline
-            value={formattedDepartureDate}
-            onClick={(e) => {
-              setShowCrossIcons(true);
-              setAnchorEl(e.currentTarget);
-            }}
-            //onFocus={handleInputFocus}
-            //onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "100%", cursor: "pointer" }}
-          />
-          {showCrossIcons && departureDate && (
-            <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
-          )}
-        </Grid>
-        {/* return  */}
+        </Box>
+
         <Grid
-          item
-          className='date-input'
-          sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+          container
+          alignItems='center'
+          gap={0.5}
+          sx={{ flexWrap: { md: "nowrap", xs: "wrap" } }}
         >
-          <Typography
-            variant='subtitle2'
-            sx={{
-              ...inputLableStyle,
-              cursor: "pointer",
-            }}
-            onClick={() => departureDateRef.current?.click()}
-          >
-            Return
-          </Typography>
-          <Input
-            placeholder='Return Add date'
-            disableUnderline
-            readOnly
-            value={formattedReturnDate}
-            onClick={() => departureDateRef.current.click()}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            sx={{ ...inputStyle, width: "100%", cursor: "pointer" }}
-          />
-          {showCrossIcons && returnDate && (
-            <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
-          )}
-        </Grid>
-        <ClickAwayListener
-          onClickAway={() => dispatch(setTravellersOpen(false))}
-        >
+          {/* From */}
           <Grid
             item
+            sx={{ position: "relative", width: { md: "242px", xs: "100%" } }}
+          >
+            <Typography
+              variant='subtitle2'
+              sx={{
+                ...inputLableStyle,
+              }}
+            >
+              From
+            </Typography>
+            <Input
+              value={`${origin.city} (${origin.code}), ${origin.country}`}
+              placeholder='From'
+              disableUnderline
+              sx={{
+                ...inputStyle,
+                borderRadius: { md: "10px 0px 0px 10px", xs: "0" },
+                width: "100%",
+              }}
+            />
+          </Grid>
+          {/* To */}
+          <Grid
+            item
+            sx={{ position: "relative", width: { md: "242px", xs: "100%" } }}
+          >
+            <Typography
+              variant='subtitle2'
+              sx={{
+                ...inputLableStyle,
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                setIsOpenDestinationPopup(true);
+                destinationRef.current.click();
+              }}
+            >
+              To
+            </Typography>
+
+            <Autocomplete
+              fullWidth
+              open={isOpenDestinationPopup}
+              onOpen={() => setIsOpenDestinationPopup(true)}
+              onClose={() => setIsOpenDestinationPopup(false)}
+              ref={destinationRef}
+              freeSolo
+              options={cities}
+              getOptionLabel={(option) =>
+                option && option.city && option.code
+                  ? `${option.city} (${option.code})`
+                  : ""
+              }
+              filterOptions={(options, state) => {
+                const inputValue = state.inputValue.trim().toLowerCase();
+                if (inputValue === "") {
+                  return options.slice(0, 5);
+                }
+                return options.filter(
+                  (option) =>
+                    option.city.toLowerCase().includes(inputValue) ||
+                    option.code.toLowerCase().includes(inputValue) ||
+                    option.country.toLowerCase().includes(inputValue)
+                );
+              }}
+              onChange={(event, value) => {
+                dispatch(setTo(value));
+              }}
+              value={destination}
+              renderOption={(props, option) => (
+                <li
+                  {...props}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "12px",
+                  }}
+                >
+                  <FlightIcon
+                    style={{ color: "#5a5a5a", transform: "rotate(45deg)" }}
+                  />
+                  <div style={{ width: "100%" }}>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        color: "black",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {option.city} ({option.code})
+                    </div>
+                    <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
+                      {option.country}
+                    </div>
+                  </div>
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  fullWidth
+                  {...params}
+                  InputProps={{
+                    ...params.InputProps,
+                    disableUnderline: true,
+                    style: {},
+                    sx: {
+                      ...inputStyle,
+                      border: 0,
+                    },
+                  }}
+                  placeholder='Country, city or airport'
+                  variant='standard'
+                  sx={{
+                    boxSizing: "border-box",
+
+                    width: "100%",
+                    pb: "10.9px",
+                    border: "1px solid #ccc",
+                    backgroundColor: "background.paper",
+
+                    "& .MuiAutocomplete-input": {
+                      mt: "-4px",
+                      // padding: "0 !important",
+                    },
+                  }}
+                />
+              )}
+              PopperComponent={({ style, ...props }) => (
+                <Popper
+                  {...props}
+                  style={{
+                    ...style,
+                    width: "400px",
+                    maxHeight: "400px",
+                    overflowY: "auto",
+                    zIndex: 10,
+                  }}
+                />
+              )}
+              sx={{
+                width: "100%",
+
+                "& .MuiAutocomplete-endAdornment": {
+                  right: "10px",
+                  bottom: "30%",
+                },
+              }}
+            />
+          </Grid>
+          <CalandarMenu
+            anchorEl={anchorEl}
+            handleClose={() => setAnchorEl(null)}
+          />
+          {/* depart */}
+          <Grid
+            item
+            className='date-input'
             sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
           >
             <Typography
@@ -761,57 +402,130 @@ const HomeSearchbar = () => {
                 ...inputLableStyle,
                 cursor: "pointer",
               }}
-              onClick={handleTravellersInputClick}
+              onClick={() => departureDateRef.current?.click()}
             >
-              Travellers and cabin class
+              Depart
             </Typography>
-
             <Input
-              placeholder='Travellers and cabin class'
+              ref={departureDateRef}
+              placeholder='Depart Add date'
+              readOnly
               disableUnderline
-              sx={{
-                ...inputStyle,
-                borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
-                marginRight: "8px",
-                width: "100%",
+              value={formattedDepartureDate}
+              onClick={(e) => {
+                setShowCrossIcons(true);
+                setAnchorEl(e.currentTarget);
               }}
-              onClick={handleTravellersInputClick}
-              value={travellersLabel}
+              //onFocus={handleInputFocus}
+              //onBlur={handleInputBlur}
+              sx={{ ...inputStyle, width: "100%", cursor: "pointer" }}
             />
-            {travellersOpen && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "calc(100% + 8px)",
-                  left: 0,
-                  zIndex: 9999,
-                }}
-              >
-                <HomeTravellersDropDown cabinClass={cabinClass} />
-              </Box>
+            {showCrossIcons && departureDate && (
+              <CloseIcon onClick={handleClearDeparture} sx={crossIconStyle} />
             )}
           </Grid>
-        </ClickAwayListener>
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            width: { md: "unset", xs: "100%" },
-            ml: { md: "6px", xs: 0 },
-          }}
-        >
-          <Button
-            fullWidth
-            onClick={handleSearch}
-            disabled={!origin || !destination || !departureDate || !returnDate}
-            variant='contained'
-            sx={{ ...searchButtonStyle, textTransform: "none" }}
+          {/* return  */}
+          <Grid
+            item
+            className='date-input'
+            sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
           >
-            Search
-          </Button>
+            <Typography
+              variant='subtitle2'
+              sx={{
+                ...inputLableStyle,
+                cursor: "pointer",
+              }}
+              onClick={() => departureDateRef.current?.click()}
+            >
+              Return
+            </Typography>
+            <Input
+              placeholder='Return Add date'
+              disableUnderline
+              readOnly
+              value={formattedReturnDate}
+              onClick={() => departureDateRef.current.click()}
+              onFocus={handleInputFocus}
+              onBlur={handleInputBlur}
+              sx={{ ...inputStyle, width: "100%", cursor: "pointer" }}
+            />
+            {showCrossIcons && returnDate && (
+              <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
+            )}
+          </Grid>
+          <ClickAwayListener
+            onClickAway={() => dispatch(setTravellersOpen(false))}
+          >
+            <Grid
+              item
+              sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+            >
+              <Typography
+                variant='subtitle2'
+                sx={{
+                  ...inputLableStyle,
+                  cursor: "pointer",
+                  textWrap: "nowrap",
+                  textOverflow: "ellipsis",
+                  boxSizing: "border-box",
+                  width: "100%",
+                  overflowX: "hidden",
+                }}
+                onClick={handleTravellersInputClick}
+              >
+                Travellers and cabin class
+              </Typography>
+
+              <Input
+                placeholder='Travellers and cabin class'
+                disableUnderline
+                sx={{
+                  ...inputStyle,
+                  borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
+                  marginRight: "8px",
+                  width: "100%",
+                }}
+                onClick={handleTravellersInputClick}
+                value={travellersLabel}
+              />
+              {travellersOpen && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    left: 0,
+                    zIndex: 9999,
+                  }}
+                >
+                  <HomeTravellersDropDown cabinClass={cabinClass} />
+                </Box>
+              )}
+            </Grid>
+          </ClickAwayListener>
+          <Grid
+            item
+            sx={{
+              display: "flex",
+              width: { md: "unset", xs: "100%" },
+              ml: { md: "6px", xs: 0 },
+            }}
+          >
+            <Button
+              fullWidth
+              onClick={handleSearch}
+              disabled={
+                !origin || !destination || !departureDate || !returnDate
+              }
+              variant='contained'
+              sx={{ ...searchButtonStyle, textTransform: "none" }}
+            >
+              Search
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

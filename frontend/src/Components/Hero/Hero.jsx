@@ -27,12 +27,11 @@ const Hero = () => {
     textDecoration: "none",
     display: "flex",
     alignItems: "center",
-    border: "0.5px solid black",
-    padding: "15px 180px 15px 10px",
+    padding: "16px",
     borderRadius: "10px",
     flexGrow: 1,
     cursor: "pointer",
-    backgroundColor: "#05203c",
+    backgroundColor: "common.blue",
     color: "white",
     "&:hover": {
       backgroundColor: "#054184",
@@ -43,7 +42,7 @@ const Hero = () => {
     <Container
       className='container'
       sx={{
-        marginTop: 16.5,
+        mt: "40px",
         display: "flex",
         justifyContent: "space-evenly",
         flexDirection: "column",
@@ -54,35 +53,41 @@ const Hero = () => {
       <Grid
         container
         alignItems='center'
+        spacing={2}
         sx={{
-          gap: "25px",
           marginBottom: "30px",
         }}
       >
-        <Box sx={{ ...HeroStyles }}>
-          <IconButton disabled>
-            <TravelExploreIcon sx={{ color: "white" }} />
-          </IconButton>
-          <Typography>Explore Everywhere</Typography>
-        </Box>
+        <Grid item sm={4}>
+          <Box sx={{ ...HeroStyles }}>
+            <IconButton disabled>
+              <TravelExploreIcon sx={{ color: "white" }} />
+            </IconButton>
+            <Typography>Explore Everywhere</Typography>
+          </Box>
+        </Grid>
 
-        <Box component={Link} to='/hotels' sx={{ ...HeroStyles }}>
-          <IconButton disabled>
-            <BedOutlinedIcon sx={{ color: "white" }} />
-          </IconButton>
-          <Typography>Hotels</Typography>
-        </Box>
+        <Grid item sm={4}>
+          <Box component={Link} to='/hotels' sx={{ ...HeroStyles }}>
+            <IconButton disabled>
+              <BedOutlinedIcon sx={{ color: "white" }} />
+            </IconButton>
+            <Typography>Hotels</Typography>
+          </Box>
+        </Grid>
 
-        <Box
-          component={Link}
-          to='/flights'
-          sx={{ ...HeroStyles, marginRight: 0 }}
-        >
-          <IconButton disabled>
-            <FlightTakeoffOutlinedIcon sx={{ color: "white" }} />
-          </IconButton>
-          <Typography>Flights</Typography>
-        </Box>
+        <Grid item sm={4}>
+          <Box
+            component={Link}
+            to='/hotels'
+            sx={{ ...HeroStyles, marginRight: 0 }}
+          >
+            <IconButton disabled>
+              <FlightTakeoffOutlinedIcon sx={{ color: "white" }} />
+            </IconButton>
+            <Typography>Flights</Typography>
+          </Box>
+        </Grid>
       </Grid>
 
       <Box sx={{ position: "relative", zIndex: 1 }}>

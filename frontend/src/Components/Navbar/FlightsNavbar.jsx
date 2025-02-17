@@ -132,7 +132,7 @@ const NavFlights = () => {
                     padding: "4px 23px",
                     color: "#000",
                     fontWeight: "bold",
-                    backgroundColor: "#e0e4e9",
+                    backgroundColor: "text.primary",
                     borderRadius: "10px",
                     "&:hover": {
                       backgroundColor: "#c1c7cf",

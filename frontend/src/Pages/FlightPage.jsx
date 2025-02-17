@@ -7,7 +7,7 @@ import FlightLocations from "../Components/FlightLocations/FlightLocations";
 import FlightFAQ from "../Components/FAQs/FlightFAQ";
 import FlightInfoSection from "../Components/FlightInfoSection";
 import CentredFooter from "../Components/Footer/CentredFooter";
-
+import HomeFooter from "../Components/Footer/HomeFooter";
 const FlightPage = () => {
   return (
     <>
@@ -16,7 +16,8 @@ const FlightPage = () => {
       <FlightLocations />
       <FlightFAQ />
       <FlightInfoSection />
-      <CentredFooter />
+      <HomeFooter />
+      {/* <CentredFooter /> */}
     </>
   );
 };

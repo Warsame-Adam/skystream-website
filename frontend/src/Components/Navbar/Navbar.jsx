@@ -96,9 +96,9 @@ const Navbar = ({ open, onClose }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            height: "390px",
+            //   height: "390px",
             // mx: 4,
-            padding: "25px 0px",
+            padding: "25px 0px 0px",
             //  transform: "translateX(-29px)",
           }}
         >
