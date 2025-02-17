@@ -13,6 +13,8 @@ import {
   Checkbox,
   FormControlLabel,
   Container,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import LanguageIcon from "@mui/icons-material/Language";
@@ -24,10 +26,15 @@ import HotelIcon from "@mui/icons-material/Hotel";
 import FlagIcon from "@mui/icons-material/Flag";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import companyLogo from "../../Components/Assets/company-logo.png";
 import RSMenu from "../RSMenu";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ open, onClose }) => {
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -95,13 +102,25 @@ const Navbar = ({ open, onClose }) => {
             //  transform: "translateX(-29px)",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box
+            component={Link}
+            to='/'
+            sx={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <IconButton sx={{ p: 0 }}>
-              <Avatar src={companyLogo} sx={{ mr: 2 }} />
+              <Avatar src={companyLogo} sx={{ mr: { xs: 1, md: 2 } }} />
             </IconButton>
             <Typography
-              variant='h6'
-              sx={{ fontFamily: "Roboto", letterSpacing: ".1rem" }}
+              variant={matchesSM ? "h6" : "h5"}
+              sx={{
+                color: "text.primary",
+                letterSpacing: ".1rem",
+                fontWeight: 700,
+              }}
             >
               SkyStream
             </Typography>
@@ -127,12 +146,14 @@ const Navbar = ({ open, onClose }) => {
               )}
             <IconButton sx={iconButtonStyles}>
               <PersonIcon />
-              <Typography
-                variant='body1'
-                sx={{ mx: 0.2, color: "background.paper" }}
-              >
-                Log in
-              </Typography>
+              {!matchesSM && (
+                <Typography
+                  variant='body1'
+                  sx={{ mx: 0.2, color: "background.paper" }}
+                >
+                  Log in
+                </Typography>
+              )}
             </IconButton>
             {links.slice(3).map((item, i) => (
               <IconButton

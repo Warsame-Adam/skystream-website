@@ -20,10 +20,9 @@ import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   setDepartureDate,
   setReturnDate,
@@ -464,43 +463,55 @@ const HomeSearchbar = () => {
           gap: 0.5,
         }}
       >
-        <Button
-          sx={{
-            fontSize: "13.5px",
-            backgroundColor: "transparent",
-            color: "text.primary",
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: "#154679",
-            },
-            border: "0.5px solid #6a7b8b",
-            borderRadius: "75px",
-            padding: "5px 15px",
-            mx: 0.5,
-          }}
-          variant='contained'
-          startIcon={<FlightIcon sx={{ width: "20px", height: "20px" }} />}
-        >
-          Flights
-        </Button>
-        <Button
-          sx={{
-            fontSize: "13.5px",
-            backgroundColor: "transparent",
-            color: "text.primary",
-            textTransform: "none",
-            "&:hover": {
-              backgroundColor: "#154679",
-            },
-            border: "0.5px solid #6a7b8b",
-            borderRadius: "75px",
-            padding: "5px 15px",
-          }}
-          variant='contained'
-          startIcon={<HotelIcon sx={{ width: "17px", height: "20px" }} />}
-        >
-          Hotels
-        </Button>
+        <Link to='/flights'>
+          <Button
+            sx={{
+              boxSizing: "border-box",
+              fontSize: "13.5px",
+              backgroundColor: "transparent",
+              color: "text.primary",
+              textTransform: "none",
+              "&:hover": {
+                border: "0.5px solid #154679",
+                backgroundColor: "#154679",
+              },
+              border: "0.5px solid #6a7b8b",
+              borderRadius: "75px",
+              padding: "5px 15px",
+              mx: 0.5,
+            }}
+            variant='contained'
+            startIcon={
+              <FlightIcon
+                sx={{ rotate: "45deg", width: "20px", height: "20px" }}
+              />
+            }
+          >
+            Flights
+          </Button>
+        </Link>
+        <Link to='/hotels'>
+          <Button
+            sx={{
+              fontSize: "13.5px",
+              backgroundColor: "transparent",
+              color: "text.primary",
+              textTransform: "none",
+              border: "0.5px solid #6a7b8b",
+              "&:hover": {
+                border: "0.5px solid #154679",
+
+                backgroundColor: "#154679",
+              },
+              borderRadius: "75px",
+              padding: "5px 15px",
+            }}
+            variant='contained'
+            startIcon={<HotelIcon sx={{ width: "17px", height: "20px" }} />}
+          >
+            Hotels
+          </Button>
+        </Link>
       </Box>
 
       <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
@@ -845,10 +856,15 @@ const crossIconStyle = {
 };
 
 const searchButtonStyle = {
-  backgroundColor: "#0062e3",
+  backgroundColor: "primary.main",
   padding: { md: "23px 20px", xs: "10px" },
   borderRadius: "10px",
+  color: "text.primary",
   "&:hover": { backgroundColor: "#024daf" },
+  "&.Mui-disabled": {
+    backgroundColor: "primary.main",
+    color: "text.primary",
+  },
   minWidth: "70px",
 };
 

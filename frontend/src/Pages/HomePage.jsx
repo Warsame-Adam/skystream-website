@@ -11,7 +11,7 @@ const HomePage = () => {
     <>
       <Navbar />
       <HomeSearchBar />
-      <CalendarLayout />
+      {/* <CalendarLayout /> */}
       <Hero />
       <FAQ />
       <HomeFooter />

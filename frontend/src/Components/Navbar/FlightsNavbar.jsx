@@ -1,114 +1,214 @@
-import React from "react"
-import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import companyLogo from '../../Components/Assets/company-logo.png';
-import FlightIcon from '@mui/icons-material/Flight';
-import HotelIcon from '@mui/icons-material/Hotel';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import React from "react";
+import {
+  AppBar,
+  Menu,
+  Toolbar,
+  IconButton,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  Container,
+  TextField,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+import companyLogo from "../../Components/Assets/company-logo.png";
+import FlightIcon from "@mui/icons-material/Flight";
+import HotelIcon from "@mui/icons-material/Hotel";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Link } from "react-router-dom";
 
-const navFlights = () => {
+const NavFlights = () => {
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+  return (
+    <AppBar
+      position='static'
+      sx={{
+        padding: "0",
+        backgroundColor: "common.blue",
+      }}
+    >
+      <Container className='container'>
+        <Toolbar
+          disableGutters
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            padding: "24px 0px 5px",
+          }}
+        >
+          <Grid container alignItems='center' justifyContent={"space-between"}>
+            <Box
+              component={Link}
+              to='/'
+              sx={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <IconButton sx={{ p: 0 }}>
+                <Avatar src={companyLogo} sx={{ mr: { xs: 1, md: 2 } }} />
+              </IconButton>
+              <Typography
+                variant={matchesSM ? "h6" : "h5"}
+                sx={{
+                  color: "text.primary",
+                  letterSpacing: ".1rem",
+                  fontWeight: 700,
+                }}
+              >
+                SkyStream
+              </Typography>
+            </Box>
+            <Box sx={{ display: "flex", gap: "6px", alignItems: "center" }}>
+              {!matchesSM && (
+                <Typography
+                  underLine='hover'
+                  sx={{ fontSize: "14px", cursor: "pointer", mr: "6px" }}
+                >
+                  Help
+                </Typography>
+              )}
+              <Typography
+                variant='subtitle2'
+                sx={{
+                  padding: matchesSM ? 0 : "6px 16px",
+                  borderRadius: "8px",
+                  fontSize: "12px",
+                  backgroundColor: matchesSM
+                    ? "transparent"
+                    : "rgba(255, 255, 255, 0.11)",
+                  "&:hover": {
+                    backgroundColor: "#000",
+                  },
+                  cursor: "pointer",
+                }}
+              >
+                {matchesSM
+                  ? "EN - UK (GBP)"
+                  : "United Kingdom - English (UK) • £ GBP"}
+              </Typography>
 
+              <IconButton>
+                <FavoriteIcon
+                  sx={{
+                    color: "text.primary",
+                    "&:hover": {
+                      color: "#82909E",
+                    },
+                    cursor: "pointer",
+                  }}
+                />
+              </IconButton>
+              {matchesSM ? (
+                <IconButton sx={{ p: 0 }}>
+                  <AccountCircleIcon
+                    sx={{
+                      color: "text.primary",
+                      "&:hover": {
+                        color: "#82909E",
+                      },
+                      cursor: "pointer",
+                    }}
+                  />
+                </IconButton>
+              ) : (
+                <Button
+                  variant='contained'
+                  sx={{
+                    fontFamily: "SkyStreamRelative",
+                    fontSize: "16px",
+                    textTransform: "none",
+                    border: "0",
+                    padding: "4px 23px",
+                    color: "#000",
+                    fontWeight: "bold",
+                    backgroundColor: "#e0e4e9",
+                    borderRadius: "10px",
+                    "&:hover": {
+                      backgroundColor: "#c1c7cf",
+                    },
+                    cursor: "pointer",
+                  }}
+                >
+                  Log in
+                </Button>
+              )}
+            </Box>
+          </Grid>
 
-    return (
-        
-            <AppBar position="static" sx={{backgroundColor:"#05203c", padding:"20px 310px", height:"140px"}}>
-                <Toolbar   sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                        <IconButton>
-                            <Avatar src={companyLogo} />
-                        </IconButton>
-                        <Box sx={{
-                            display: "flex",
-                            mt:2,
-                            
-                            }}>
-                            <Button 
-                            sx={{
-                                fontSize:"13.5px",
-                                backgroundColor:"#05203c",
-                                color:"white",
-                                textTransform:"none",
-                                '&:hover': {
-                                    backgroundColor:"#154679"
-                                },
-                                border: "0.5px solid white",
-                                borderRadius: "75px",
-                                padding:"5px 15px",
-                                mx: 0.5,}} 
-                                variant="contained" startIcon={<FlightIcon sx={{width:"20px", height:"20px"}} />}>
-                                    Flights
-                            </Button>
-                            <Button 
-                            sx={{
-                                fontSize:"13.5px",
-                                backgroundColor:"#05203c",
-                                color:"white",
-                                textTransform:"none",
-                                '&:hover': {
-                                    backgroundColor:"#154679"
-                                },
-                                border: "0.5px solid white",
-                                borderRadius: "75px",
-                                padding:"5px 15px",
-                            }} 
-                            variant="contained" 
-                            startIcon={<HotelIcon sx={{width:"17px", height:"20px"}} />}>
-                                Hotels
-                            </Button>
-                        </Box>
-                        
-                    </Box>
-                    <Box sx={{display:"flex", gap:"6px", alignItems:"center"}}>
-                        <Typography underLine="hover" sx={{fontSize:"14px",cursor:"pointer"}}>
-                            Help
-                        </Typography>
-                        <Typography  sx={{border:"0.5px solid grey", 
-                            padding:"8px 15px", 
-                            borderRadius:"5px",
-                            fontSize:"11px", 
-                            backgroundColor:"rgba(255, 255, 255, 0.11)",
-                            '&:hover': {
-                                backgroundColor:"black"},
-                                cursor:"pointer"
-                            }}>
-                            United Kingdom - English (UK) • £ GBP
-                        </Typography>
-                        
-                        <IconButton>
-                            <FavoriteIcon sx={{
-                                color:"white", 
-                                '&:hover': {
-                                backgroundColor:"grey"},
-                                cursor:"pointer"
-                          
-                                
-                                }} />
-                        </IconButton>
-                        <Box sx={{ 
-                            border:"0.5px solid grey", 
-                            padding:"7px 25px",
-                            color:"black",
-                            fontWeight:"bold",
-                            backgroundColor:"#e0e4e9", 
-                            borderRadius:"10px",
-                            '&:hover': {
-                                backgroundColor:"#c1c7cf"},
-                                cursor:"pointer"
-                          }}>
-                            Log in
+          <Grid
+            container
+            sx={{
+              mt: "24px",
+              gap: 0.5,
+            }}
+          >
+            <Link to='/flights'>
+              <Button
+                sx={{
+                  boxSizing: "border-box",
+                  fontSize: "13.5px",
+                  backgroundColor: "primary.main",
+                  color: "text.primary",
+                  textTransform: "none",
+                  "&:hover": {
+                    border: "0.5px solid",
+                    borderColor: "primary.main",
+                    backgroundColor: "primary.main",
+                  },
+                  border: "0.5px solid",
+                  borderColor: "primary.main",
+                  borderRadius: "75px",
+                  padding: "5px 15px",
+                  mx: 0.5,
+                }}
+                variant='contained'
+                startIcon={
+                  <FlightIcon
+                    sx={{ rotate: "45deg", width: "20px", height: "20px" }}
+                  />
+                }
+              >
+                Flights
+              </Button>
+            </Link>
+            <Link to='/hotels'>
+              <Button
+                sx={{
+                  fontSize: "13.5px",
+                  backgroundColor: "transparent",
+                  color: "text.primary",
+                  textTransform: "none",
+                  border: "0.5px solid #6a7b8b",
+                  "&:hover": {
+                    border: "0.5px solid #154679",
 
-                        </Box>
-                        
-                    </Box>
+                    backgroundColor: "#154679",
+                  },
+                  borderRadius: "75px",
+                  padding: "5px 15px",
+                }}
+                variant='contained'
+                startIcon={<HotelIcon sx={{ width: "17px", height: "20px" }} />}
+              >
+                Hotels
+              </Button>
+            </Link>
+          </Grid>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+};
 
-
-                </Toolbar>
-            </AppBar>
-
-        
-    )
-}
-
-export default navFlights;
-
+export default NavFlights;

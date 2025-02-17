@@ -20,9 +20,11 @@ import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import BedOutlinedIcon from "@mui/icons-material/BedOutlined";
 import FlightTakeoffOutlinedIcon from "@mui/icons-material/FlightTakeoffOutlined";
 import HeroImage from "../../Components/Assets/HeroImage.png";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   const HeroStyles = {
+    textDecoration: "none",
     display: "flex",
     alignItems: "center",
     border: "0.5px solid black",
@@ -64,14 +66,18 @@ const Hero = () => {
           <Typography>Explore Everywhere</Typography>
         </Box>
 
-        <Box sx={{ ...HeroStyles }}>
+        <Box component={Link} to='/hotels' sx={{ ...HeroStyles }}>
           <IconButton disabled>
             <BedOutlinedIcon sx={{ color: "white" }} />
           </IconButton>
           <Typography>Hotels</Typography>
         </Box>
 
-        <Box sx={{ ...HeroStyles, marginRight: 0 }}>
+        <Box
+          component={Link}
+          to='/flights'
+          sx={{ ...HeroStyles, marginRight: 0 }}
+        >
           <IconButton disabled>
             <FlightTakeoffOutlinedIcon sx={{ color: "white" }} />
           </IconButton>
