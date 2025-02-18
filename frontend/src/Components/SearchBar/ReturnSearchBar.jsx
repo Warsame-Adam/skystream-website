@@ -46,6 +46,7 @@ const cities = [
 const ReturnSearchBar = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
   const destinationRef = useRef();
 
@@ -72,18 +73,19 @@ const ReturnSearchBar = () => {
     }
   }, [adults, children, cabinClass]);
 
-  const handleClickDepart = () => {
+  const handleClickDepart = (e) => {
     dispatch(setActiveInput("depart"));
-    handleClick();
+    handleClick(e);
   };
 
-  const handleClickReturn = () => {
+  const handleClickReturn = (e) => {
     dispatch(setActiveInput("return"));
-    handleClick();
+    handleClick(e);
   };
 
-  const handleClick = () => {
-    dispatch(calendarShow());
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+    // dispatch(calendarShow());
   };
 
   useEffect(() => {
@@ -107,27 +109,9 @@ const ReturnSearchBar = () => {
   const departInputRef = useRef(null);
   const returnInputRef = useRef(null);
 
-  const [calendarPosition, setCalendarPosition] = useState({ top: 0, left: 0 });
-
-  const handlePositionCalendar = () => {
-    if (activeInput === "depart" && departInputRef.current) {
-      const { top, left, height } =
-        departInputRef.current.getBoundingClientRect();
-      setCalendarPosition({ top: top + height - 300, left: left - 420 });
-    } else if (activeInput === "return" && returnInputRef.current) {
-      const { top, left, height } =
-        returnInputRef.current.getBoundingClientRect();
-      setCalendarPosition({ top: top + height - 300, left: left - 340 });
-    }
-  };
-
   const handleTravellersInputClick = () => {
     dispatch(setTravellersOpen(true));
   };
-
-  useEffect(() => {
-    handlePositionCalendar();
-  }, [activeInput]);
 
   const checkboxes = (
     <Box
@@ -428,7 +412,12 @@ const ReturnSearchBar = () => {
             disabled={searchType === "oneway"}
           />
         </Grid>
-
+        <ReusableDatePicker
+          anchorEl={anchorEl}
+          handleClose={() => setAnchorEl(null)}
+          departInputRef={departInputRef}
+          returnInputRef={returnInputRef}
+        />
         <ClickAwayListener
           onClickAway={() => dispatch(setTravellersOpen(false))}
         >
@@ -496,13 +485,6 @@ const ReturnSearchBar = () => {
             Search
           </Button>
         </Grid>
-        {isCalendarVisible && (
-          <ReusableDatePicker
-            departInputRef={departInputRef}
-            returnInputRef={returnInputRef}
-            calendarPosition={calendarPosition}
-          />
-        )}
       </Grid>
       {!matchesSM && checkboxes}
     </Box>
@@ -521,7 +503,7 @@ const inputLableStyle = {
 const searchButtonStyle = {
   backgroundColor: "primary.main",
   padding: { md: "23px 20px", xs: "10px" },
-  borderRadius: "10px",
+  borderRadius: { md: "10px", xs: 0 },
   color: "text.primary",
   "&:hover": { backgroundColor: "#024daf" },
   "&.Mui-disabled": {

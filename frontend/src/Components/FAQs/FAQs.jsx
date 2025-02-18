@@ -81,12 +81,12 @@ const FAQs = () => {
                   justifyContent: "space-between",
                   paddingBottom: "5px",
                   cursor: "pointer",
+                  borderBottom: "0.5px solid #c1c7cf",
+                  paddingBottom: "10px",
                 }}
               >
                 <Typography
                   sx={{
-                    borderBottom: "0.5px solid #c1c7cf",
-                    paddingBottom: "10px",
                     flexGrow: 1,
                     fontWeight: "bold",
                     fontSize: "15px",
@@ -98,11 +98,12 @@ const FAQs = () => {
                 <IconButton
                   sx={{
                     color: "black",
-                    marginLeft: -3.5,
+                    //  marginLeft: -3.5,
                     transform: visibleFAQs[index]
                       ? "rotate(180deg)"
                       : "rotate(0deg)",
                     transition: "transform 0.3s",
+                    py: 0,
                   }}
                 >
                   <ExpandMoreIcon sx={{ fontSize: "20px" }} />

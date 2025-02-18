@@ -58,7 +58,7 @@ const Hero = () => {
           marginBottom: "30px",
         }}
       >
-        <Grid item sm={4}>
+        <Grid item sm={4} xs={12}>
           <Box sx={{ ...HeroStyles }}>
             <IconButton disabled>
               <TravelExploreIcon sx={{ color: "white" }} />
@@ -67,7 +67,7 @@ const Hero = () => {
           </Box>
         </Grid>
 
-        <Grid item sm={4}>
+        <Grid item sm={4} xs={12}>
           <Box component={Link} to='/hotels' sx={{ ...HeroStyles }}>
             <IconButton disabled>
               <BedOutlinedIcon sx={{ color: "white" }} />
@@ -76,7 +76,7 @@ const Hero = () => {
           </Box>
         </Grid>
 
-        <Grid item sm={4}>
+        <Grid item sm={4} xs={12}>
           <Box
             component={Link}
             to='/hotels'
@@ -137,11 +137,18 @@ const Hero = () => {
               fontSize: "48px",
               fontWeight: "900",
               letterSpacing: "-.04em",
+              textShadow: "1px 1px 2px rgba(0,0,0, 0.25)",
             }}
           >
             Go further, get <br /> closer
           </Typography>
-          <Typography variant='subtitle1' sx={{ paddingBottom: "25px" }}>
+          <Typography
+            variant='subtitle1'
+            sx={{
+              paddingBottom: "25px",
+              textShadow: "1px 1px 2px rgba(0,0,0, 0.25)",
+            }}
+          >
             <span style={{}}>
               Sneak off for a romantic hotel stay with prices <br /> you'll
               love.{" "}

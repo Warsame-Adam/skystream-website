@@ -4,199 +4,235 @@ import {
   IconButton,
   Select,
   MenuItem,
-} from '@mui/material';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import { useSelector, useDispatch } from 'react-redux';
+  Menu,
+  TextField,
+} from "@mui/material";
+import ArrowLeftRoundedIcon from "@mui/icons-material/ArrowLeftRounded";
+import ArrowRightRoundedIcon from "@mui/icons-material/ArrowRightRounded";
+import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { useSelector, useDispatch } from "react-redux";
 import { calendarHide } from "./Slices/ReusableCalendar";
 import { setDepartureDate, setReturnDate } from "./Slices/dateStore";
 import { setCurrentMonth, updateMonth } from "./Slices/singleMonthSlice";
-import { styled } from '@mui/material/styles';
-
+import { styled } from "@mui/material/styles";
+import * as datefns from "date-fns";
 const CustomStaticDatePicker = styled(StaticDatePicker)({
-
-'& .MuiPickersCalendarHeader-root': {
-    display: 'none', 
+  "& .MuiDateCalendar-root": {
+    minHeight: "348px",
+    height: "auto",
+    overflow: "visible",
   },
-  '& .MuiDayCalendar-weekDayLabel': {
-    color: 'black',
-    width: '14.28%', 
-    textAlign: 'center',
-    margin: 0,
-    fontSize: '12px',
-    marginBottom:"-190px",
-    
+  "& .MuiPickersCalendarHeader-root": {
+    display: "none",
   },
-  '& .MuiDateCalendar-root': {
-    width: '350px',
-    height: '480px',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden', 
+  "& .MuiPickersSlideTransition-root": {
+    height: "100%",
+    overflow: "visible",
   },
-  '& .MuiPickersLayout-contentWrapper': {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: '1 1 auto',
-    height: '100%',
-    overflow: 'hidden', 
-    backgroundColor:"white",
-    
-  },
-  '& .MuiPickersFadeTransitionGroup-root': {
-    height: '100%', 
-    overflow: 'hidden',
-  },
-  '& .MuiDayCalendar-root': {
-    flex: '1 1 auto',
-    display: 'grid',
-    gridTemplateRows: 'repeat(6, 1fr)', 
-    
-    justifyContent: 'stretch',
-    alignItems: 'stretch',
-    height: '100%',
-    margin: 0,
-    padding: 0,
-    overflow: 'hidden',
-    marginTop:"-190px"
-  },
-  '& .MuiDayCalendar-weekContainer': {
-    display: 'flex',
-    flex: '1 1 auto',
-    justifyContent: 'space-between',
-    alignItems: 'stretch',
-  },
-  '& .MuiPickersDay-root': {
-    flex: '1 1 auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 0, 
-    padding: '10px',
-    fontSize: '15px',
-    height: '100%',
-    color: 'black',
-    
-  },
-  '& .MuiPickersDay-root.Mui-selected': {
-    backgroundColor: 'primary.main',
-    color: '#ffffff',
+  "& .MuiDayCalendar-header ": {
+    gap: "8px",
+    margin: "24px 0px",
+    borderBottom: "1px solid #c2c9cd",
   },
 
-  '& .MuiBox-root css-7fiw7d': {
-    zIndex:9999
-  }
-  
+  "& .MuiDayCalendar-weekDayLabel": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    color: "#161616",
+    fontWeight: 400,
+    margin: "0",
+    p: "0 8px",
+    lineHeight: "16px",
+    height: "36px",
+    width: "36px",
+  },
+
+  "& .MuiPickersLayout-contentWrapper": {
+    display: "flex",
+    flexDirection: "column",
+    flex: "1 1 auto",
+    height: "100%",
+    overflow: "hidden",
+    backgroundColor: "white",
+  },
+  "& .MuiPickersFadeTransitionGroup-root": {
+    height: "100%",
+    overflow: "hidden",
+  },
+  "& .MuiDayCalendar-weekContainer": {
+    display: "flex",
+    flexDirection: "row",
+    gap: "8px",
+    // justifyContent: "space-around",
+    marginBottom: "20px",
+  },
+
+  "& .MuiPickersDay-root": {
+    margin: 0,
+    fontSize: "14px",
+    color: "#000",
+    fontWeight: 700,
+  },
+  "& .MuiPickersDay-today": {
+    border: "none !important",
+    backgroundColor: "transparent",
+    color: "#000",
+  },
+  "& .MuiPickersDay-root.Mui-selected": {
+    border: "none",
+    backgroundColor: "transparent",
+    color: "#000",
+  },
+  "& .MuiPickersDay-root.selected-range": {
+    zIndex: 1,
+    color: "#fff",
+    backgroundColor: "#0062e3 !important",
+  },
 });
 
-const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }) => {
-  const isCalendarVisible = useSelector((state) => state.CalendarVisible.isCalendarVisible);
+const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const ReusableDatePicker = ({
+  anchorEl,
+  handleClose,
+  returnInputRef,
+  departInputRef,
+}) => {
   const activeInput = useSelector((state) => state.CalendarVisible.activeInput);
   const currentMonth = useSelector((state) => state.singleMonth.currentMonth);
+  const departureDate = useSelector((state) => state.dates.departureDate);
+  const returnDate = useSelector((state) => state.dates.returnDate);
   const dispatch = useDispatch();
-  const calendarRef = useRef(null);
   const selectRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target) &&
-        !(departInputRef.current.contains(event.target) || 
-          returnInputRef.current.contains(event.target) ||
-          (selectRef.current && selectRef.current.contains(event.target)))
-      ) {
-        dispatch(calendarHide());
-      }
-    };
-
-    if (isCalendarVisible) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isCalendarVisible, departInputRef, returnInputRef, dispatch]);
-
+  const datePickerRef = useRef(null);
   const handleDateChange = (date) => {
     const selectedTimestamp = date.getTime();
-
     if (activeInput === "depart" && departInputRef.current) {
       dispatch(setDepartureDate(selectedTimestamp));
+      if (selectedTimestamp >= returnDate) {
+        const daysDiff = new Date(Date.now() + 9 * 24 * 60 * 60 * 1000);
+        dispatch(setReturnDate(selectedTimestamp + daysDiff.getTime()));
+      }
       departInputRef.current.value = date?.toLocaleDateString();
     } else if (activeInput === "return" && returnInputRef.current) {
       dispatch(setReturnDate(selectedTimestamp));
       returnInputRef.current.value = date?.toLocaleDateString();
     }
-    dispatch(calendarHide());
+    handleClose();
+    //dispatch(calendarHide());
   };
+  useEffect(() => {
+    const applyStyles = () => {
+      const dateElements = document.querySelectorAll(".MuiPickersDay-root");
+      dateElements.forEach((el) => {
+        const timestamp = parseInt(el.getAttribute("data-timestamp"), 10);
+        const d = new Date(departureDate);
+        d.setHours(0, 0, 0, 0);
+        const e = new Date(returnDate);
+        e.setHours(0, 0, 0, 0);
 
+        const start = d.getTime();
+        const end = e.getTime();
+
+        if (activeInput === "depart") {
+          if (timestamp === start) {
+            el.classList.add("selected-range");
+          } else {
+            el.classList.remove("selected-range");
+          }
+        } else {
+          if (timestamp === end) {
+            el.classList.add("selected-range");
+          } else {
+            el.classList.remove("selected-range");
+          }
+        }
+      });
+    };
+    // Apply styles after MUI renders
+    const timeout = setTimeout(applyStyles, 50);
+
+    // Cleanup on unmount or dependency change
+    return () => clearTimeout(timeout);
+  }, [currentMonth, departureDate, returnDate, anchorEl]);
   const handleMonthChange = (monthChange) => {
     dispatch(updateMonth(monthChange));
   };
 
-  
   const months = useMemo(() => {
     const monthsList = [];
     const startDate = new Date(currentMonth);
     startDate.setHours(0, 0, 0, 0);
 
     for (let i = 0; i < 12; i++) {
-      const date = new Date(startDate.getFullYear(), startDate.getMonth() + i, 1);
-      monthsList.push(date.toLocaleString('default', { month: 'long', year: 'numeric' }));
+      const date = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth() + i,
+        1
+      );
+      monthsList.push(
+        date.toLocaleString("default", { month: "long", year: "numeric" })
+      );
     }
     return monthsList;
   }, [currentMonth]);
 
   const handleMonthSelect = (event) => {
     const selectedMonthString = event.target.value;
-    const [selectedMonthName, selectedYear] = selectedMonthString.split(' ');
+    const [selectedMonthName, selectedYear] = selectedMonthString.split(" ");
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June', 
-      'July', 'August', 'September', 'October', 'November', 'December'
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     const monthIndex = monthNames.indexOf(selectedMonthName);
-    
+
     const newMonth = new Date(parseInt(selectedYear), monthIndex, 1);
     dispatch(setCurrentMonth(newMonth));
   };
 
-
   const isPreviousMonthDisabled =
-  currentMonth.getFullYear() === new Date().getFullYear() &&
-  currentMonth.getMonth() <= new Date().getMonth();
-  
-  const maxForward =
-  currentMonth.getFullYear() === new Date().getFullYear() + 1 &&
-  currentMonth.getMonth() === new Date().getMonth();
+    currentMonth.getFullYear() === new Date().getFullYear() &&
+    currentMonth.getMonth() <= new Date().getMonth();
 
-  
+  const maxForward =
+    currentMonth.getFullYear() === new Date().getFullYear() + 1 &&
+    currentMonth.getMonth() === new Date().getMonth();
 
   return (
-    <Box
-      ref={calendarRef}
-      sx={{
-        position: 'absolute',
-        top: `${calendarPosition.top}px`,
-        left: `${calendarPosition.left}px`,
-        width: "350px",
-        height:"400px",
-        Zindex:9999,
-        backgroundColor: "red",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-        borderRadius: "8px",
-        padding: "16px",
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        overflow: "visible",
-
-        
-        
-        
-        
+    <Menu
+      id='basic-menu'
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+      MenuListProps={{
+        "aria-labelledby": "basic-button",
+      }}
+      slotProps={{
+        paper: {
+          sx: {
+            "&.MuiPaper-root": {
+              mt: "3px",
+              border: ".0625rem solid #e0e3e5",
+              boxShadow: "0 4px 14px 0 #25201f40",
+              borderRadius: "8px",
+              ml: { md: "-100px", xs: 0 },
+              //top: "10px !important",
+              // left: "21% !important",
+            },
+          },
+        },
       }}
     >
       <Box
@@ -204,75 +240,100 @@ const ReusableDatePicker = ({ departInputRef, returnInputRef, calendarPosition }
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          paddingBottom: "8px",
-          borderBottom: "1px solid #e0e0e0",
-          width: '100%',
-          boxSizing: 'border-box',
-          
+          gap: "8px",
+          width: "100%",
+          boxSizing: "border-box",
+          mt: "8px",
+          px: "14px",
         }}
       >
-        <IconButton onClick={() => handleMonthChange(-1)} disabled={isPreviousMonthDisabled}>
-          <ArrowLeftIcon />
-        </IconButton>
-        <Select
-          ref={selectRef}
-          value={currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
-          onChange={handleMonthSelect}
-          variant="standard"
-          MenuProps={{
-            disableScrollLock: true,
-            
-            onClose: (event) => {
-              event.stopPropagation();
-            }
-          }}
+        <IconButton
+          onClick={() => handleMonthChange(-1)}
+          disabled={isPreviousMonthDisabled}
           sx={{
-            fontSize: "15px",
-            fontWeight: "600",
-            textAlign: 'center',
-            color:"black",
-            margin: '0 8px',
-            minWidth: '150px',
-            '& .MuiSelect-select': {
-              textAlign: 'center'
-            },
+            p: 0,
+            color: "#161616",
           }}
         >
-          {months.map((month, index) => (
-            <MenuItem sx={{color:"black"}} key={index} value={month}>{month}</MenuItem>
-          ))}
-        </Select>
-        <IconButton onClick={() => handleMonthChange(1)} disabled={maxForward}>
-          <ArrowRightIcon />
+          <ArrowLeftRoundedIcon sx={{ fontSize: "3rem" }} />
+        </IconButton>
+        <Box sx={{ flex: 1 }}>
+          <Select
+            native
+            fullWidth
+            size='small'
+            variant='outlined'
+            ref={selectRef}
+            value={currentMonth.toLocaleString("default", {
+              month: "long",
+              year: "numeric",
+            })}
+            IconComponent={ArrowDropDownRoundedIcon}
+            onChange={handleMonthSelect}
+            MenuProps={{
+              disableScrollLock: true,
+
+              onClose: (event) => {
+                event.stopPropagation();
+              },
+            }}
+            sx={{
+              fontSize: "15px",
+              fontWeight: "400",
+              textAlign: "center",
+              color: "#000",
+              minWidth: "150px",
+              "& .MuiSelect-select": {
+                textAlign: "center",
+              },
+              "&:hover.MuiOutlinedInput-root fieldset": {
+                borderColor: "#c2c9cd",
+              },
+              "&:hover.Mui-focused.MuiOutlinedInput-root fieldset": {
+                borderColor: "primary.main",
+              },
+              "& .MuiSvgIcon-root": {
+                fontSize: "2rem",
+                mr: "-6px",
+                color: "#161616",
+              },
+            }}
+          >
+            {months.map((month, index) => (
+              <option style={{ color: "#000" }} key={index} value={month}>
+                {month}
+              </option>
+            ))}
+          </Select>
+        </Box>
+        <IconButton
+          sx={{
+            p: 0,
+            color: "#161616",
+          }}
+          onClick={() => handleMonthChange(1)}
+          disabled={maxForward}
+        >
+          <ArrowRightRoundedIcon sx={{ fontSize: "3rem" }} />
         </IconButton>
       </Box>
 
       <CustomStaticDatePicker
-        displayStaticWrapperAs="desktop"
+        ref={datePickerRef}
+        displayStaticWrapperAs='desktop'
         value={currentMonth}
         onChange={handleDateChange}
         disablePast={true}
-        minDate={new Date()}
+        minDate={
+          activeInput === "depart" ? new Date() : new Date(departureDate)
+        }
         maxDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
-        
-        componentsProps={{
-          actionBar: {
-            actions: ['cancel']
-          },
-         day : {
-          dayOfWeekFormatter: (day) => {
-            const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            return weekDays[new Date(day).getDay()];
-          },
-            
-          },
-        }}
+        dayOfWeekFormatter={(date) => weekDays[datefns.getDay(date)]}
         renderInput={(params) => null}
-        sx={{color:"pink"}}
-       
+        sx={{ color: "pink" }}
       />
-    </Box>
+    </Menu>
   );
 };
 
-export default ReusableDatePicker; 
+export default ReusableDatePicker;

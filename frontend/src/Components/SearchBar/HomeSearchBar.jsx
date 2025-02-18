@@ -572,7 +572,7 @@ const crossIconStyle = {
 const searchButtonStyle = {
   backgroundColor: "primary.main",
   padding: { md: "23px 20px", xs: "10px" },
-  borderRadius: "10px",
+  borderRadius: { md: "10px", xs: 0 },
   color: "text.primary",
   "&:hover": { backgroundColor: "#024daf" },
   "&.Mui-disabled": {

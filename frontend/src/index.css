@@ -2,9 +2,7 @@
   font-family: "SkyStreamRelative";
   font-style: normal;
   font-weight: 400;
-  src: url("./fonts/primary-font-normal.woff2") format("woff2"),
-    url("./fonts/primary-font-normal.woff") format("woff"),
-    url("./fonts/primary-font-normal.ttf") format("ttf");
+  src: url("./fonts/primary-font-normal.ttf");
 }
 
 @font-face {
