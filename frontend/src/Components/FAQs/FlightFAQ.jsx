@@ -59,7 +59,7 @@ const FlightFAQ = () => {
         Finding flight deals: frequently asked questions
       </Typography>
 
-      <Box sx={{ width: "65%" }}>
+      <Box sx={{ width: { md: "65%", xs: "100%" } }}>
         {faqData.map((faq, index) => (
           <Box>
             <Box

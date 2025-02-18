@@ -80,28 +80,28 @@ const FlightInfoSection = () => {
           Plan your journey with peace of mind
         </Typography>
 
-        <Typography sx={{ marginBottom: "80px" }}>
+        <Typography sx={{ marginBottom: { md: "60px", xs: "30px" } }}>
           We've made it our mission to help you travel with confidence and make
           your journey as smooth as possible.
         </Typography>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: 4,
-        }}
-      >
-        <Box
+      <Grid container justifyContent='space-between' spacing={{ md: 1, xs: 4 }}>
+        <Grid
+          item
+          md={5}
+          xs={12}
           sx={{
-            textAlign: "center",
-            maxWidth: "45%",
-            alignItems: "center",
+            alignItems: { md: "flex-start", xs: "center" },
             display: "flex",
+            flexDirection: { md: "row", xs: "column" },
+            gap: "12px",
           }}
         >
           <Icon component={ChangeCircleIcon} sx={{ fontSize: 30 }} />
-          <Typography variant='body2'>
+          <Typography
+            variant='body2'
+            sx={{ textAlign: { md: "left", xs: "center" } }}
+          >
             <span
               style={{
                 fontWeight: "bold",
@@ -114,17 +114,23 @@ const FlightInfoSection = () => {
             Explore flexible flight ticket deals so you won't lose out if your
             flight is changed or cancelled.
           </Typography>
-        </Box>
-        <Box
+        </Grid>
+        <Grid
+          item
+          md={5}
+          xs={12}
           sx={{
-            textAlign: "center",
-            maxWidth: "45%",
             display: "flex",
-            alignItems: "center",
+            alignItems: { md: "flex-start", xs: "center" },
+            flexDirection: { md: "row", xs: "column" },
+            gap: "12px",
           }}
         >
           <Icon component={HotelIcon} sx={{ fontSize: 30 }} />
-          <Typography variant='body2'>
+          <Typography
+            variant='body2'
+            sx={{ textAlign: { md: "left", xs: "center" } }}
+          >
             <span
               style={{
                 fontWeight: "bold",
@@ -137,12 +143,15 @@ const FlightInfoSection = () => {
             Plan your journey with hotels and car hire, and keep your bookings
             all in one place.
           </Typography>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
 
       {/* Tab Navigation */}
 
-      <Typography variant='h5' sx={{ fontWeight: "bold", marginBottom: 1 }}>
+      <Typography
+        variant='h5'
+        sx={{ fontWeight: "bold", mt: "60px", marginBottom: 1 }}
+      >
         Ready to start your adventure?
       </Typography>
       <Typography variant='body2' sx={{ marginBottom: 3 }}>

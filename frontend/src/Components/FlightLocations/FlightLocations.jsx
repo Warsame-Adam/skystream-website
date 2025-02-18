@@ -32,12 +32,15 @@ import Dubai from "../../Components/Assets/dubai.png";
 import Amsterdam from "../../Components/Assets/Amsterdam-Netherlands.png";
 import Istanbul from "../../Components/Assets/Istanbul-Turkey.png";
 import Bangkok from "../../Components/Assets/Bangkok-Thailand.png";
+import { Link } from "react-router-dom";
 
 const flightDeals = [
   {
     image: Paris,
-    city: "Paris",
-    country: "France",
+    destinationCity: "Paris",
+    destinationCountry: "France",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo1.jpg", // Placeholder for the airline logo
     departDate: "Tue, 26 Nov", // Placeholder for the departure date
     departDetails: "LTN - FUE with easyJet", // Placeholder for departing airport details
@@ -47,8 +50,10 @@ const flightDeals = [
   },
   {
     image: Athens,
-    city: "Athens",
-    country: "Greece",
+    destinationCity: "Athens",
+    destinationCountry: "Greece",
+    originCity: "Khi",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -58,8 +63,10 @@ const flightDeals = [
   },
   {
     image: Sydney,
-    city: "Sydney",
-    country: "Australia",
+    destinationCity: "Sydney",
+    destinationCountry: "Australia",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -69,8 +76,10 @@ const flightDeals = [
   },
   {
     image: Antalya,
-    city: "Antalya",
-    country: "Turkey",
+    destinationCity: "Antalya",
+    destinationCountry: "Turkey",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -80,8 +89,10 @@ const flightDeals = [
   },
   {
     image: Rome,
-    city: "Rome",
-    country: "Italy",
+    destinationCity: "Rome",
+    destinationCountry: "Italy",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -91,8 +102,10 @@ const flightDeals = [
   },
   {
     image: Cardiff,
-    city: "Cardiff",
-    country: "Wales",
+    destinationCity: "Cardiff",
+    destinationCountry: "Wales",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -102,8 +115,10 @@ const flightDeals = [
   },
   {
     image: Edinburgh,
-    city: "Edinburgh",
-    country: "Scotland",
+    destinationCity: "Edinburgh",
+    destinationCountry: "Scotland",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -113,8 +128,10 @@ const flightDeals = [
   },
   {
     image: Dublin,
-    city: "Dublin",
-    country: "Ireland",
+    destinationCity: "Dublin",
+    destinationCountry: "Ireland",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -124,8 +141,10 @@ const flightDeals = [
   },
   {
     image: Dubai,
-    city: "Dubai",
-    country: "UAE",
+    destinationCity: "Dubai",
+    destinationCountry: "UAE",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -135,8 +154,10 @@ const flightDeals = [
   },
   {
     image: Amsterdam,
-    city: "Amsterdam",
-    country: "Netherlands",
+    destinationCity: "Amsterdam",
+    destinationCountry: "Netherlands",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -146,8 +167,10 @@ const flightDeals = [
   },
   {
     image: Istanbul,
-    city: "Istanbul",
-    country: "Turkey",
+    destinationCity: "Istanbul",
+    destinationCountry: "Turkey",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -157,8 +180,10 @@ const flightDeals = [
   },
   {
     image: Bangkok,
-    city: "Bangkok",
-    country: "Thailand",
+    destinationCity: "Bangkok",
+    destinationCountry: "Thailand",
+    originCity: "Isl",
+    originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Mon, 21 Oct",
     departDetails: "BFS - MAN with easyJet",
@@ -175,46 +200,60 @@ const FlightLocations = () => {
   const displayedDeals = showAll ? flightDeals : flightDeals.slice(0, 6);
 
   return (
-    <Container className='container' sx={{ pt: "40px" }}>
+    <Container className='container' sx={{ pt: "16px" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "center",
+          color: "#626971",
         }}
       >
-        <Typography sx={{ color: "primary.main" }}>Home</Typography>
-        <ArrowRightIcon disabled sx={{ padding: "0", color: "grey" }} />
-        <Typography sx={{ alignItems: "center" }}>Flights</Typography>
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
+          Home
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
+        <Typography variant='subtitle1'>Flights</Typography>
       </Box>
 
-      <Box
+      <Grid
+        container
+        justifyContent='space-between'
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: "40px",
-          marginBottom: "90px",
+          pt: { md: "40px", xs: "20px" },
+          mb: "90px",
         }}
+        spacing={{ md: 2, xs: 4 }}
       >
-        <FlightIcon />
-        <Typography sx={{ fontWeight: "bold", fontSize: "13px" }}>
-          Explore the best flight deals from anywhere, to <br /> everywhere,
-          then book with no fees
-        </Typography>
-
-        <CalendarMonthIcon />
-        <Typography sx={{ fontWeight: "bold", fontSize: "13px" }}>
-          Compare flight deals from over 1000 providers and <br /> choose the
-          cheapest, fastest or greenest tickets
-        </Typography>
-
-        <LocalOfferIcon />
-        <Typography sx={{ fontWeight: "bold", fontSize: "13px" }}>
-          Find the cheapest month - or even day - to fly, and set <br /> up
-          Price Alerts to book when the price is right
-        </Typography>
-      </Box>
+        <Grid item md={4} xs={12} sx={{ display: "flex", gap: "12px" }}>
+          <FlightIcon sx={{ rotate: "45deg" }} />
+          <Typography
+            variant='body2'
+            sx={{
+              lineHeight: "20px",
+              color: "#161616",
+              fontWeight: "bold",
+            }}
+          >
+            Explore the best flight deals from anywhere, to <br /> everywhere,
+            then book with no fees
+          </Typography>
+        </Grid>
+        <Grid item md={4} xs={12} sx={{ display: "flex", gap: "12px" }}>
+          <CalendarMonthIcon />
+          <Typography sx={{ fontWeight: "bold", fontSize: "13px" }}>
+            Compare flight deals from over 1000 providers and <br /> choose the
+            cheapest, fastest or greenest tickets
+          </Typography>
+        </Grid>
+        <Grid item md={4} xs={12} sx={{ display: "flex", gap: "16px" }}>
+          <LocalOfferIcon sx={{ rotate: "90deg" }} />
+          <Typography sx={{ fontWeight: "bold", fontSize: "13px" }}>
+            Find the cheapest month - or even day - to fly, and set <br /> up
+            Price Alerts to book when the price is right
+          </Typography>
+        </Grid>
+      </Grid>
 
       <Box sx={{ marginTop: "20px" }}>
         <Typography>
@@ -233,108 +272,134 @@ const FlightLocations = () => {
         <Grid container spacing={2}>
           {displayedDeals.map((deal, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card sx={{ borderRadius: "10px", boxShadow: 3 }}>
-                {/* Image Section */}
-                <CardMedia
-                  sx={{ height: "160px" }}
-                  component='img'
-                  height='140'
-                  image={deal.image}
-                  alt={`${deal.city} Image`}
-                />
+              <Link
+                to={`/flights/${deal.originCity}/${deal.destinationCity}/${deal.departDate}/${deal.returnDate}`}
+                style={{ textDecoration: "none" }}
+              >
+                <Card
+                  sx={{
+                    borderRadius: "12px",
+                    boxShadow: "0 1px 3px 0 #25201f4d",
+                    "&:hover": {
+                      boxShadow: "0 4px 14px 0 #25201f40",
+                    },
+                    transition: "all .2s ease-in-out",
+                  }}
+                >
+                  {/* Image Section */}
+                  <CardMedia
+                    sx={{ height: "160px" }}
+                    component='img'
+                    height='140'
+                    image={deal.image}
+                    alt={`${deal.city} Image`}
+                  />
 
-                <CardContent>
-                  {/* City/Town and Country */}
-                  <Typography
-                    variant='h6'
-                    sx={{ fontWeight: "bold", color: "black" }}
-                  >
-                    {deal.city}
-                  </Typography>
-                  <Typography variant='body2' color='grey'>
-                    {deal.country}
-                  </Typography>
-
-                  {/* Departure Ticket Information */}
-                  <Box
-                    sx={{ display: "flex", alignItems: "center", marginTop: 2 }}
-                  >
-                    <CardMedia
-                      component='img'
-                      image={deal.airlineLogo}
-                      alt='Airline Logo'
-                      sx={{ width: 20, height: 20, marginRight: 1 }}
-                    />
-                    <Box>
-                      <Typography
-                        variant='body2'
-                        sx={{ fontWeight: "bold", color: "black" }}
-                      >
-                        {deal.departDate}
-                      </Typography>
-                      <Typography sx={{ color: "grey", fontSize: "12px" }}>
-                        {deal.departDetails}
-                      </Typography>
-                    </Box>
+                  <CardContent>
+                    {/* City/Town and Country */}
                     <Typography
-                      variant='body2'
+                      variant='h6'
                       sx={{
-                        marginLeft: "auto",
-                        color: "black",
                         fontWeight: "bold",
+                        color: "#000",
+                        lineHeight: "24px",
                       }}
                     >
-                      Direct
+                      {deal.destinationCity}
                     </Typography>
-                  </Box>
+                    <Typography variant='body2' sx={{ color: "#626971" }}>
+                      {deal.destinationCountry}
+                    </Typography>
 
-                  {/* Return Ticket Information */}
-                  <Box
-                    sx={{ display: "flex", alignItems: "center", marginTop: 1 }}
-                  >
-                    <CardMedia
-                      component='img'
-                      image={deal.airlineLogo}
-                      alt='Airline Logo'
-                      sx={{ width: 20, height: 20, marginRight: 1 }}
-                    />
-                    <Box>
-                      <Typography
-                        variant='body2'
-                        sx={{ fontWeight: "bold", color: "black" }}
-                      >
-                        {deal.returnDate}
-                      </Typography>
-                      <Typography sx={{ color: "grey", fontSize: "12px" }}>
-                        {deal.returnDetails}
-                      </Typography>
-                    </Box>
-                    <Typography
-                      variant='body2'
+                    {/* Departure Ticket Information */}
+                    <Box
                       sx={{
-                        marginLeft: "auto",
-                        color: "black",
-                        fontWeight: "bold",
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "center",
+                        marginTop: "18px",
                       }}
                     >
-                      Direct
-                    </Typography>
-                  </Box>
+                      <img
+                        src={deal.airlineLogo}
+                        alt='Airline Logo'
+                        style={{ width: 20, height: 20 }}
+                      />
+                      <Box>
+                        <Typography
+                          variant='body2'
+                          sx={{ fontWeight: "bold", color: "black" }}
+                        >
+                          {deal.departDate}
+                        </Typography>
+                        <Typography sx={{ color: "grey", fontSize: "12px" }}>
+                          {deal.departDetails}
+                        </Typography>
+                      </Box>
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          marginLeft: "auto",
+                          color: "black",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Direct
+                      </Typography>
+                    </Box>
 
-                  {/* Price Tag */}
-                  <Typography
-                    sx={{
-                      textAlign: "right",
-                      marginTop: 2,
-                      color: "#0062e3",
-                      fontWeight: "bold",
-                      fontSize: "14.5px",
-                    }}
-                  >
-                    from {deal.price}
-                  </Typography>
-                </CardContent>
-              </Card>
+                    {/* Return Ticket Information */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "center",
+                        marginTop: 1,
+                      }}
+                    >
+                      <img
+                        src={deal.airlineLogo}
+                        alt='Airline Logo'
+                        style={{ width: 20, height: 20 }}
+                      />
+                      <Box>
+                        <Typography
+                          variant='body2'
+                          sx={{ fontWeight: "bold", color: "black" }}
+                        >
+                          {deal.returnDate}
+                        </Typography>
+                        <Typography sx={{ color: "grey", fontSize: "12px" }}>
+                          {deal.returnDetails}
+                        </Typography>
+                      </Box>
+                      <Typography
+                        variant='body2'
+                        sx={{
+                          marginLeft: "auto",
+                          color: "black",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        Direct
+                      </Typography>
+                    </Box>
+
+                    {/* Price Tag */}
+                    <Typography
+                      sx={{
+                        textAlign: "right",
+                        marginTop: 2,
+                        color: "#0062e3",
+                        fontWeight: "bold",
+                        fontSize: "14.5px",
+                      }}
+                    >
+                      from {deal.price}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid>
           ))}
         </Grid>
