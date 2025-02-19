@@ -6,30 +6,26 @@ import {
   Select,
   MenuItem,
   Divider,
-  Tooltip
+  Tooltip,
+  Menu,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useDispatch, useSelector } from "react-redux";
-import { setTravellersOpen, handleChangeTravellers } from "./Slices/HomeTravellersddSlice";
-
+import { handleChangeTravellers } from "./Slices/HomeTravellersddSlice";
 
 const HomeTravellersDropDown = ({
-  
   anchorEl,
-  
-  
-  
+
+  handleClose,
 
   cabinClass = "Economy",
 }) => {
-  
   const maxAdults = 5;
   const minAdults = 1;
   const maxChildren = 5;
   const minChildren = 0;
 
-  
   const disabledStyle = {
     color: "#999",
     cursor: "not-allowed",
@@ -38,25 +34,10 @@ const HomeTravellersDropDown = ({
 
   const dispatch = useDispatch();
 
+  const { adults, children, childAges } = useSelector(
+    (state) => state.travellers
+  );
 
-  const { travellersOpen, adults, children, childAges } = useSelector((state) => state.travellers);
-
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  useEffect(() => {
-    if (anchorEl && travellersOpen) {
-      const rect = anchorEl.getBoundingClientRect();
-      
-      setPosition({
-        top: rect.bottom + window.scrollY + 8,
-        left: rect.left + window.scrollX,
-      });
-    }
-  }, [anchorEl, travellersOpen]);
-  
-  
-  
-
-  
   useEffect(() => {
     if (childAges.length < children) {
       const diff = children - childAges.length;
@@ -64,38 +45,46 @@ const HomeTravellersDropDown = ({
       for (let i = 0; i < diff; i++) {
         newAges.push(0);
       }
-      dispatch(handleChangeTravellers({ adults, children, childAges: newAges }));
+      dispatch(
+        handleChangeTravellers({ adults, children, childAges: newAges })
+      );
     } else if (childAges.length > children) {
       const newAges = [...childAges].slice(0, children);
-      dispatch(handleChangeTravellers({ adults, children, childAges: newAges }));
+      dispatch(
+        handleChangeTravellers({ adults, children, childAges: newAges })
+      );
     }
-    
   }, [children]);
 
-  if (!travellersOpen) return null;
-
-  
   const handlePlusAdult = () => {
     if (adults < maxAdults) {
-      dispatch(handleChangeTravellers({ adults: adults + 1, children, childAges }));
+      dispatch(
+        handleChangeTravellers({ adults: adults + 1, children, childAges })
+      );
     }
   };
 
   const handleMinusAdult = () => {
     if (adults > minAdults) {
-      dispatch(handleChangeTravellers({ adults: adults - 1, children, childAges }));
+      dispatch(
+        handleChangeTravellers({ adults: adults - 1, children, childAges })
+      );
     }
   };
 
   const handlePlusChild = () => {
     if (children < maxChildren) {
-      dispatch(handleChangeTravellers({ adults, children: children + 1, childAges }));
+      dispatch(
+        handleChangeTravellers({ adults, children: children + 1, childAges })
+      );
     }
   };
 
   const handleMinusChild = () => {
     if (children > minChildren) {
-      dispatch(handleChangeTravellers({ adults, children: children - 1, childAges }));
+      dispatch(
+        handleChangeTravellers({ adults, children: children - 1, childAges })
+      );
     }
   };
 
@@ -106,26 +95,38 @@ const HomeTravellersDropDown = ({
   };
 
   return (
-    <Box
-      sx={{
-        position: "absolute",
-        top: position.top,
-        left: position.left,
-        width: 300,
-        backgroundColor: "#fff",
-        border: "1px solid #ccc",
-        borderRadius: "8px",
-        boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
-        padding: 2,
-        zIndex: 9999,
-        fontFamily: "sans-serif",
+    <Menu
+      id='basic-menu'
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+      MenuListProps={{
+        "aria-labelledby": "basic-button",
+      }}
+      slotProps={{
+        paper: {
+          sx: {
+            "&.MuiPaper-root": {
+              width: "300px",
+              mt: "3px",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
+              padding: 2,
+              zIndex: 9999,
+            },
+          },
+        },
       }}
     >
-      
-      <Typography sx={{ fontWeight: 600, fontSize: "15px", mb: 0.5 }}>
+      <Typography
+        sx={{ color: "#000", fontWeight: 600, fontSize: "15px", mb: 0.5 }}
+      >
         Cabin class
       </Typography>
-      <Typography sx={{ fontSize: "13px", color: "#5a5a5a", mb: 2 }}>
+      <Typography
+        sx={{ color: "#000", fontSize: "13px", color: "#5a5a5a", mb: 2 }}
+      >
         We can only show {cabinClass} prices for this search.
         <br />
         To see Business, Premium Economy, and First Class options, please tell
@@ -134,7 +135,6 @@ const HomeTravellersDropDown = ({
 
       <Divider sx={{ mb: 2 }} />
 
-      
       <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <Box sx={{ flex: 1 }}>
           <Typography sx={{ fontWeight: 600, fontSize: "15px" }}>
@@ -147,7 +147,7 @@ const HomeTravellersDropDown = ({
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Tooltip
             title={adults === minAdults ? "Can't go lower" : ""}
-            placement="top"
+            placement='top'
           >
             <IconButton
               onClick={handleMinusAdult}
@@ -165,7 +165,7 @@ const HomeTravellersDropDown = ({
           </Typography>
           <Tooltip
             title={adults === maxAdults ? "Max 5 adults" : ""}
-            placement="top"
+            placement='top'
           >
             <IconButton
               onClick={handlePlusAdult}
@@ -181,7 +181,6 @@ const HomeTravellersDropDown = ({
         </Box>
       </Box>
 
-    
       <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <Box sx={{ flex: 1 }}>
           <Typography sx={{ fontWeight: 600, fontSize: "15px" }}>
@@ -194,7 +193,7 @@ const HomeTravellersDropDown = ({
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Tooltip
             title={children === minChildren ? "Can't go lower" : ""}
-            placement="top"
+            placement='top'
           >
             <IconButton
               onClick={handleMinusChild}
@@ -212,7 +211,7 @@ const HomeTravellersDropDown = ({
           </Typography>
           <Tooltip
             title={children === maxChildren ? "Max 5 children" : ""}
-            placement="top"
+            placement='top'
           >
             <IconButton
               onClick={handlePlusChild}
@@ -228,17 +227,16 @@ const HomeTravellersDropDown = ({
         </Box>
       </Box>
 
-      
       {Array.from({ length: children }).map((_, index) => (
         <Box key={index} sx={{ mt: 2 }}>
           <Typography sx={{ fontSize: "13px", fontWeight: 600, mb: 0.5 }}>
             Age of child {index + 1}
           </Typography>
           <Select
-            size="small"
+            size='small'
             value={childAges[index] || 0}
             onChange={(e) => handleChildAgeChange(index, e.target.value)}
-            sx={{ width: "100%", color:"black" }}
+            sx={{ width: "100%", color: "black" }}
             MenuProps={{
               disablePortal: true,
               anchorOrigin: { vertical: "bottom", horizontal: "left" },
@@ -251,14 +249,14 @@ const HomeTravellersDropDown = ({
             }}
           >
             {Array.from({ length: 16 }).map((_, age) => (
-              <MenuItem key={age} value={age} sx={{color:"black"}}>
+              <MenuItem key={age} value={age} sx={{ color: "black" }}>
                 {age}
               </MenuItem>
             ))}
           </Select>
         </Box>
       ))}
-    </Box>
+    </Menu>
   );
 };
 

@@ -23,11 +23,12 @@ import companyLogo from "../../Components/Assets/company-logo.png";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const NavFlights = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+  const { pathname } = useLocation();
   return (
     <AppBar
       position='static'
@@ -158,16 +159,20 @@ const NavFlights = () => {
                 sx={{
                   boxSizing: "border-box",
                   fontSize: "13.5px",
-                  backgroundColor: "primary.main",
+                  backgroundColor:
+                    pathname === "/flights" ? "primary.main" : "transparent",
                   color: "text.primary",
                   textTransform: "none",
                   "&:hover": {
                     border: "0.5px solid",
-                    borderColor: "primary.main",
-                    backgroundColor: "primary.main",
+                    borderColor:
+                      pathname === "/flights" ? "primary.main" : "#154679",
+                    backgroundColor:
+                      pathname === "/flights" ? "primary.main" : "#154679",
                   },
                   border: "0.5px solid",
-                  borderColor: "primary.main",
+                  borderColor:
+                    pathname === "/flights" ? "primary.main" : "#6a7b8b",
                   borderRadius: "75px",
                   padding: "5px 15px",
                   mx: 0.5,
@@ -187,13 +192,19 @@ const NavFlights = () => {
                 sx={{
                   fontSize: "13.5px",
                   backgroundColor: "transparent",
+                  backgroundColor:
+                    pathname === "/hotels" ? "primary.main" : "transparent",
                   color: "text.primary",
                   textTransform: "none",
-                  border: "0.5px solid #6a7b8b",
+                  border: "0.5px solid",
+                  borderColor:
+                    pathname === "/hotels" ? "primary.main" : "#6a7b8b",
                   "&:hover": {
-                    border: "0.5px solid #154679",
-
-                    backgroundColor: "#154679",
+                    border: "0.5px solid",
+                    borderColor:
+                      pathname === "/hotels" ? "primary.main" : "#154679",
+                    backgroundColor:
+                      pathname === "/hotels" ? "primary.main" : "#154679",
                   },
                   borderRadius: "75px",
                   padding: "5px 15px",

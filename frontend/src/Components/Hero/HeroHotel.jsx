@@ -201,12 +201,12 @@ const HeroHotel = () => {
   const dispatch = useDispatch();
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
+  const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
 
   const inputRef = useRef(null);
 
   const [inputValue, setInputValue] = useState("");
 
-  const [travellersOpen, setTravellersOpen] = useState(false);
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [childAges, setChildAges] = useState([]);
@@ -237,8 +237,8 @@ const HeroHotel = () => {
     return parts.join(", ");
   }, [adults, children, rooms]);
 
-  const handleTravellersInputClick = () => {
-    setTravellersOpen(true);
+  const handleTravellersInputClick = (e) => {
+    setTravellersAnchorEl(e.currentTarget);
   };
 
   const handleChangeTravellers = ({ adults, children, childAges, rooms }) => {
@@ -276,6 +276,7 @@ const HeroHotel = () => {
           lineHeight: { md: "64px", xs: "48px" },
           color: "text.primary",
           pt: "24px",
+          textShadow: "1px 1px 2px rgba(0,0,0, 0.25)",
         }}
       >
         Find the right hotel today
@@ -528,53 +529,41 @@ const HeroHotel = () => {
           departInputRef={departInputRef}
           returnInputRef={returnInputRef}
         /> */}
-          <ClickAwayListener onClickAway={() => setTravellersOpen(false)}>
-            <Grid item md={3} xs={12} sx={{ position: "relative" }}>
-              <label htmlFor='#guest'>
-                <Typography
-                  variant='subtitle2'
-                  sx={{
-                    ...inputLableStyle,
-                  }}
-                >
-                  Guests and rooms
-                </Typography>
-              </label>
-              <Input
-                id='guest'
-                placeholder='Rooms'
-                disableUnderline
+          <Grid item md={3} xs={12} sx={{ position: "relative" }}>
+            <label htmlFor='#guest'>
+              <Typography
+                variant='subtitle2'
                 sx={{
-                  ...inputStyle,
-                  width: "100%",
-                  borderRadius: { md: "0 8px 8px 0", xs: "8px" },
+                  ...inputLableStyle,
                 }}
-                value={travellersLabel}
-                onClick={handleTravellersInputClick}
-              />
-              {travellersOpen && (
-                <Box
-                  id='hotel-travellers-dropdown'
-                  sx={{
-                    position: "absolute",
-                    top: "calc(100% + 8px)",
-                    left: 0,
-                    zIndex: 9999,
-                  }}
-                >
-                  <HotelTravellersDropDown
-                    open={travellersOpen}
-                    adults={adults}
-                    children={children}
-                    childAges={childAges}
-                    rooms={rooms}
-                    onChange={handleChangeTravellers}
-                    onClose={() => setTravellersOpen(false)}
-                  />
-                </Box>
-              )}
-            </Grid>
-          </ClickAwayListener>
+              >
+                Guests and rooms
+              </Typography>
+            </label>
+            <Input
+              id='guest'
+              placeholder='Rooms'
+              disableUnderline
+              readOnly
+              sx={{
+                ...inputStyle,
+                width: "100%",
+                borderRadius: { md: "0 8px 8px 0", xs: "8px" },
+              }}
+              value={travellersLabel}
+              onClick={handleTravellersInputClick}
+            />
+
+            <HotelTravellersDropDown
+              anchorEl={travellersAnchorEl}
+              adults={adults}
+              children={children}
+              childAges={childAges}
+              rooms={rooms}
+              onChange={handleChangeTravellers}
+              onClose={() => setTravellersAnchorEl(null)}
+            />
+          </Grid>
         </Grid>
 
         <Grid

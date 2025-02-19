@@ -49,6 +49,7 @@ const ReturnSearchBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
   const destinationRef = useRef();
+  const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
 
   const dispatch = useDispatch();
   const departureDate = useSelector((state) => state.dates.departureDate);
@@ -109,8 +110,9 @@ const ReturnSearchBar = () => {
   const departInputRef = useRef(null);
   const returnInputRef = useRef(null);
 
-  const handleTravellersInputClick = () => {
-    dispatch(setTravellersOpen(true));
+  const handleTravellersInputClick = (e) => {
+    setTravellersAnchorEl(e.currentTarget);
+    //dispatch(setTravellersOpen(true));
   };
 
   const checkboxes = (
@@ -418,56 +420,48 @@ const ReturnSearchBar = () => {
           departInputRef={departInputRef}
           returnInputRef={returnInputRef}
         />
-        <ClickAwayListener
-          onClickAway={() => dispatch(setTravellersOpen(false))}
+
+        <Grid
+          item
+          sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
         >
-          <Grid
-            item
-            sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+          <Typography
+            variant='subtitle2'
+            sx={{
+              ...inputLableStyle,
+              cursor: "pointer",
+              textWrap: "nowrap",
+              textOverflow: "ellipsis",
+              boxSizing: "border-box",
+              width: "100%",
+              overflowX: "hidden",
+            }}
+            // onClick={handleTravellersInputClick}
           >
-            <Typography
-              variant='subtitle2'
-              sx={{
-                ...inputLableStyle,
-                cursor: "pointer",
-                textWrap: "nowrap",
-                textOverflow: "ellipsis",
-                boxSizing: "border-box",
-                width: "100%",
-                overflowX: "hidden",
-              }}
-              // onClick={handleTravellersInputClick}
-            >
-              Travellers and cabin class
-            </Typography>
+            Travellers and cabin class
+          </Typography>
 
-            <Input
-              placeholder='Travellers and cabin class'
-              disableUnderline
-              sx={{
-                ...inputStyle,
-                borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
+          <Input
+            placeholder='Travellers and cabin class'
+            disableUnderline
+            readOnly
+            sx={{
+              ...inputStyle,
+              borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
+              cursor: "pointer",
+              marginRight: "8px",
+              width: "100%",
+            }}
+            onClick={handleTravellersInputClick}
+            value={travellersLabel}
+          />
+          <HomeTravellersDropDown
+            cabinClass={cabinClass}
+            anchorEl={travellersAnchorEl}
+            handleClose={() => setTravellersAnchorEl(null)}
+          />
+        </Grid>
 
-                marginRight: "8px",
-                width: "100%",
-              }}
-              onClick={handleTravellersInputClick}
-              value={travellersLabel}
-            />
-            {travellersOpen && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "calc(100% + 8px)",
-                  left: 0,
-                  zIndex: 9999,
-                }}
-              >
-                <HomeTravellersDropDown cabinClass={cabinClass} />
-              </Box>
-            )}
-          </Grid>
-        </ClickAwayListener>
         {matchesSM && checkboxes}
         <Grid
           item
