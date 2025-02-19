@@ -42,7 +42,7 @@ const NavFlights = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            padding: "24px 0px 5px",
+            padding: "24px 0px 16px",
           }}
         >
           <Grid container alignItems='center' justifyContent={"space-between"}>
