@@ -10,6 +10,8 @@ import {
   IconButton,
   Container,
   Grid,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -21,8 +23,12 @@ import { setSelectedCity, setCurrentIndex } from "../Slices/hotelSlice";
 import { Link } from "react-router-dom";
 
 const LocalHotelSelection = () => {
-  const dispatch = useDispatch();
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const dispatch = useDispatch();
+  const nCards = matchesXS ? 1 : matchesSM ? 2 : 3;
   const selectedCity = useSelector((state) => state.hotels.selectedCity);
   const currentIndex = useSelector((state) => state.hotels.currentIndex);
 
@@ -33,21 +39,20 @@ const LocalHotelSelection = () => {
 
   const visibleHotels = hotels[selectedCity].hotels.slice(
     currentIndex,
-    currentIndex + 3
+    currentIndex + nCards
   );
 
   const handleNext = () => {
-    if (currentIndex + 3 < hotels[selectedCity].hotels.length) {
-      dispatch(setCurrentIndex(currentIndex + 3));
+    if (currentIndex + nCards < hotels[selectedCity].hotels.length) {
+      dispatch(setCurrentIndex(currentIndex + nCards));
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      dispatch(setCurrentIndex(currentIndex - 3));
+      dispatch(setCurrentIndex(currentIndex - nCards));
     }
   };
-
   return (
     <Container className='container' sx={{ mt: "96px" }}>
       <Typography sx={{ fontWeight: "bold", fontSize: "28px" }}>
@@ -96,9 +101,7 @@ const LocalHotelSelection = () => {
           {visibleHotels.map((hotel, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link
-                to={`/hotels/${
-                  hotels.find((x) => x.city === selectedCity)?.country
-                }/${selectedCity}/${hotel.name}/${hotel.id}`}
+                to={`/hotels/${hotels[selectedCity]?.country}/${hotels[selectedCity]?.city}/${hotel.name}/${hotel.id}`}
                 style={{ textDecoration: "none" }}
               >
                 <Card
@@ -216,27 +219,31 @@ const LocalHotelSelection = () => {
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
-          {Array.from({ length: 2 }).map((_, index) => (
-            <Box
-              key={index}
-              sx={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                backgroundColor:
-                  currentIndex === index * 3 ? "darkgrey" : "lightgrey",
-              }}
-            />
-          ))}
+          {Array.from({ length: hotels[selectedCity].hotels.length }).map(
+            (_, index) => (
+              <Box
+                key={index}
+                sx={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: "50%",
+                  backgroundColor:
+                    currentIndex === index * nCards ? "darkgrey" : "lightgrey",
+                }}
+              />
+            )
+          )}
         </Box>
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}>
           <IconButton
-            disabled={currentIndex + 3 >= hotels[selectedCity].hotels.length}
+            disabled={
+              currentIndex + nCards >= hotels[selectedCity].hotels.length
+            }
             onClick={handleNext}
             disableRipple
             sx={{
               color:
-                currentIndex + 3 >= hotels[selectedCity].hotels.length
+                currentIndex + nCards >= hotels[selectedCity].hotels.length
                   ? "#cccccc"
                   : "#0062e3",
             }}
