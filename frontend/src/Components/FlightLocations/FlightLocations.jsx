@@ -33,7 +33,7 @@ import Amsterdam from "../../Components/Assets/Amsterdam-Netherlands.png";
 import Istanbul from "../../Components/Assets/Istanbul-Turkey.png";
 import Bangkok from "../../Components/Assets/Bangkok-Thailand.png";
 import { Link } from "react-router-dom";
-
+console.log(new Date().toString());
 const flightDeals = [
   {
     image: Paris,
@@ -42,9 +42,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo1.jpg", // Placeholder for the airline logo
-    departDate: "Tue, 26 Nov", // Placeholder for the departure date
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "LTN - FUE with easyJet", // Placeholder for departing airport details
-    returnDate: "Tue, 10 Dec", // Placeholder for the return date
     returnDetails: "FUE - LGW with easyJet", // Placeholder for returning airport details
     price: "£24", // Placeholder for the price
   },
@@ -55,9 +55,9 @@ const flightDeals = [
     originCity: "Khi",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -68,9 +68,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -81,9 +81,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -94,9 +94,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -107,9 +107,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -120,9 +120,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -133,9 +133,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -146,9 +146,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -159,9 +159,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -172,9 +172,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -185,9 +185,9 @@ const flightDeals = [
     originCity: "Isl",
     originCountry: "Pakistan",
     airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Mon, 21 Oct",
+    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
+    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
     departDetails: "BFS - MAN with easyJet",
-    returnDate: "Wed, 20 Nov",
     returnDetails: "MAN - BFS with easyJet",
     price: "£24",
   },
@@ -273,7 +273,11 @@ const FlightLocations = () => {
           {displayedDeals.map((deal, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link
-                to={`/flights/${deal.originCity}/${deal.destinationCity}/${deal.departDate}/${deal.returnDate}`}
+                to={`/flights/${deal.originCity}/${
+                  deal.destinationCity
+                }/${new Date(deal.departDate).getTime()}/${new Date(
+                  deal.returnDate
+                ).getTime()}`}
                 style={{ textDecoration: "none" }}
               >
                 <Card
@@ -330,7 +334,7 @@ const FlightLocations = () => {
                           variant='body2'
                           sx={{ fontWeight: "bold", color: "black" }}
                         >
-                          {deal.departDate}
+                          {new Date(deal.departDate).toDateString()}
                         </Typography>
                         <Typography sx={{ color: "grey", fontSize: "12px" }}>
                           {deal.departDetails}
@@ -367,7 +371,7 @@ const FlightLocations = () => {
                           variant='body2'
                           sx={{ fontWeight: "bold", color: "black" }}
                         >
-                          {deal.returnDate}
+                          {new Date(deal.returnDate).toDateString()}
                         </Typography>
                         <Typography sx={{ color: "grey", fontSize: "12px" }}>
                           {deal.returnDetails}

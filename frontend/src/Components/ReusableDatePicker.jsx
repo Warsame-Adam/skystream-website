@@ -109,16 +109,18 @@ const ReusableDatePicker = ({
   const datePickerRef = useRef(null);
   const handleDateChange = (date) => {
     const selectedTimestamp = date.getTime();
-    if (activeInput === "depart" && departInputRef.current) {
+    if (activeInput === "depart") {
       dispatch(setDepartureDate(selectedTimestamp));
       if (selectedTimestamp >= returnDate) {
         const daysDiff = new Date(Date.now() + 9 * 24 * 60 * 60 * 1000);
         dispatch(setReturnDate(selectedTimestamp + daysDiff.getTime()));
       }
-      departInputRef.current.value = date?.toLocaleDateString();
-    } else if (activeInput === "return" && returnInputRef.current) {
+      if (departInputRef?.current)
+        departInputRef.current.value = date?.toLocaleDateString();
+    } else if (activeInput === "return") {
       dispatch(setReturnDate(selectedTimestamp));
-      returnInputRef.current.value = date?.toLocaleDateString();
+      if (returnInputRef?.current)
+        returnInputRef.current.value = date?.toLocaleDateString();
     }
     handleClose();
     //dispatch(calendarHide());

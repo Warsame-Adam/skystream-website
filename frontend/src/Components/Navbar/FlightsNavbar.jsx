@@ -18,7 +18,6 @@ import {
   useTheme,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
 import companyLogo from "../../Components/Assets/company-logo.png";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
@@ -29,6 +28,7 @@ const NavFlights = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const { pathname } = useLocation();
+
   return (
     <AppBar
       position='static'

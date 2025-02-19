@@ -22,7 +22,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import { useSelector, useDispatch } from "react-redux";
 import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
 import { setTravellersOpen } from "../Slices/HomeTravellersddSlice";
-import { calendarShow, setActiveInput } from "../Slices/ReusableCalendar";
+import { setActiveInput } from "../Slices/ReusableCalendar";
 import { setTo } from "../Slices/flightSearchSlice";
 import { format } from "date-fns";
 import ReusableDatePicker from "../ReusableDatePicker";

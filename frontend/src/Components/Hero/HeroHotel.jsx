@@ -24,10 +24,12 @@ import KingBedIcon from "@mui/icons-material/KingBed";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
+import { setActiveInput } from "../Slices/ReusableCalendar";
 import HotelTravellersDropDown from "../HotelTravellersDropDown";
 import { format } from "date-fns";
 
 import Hotelimg from "../../Components/Assets/HotelHeroimg.jpg";
+import ReusableDatePicker from "../ReusableDatePicker";
 
 const Locations = [
   // Cities
@@ -201,6 +203,7 @@ const HeroHotel = () => {
   const dispatch = useDispatch();
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
 
   const inputRef = useRef(null);
@@ -237,6 +240,20 @@ const HeroHotel = () => {
     return parts.join(", ");
   }, [adults, children, rooms]);
 
+  const handleClickDepart = (e) => {
+    dispatch(setActiveInput("depart"));
+    handleClick(e);
+  };
+
+  const handleClickReturn = (e) => {
+    dispatch(setActiveInput("return"));
+    handleClick(e);
+  };
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+    // dispatch(calendarShow());
+  };
+
   const handleTravellersInputClick = (e) => {
     setTravellersAnchorEl(e.currentTarget);
   };
@@ -264,6 +281,8 @@ const HeroHotel = () => {
   const formattedReturnDate = returnDate
     ? format(new Date(returnDate), "dd/MM/yyyy")
     : "";
+  const departInputRef = useRef(null);
+  const returnInputRef = useRef(null);
 
   const content = (
     <>
@@ -497,6 +516,8 @@ const HeroHotel = () => {
 
                 borderRadius: { md: "0", xs: "8px" },
               }}
+              ref={departInputRef}
+              onClick={handleClickDepart}
             />
           </Grid>
           <Grid item sx={{ flex: 1 }}>
@@ -521,14 +542,16 @@ const HeroHotel = () => {
 
                 borderRadius: { md: "0", xs: "8px" },
               }}
+              ref={returnInputRef}
+              onClick={handleClickReturn}
             />
           </Grid>
-          {/* <ReusableDatePicker
-          anchorEl={anchorEl}
-          handleClose={() => setAnchorEl(null)}
-          departInputRef={departInputRef}
-          returnInputRef={returnInputRef}
-        /> */}
+          <ReusableDatePicker
+            anchorEl={anchorEl}
+            handleClose={() => setAnchorEl(null)}
+            departInputRef={departInputRef}
+            returnInputRef={returnInputRef}
+          />
           <Grid item md={3} xs={12} sx={{ position: "relative" }}>
             <label htmlFor='#guest'>
               <Typography
