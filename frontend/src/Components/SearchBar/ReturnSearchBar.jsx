@@ -27,6 +27,7 @@ import { setTo } from "../Slices/flightSearchSlice";
 import { format } from "date-fns";
 import ReusableDatePicker from "../ReusableDatePicker";
 import HomeTravellersDropDown from "../HomeTravellersDropDown";
+import { useNavigate } from "react-router-dom";
 
 const cities = [
   { city: "Paris", code: "CDG", country: "France" },
@@ -44,6 +45,7 @@ const cities = [
 ];
 
 const ReturnSearchBar = () => {
+  const navigate = useNavigate();
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -475,6 +477,24 @@ const ReturnSearchBar = () => {
             fullWidth
             variant='contained'
             sx={{ ...searchButtonStyle, textTransform: "none" }}
+            onClick={() => {
+              const isDate = (val) => !isNaN(new Date(val).getTime());
+
+              if (
+                from &&
+                from.code &&
+                to &&
+                to.code &&
+                isDate(departureDate) &&
+                isDate(returnDate)
+              ) {
+                navigate(
+                  `/flights/${from.code}/${to.code}/${departureDate}/${
+                    searchType === "oneway" ? "" : returnDate
+                  }`
+                );
+              }
+            }}
           >
             Search
           </Button>

@@ -5,6 +5,7 @@ import FlightsNavbar from "../Components/Navbar/FlightsNavbar";
 import FlightSearchUI from "../Components/FlightSearchUI";
 
 import FlightSearchResults from "../Components/FlightSearchResults";
+import HomeFooter from "../Components/Footer/HomeFooter";
 
 const FlightSearchResultsPage = () => {
   return (
@@ -13,6 +14,7 @@ const FlightSearchResultsPage = () => {
       {/* <FlightSearchResultsNavbar /> */}
       <FlightSearchUI />
       <FlightSearchResults />
+      <HomeFooter />
     </>
   );
 };
