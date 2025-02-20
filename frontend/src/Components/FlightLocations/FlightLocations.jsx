@@ -33,14 +33,15 @@ import Amsterdam from "../../Components/Assets/Amsterdam-Netherlands.png";
 import Istanbul from "../../Components/Assets/Istanbul-Turkey.png";
 import Bangkok from "../../Components/Assets/Bangkok-Thailand.png";
 import { Link } from "react-router-dom";
-console.log(new Date().toString());
 const flightDeals = [
   {
     image: Paris,
+    destinationCityCode: "CDG",
     destinationCity: "Paris",
     destinationCountry: "France",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo1.jpg", // Placeholder for the airline logo
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -50,10 +51,12 @@ const flightDeals = [
   },
   {
     image: Athens,
+    destinationCityCode: "ATH",
     destinationCity: "Athens",
     destinationCountry: "Greece",
-    originCity: "Khi",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -63,10 +66,12 @@ const flightDeals = [
   },
   {
     image: Sydney,
+    destinationCityCode: "SYD",
     destinationCity: "Sydney",
     destinationCountry: "Australia",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -76,10 +81,12 @@ const flightDeals = [
   },
   {
     image: Antalya,
+    destinationCityCode: "AYT",
     destinationCity: "Antalya",
     destinationCountry: "Turkey",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -89,10 +96,12 @@ const flightDeals = [
   },
   {
     image: Rome,
+    destinationCityCode: "FCO",
     destinationCity: "Rome",
     destinationCountry: "Italy",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -102,10 +111,12 @@ const flightDeals = [
   },
   {
     image: Cardiff,
+    destinationCityCode: "CWL",
     destinationCity: "Cardiff",
     destinationCountry: "Wales",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -115,10 +126,12 @@ const flightDeals = [
   },
   {
     image: Edinburgh,
+    destinationCityCode: "EDI",
     destinationCity: "Edinburgh",
     destinationCountry: "Scotland",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -128,10 +141,12 @@ const flightDeals = [
   },
   {
     image: Dublin,
+    destinationCityCode: "DUB",
     destinationCity: "Dublin",
     destinationCountry: "Ireland",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -141,10 +156,12 @@ const flightDeals = [
   },
   {
     image: Dubai,
+    destinationCityCode: "DXB",
     destinationCity: "Dubai",
     destinationCountry: "UAE",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -154,10 +171,12 @@ const flightDeals = [
   },
   {
     image: Amsterdam,
+    destinationCityCode: "AMS",
     destinationCity: "Amsterdam",
     destinationCountry: "Netherlands",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -167,10 +186,12 @@ const flightDeals = [
   },
   {
     image: Istanbul,
+    destinationCityCode: "IST",
     destinationCity: "Istanbul",
     destinationCountry: "Turkey",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -180,10 +201,12 @@ const flightDeals = [
   },
   {
     image: Bangkok,
+    destinationCityCode: "BKK",
     destinationCity: "Bangkok",
     destinationCountry: "Thailand",
-    originCity: "Isl",
-    originCountry: "Pakistan",
+    originCityCode: "LHR",
+    originCity: "London",
+    originCountry: "United Kingdom",
     airlineLogo: "/path/to/airline-logo2.jpg",
     departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
     returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
@@ -273,8 +296,8 @@ const FlightLocations = () => {
           {displayedDeals.map((deal, index) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Link
-                to={`/flights/${deal.originCity}/${
-                  deal.destinationCity
+                to={`/flights/${deal.originCityCode}/${
+                  deal.destinationCityCode
                 }/${new Date(deal.departDate).getTime()}/${new Date(
                   deal.returnDate
                 ).getTime()}`}

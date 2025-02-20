@@ -35,6 +35,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import HomeTravellersDropDown from "./HomeTravellersDropDown";
 import { setActiveInput } from "./Slices/ReusableCalendar";
 import ReusableDatePicker from "./ReusableDatePicker.jsx";
+import ReturnSearchBar from "./SearchBar/ReturnSearchBar.jsx";
 
 const cities = [
   { city: "Paris", code: "CDG", country: "France" },
@@ -70,6 +71,7 @@ const FlightSearchUI = () => {
 
   const newOrigin = useSelector((state) => state.flightSearch.from);
   const newDestination = useSelector((state) => state.flightSearch.to);
+
   const CurrentDepartureDate = useSelector(
     (state) => state.dates.departureDate
   );
@@ -81,7 +83,7 @@ const FlightSearchUI = () => {
   }, []);
 
   const { origin, destination, departureDate, returnDate } = useParams();
-  console.log(departureDate, isDate(departureDate * 1));
+
   useEffect(() => {
     if (departureDate && isDate(departureDate * 1)) {
       dispatch(setDepartureDate(departureDate * 1));
@@ -381,13 +383,20 @@ const FlightSearchUI = () => {
               </Grid>
             </Grid>
           </Grid>
-          <ReusableDatePicker
+          {/* <ReusableDatePicker
             anchorEl={anchorEl}
             handleClose={() => setAnchorEl(null)}
-          />
+            departInputRef={departInputRef}
+            returnInputRef={returnInputRef}
+          /> */}
         </Grid>
 
         {showInputs && (
+          <Box sx={{ width: "100%", mt: "30px" }}>
+            <ReturnSearchBar />
+          </Box>
+        )}
+        {/* {showInputs && (
           <Box
             sx={{
               position: "absolute",
@@ -664,7 +673,7 @@ const FlightSearchUI = () => {
               />
             </Box>
           </Box>
-        )}
+        )} */}
       </Container>
     </Box>
   );
