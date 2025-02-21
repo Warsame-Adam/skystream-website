@@ -1,73 +1,60 @@
 import React from "react";
-import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel, Breadcrumbs, Stack } from '@mui/material';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import Link from '@mui/material/Link';
+import { useParams } from "react-router-dom";
+import {
+  AppBar,
+  Menu,
+  Toolbar,
+  IconButton,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  Container,
+  TextField,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Breadcrumbs,
+  Stack,
+} from "@mui/material";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import Link from "@mui/material/Link";
 
+const BreadCrumbs = () => {
+  const params = useParams();
 
-
-
-
-console.log('Breadcrumbs component rendered');
-
-
-const BreadCrumbs  = () => {
-
-    const breadcrumbs = [
-        <Link underline="hover" key= "1" color="#1d6ee6" href="/" sx={{paddingLeft:"80px"}} >
+  return (
+    <Container className='container' sx={{ pt: "16px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          color: "#626971",
+        }}
+      >
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
           Home
-        </Link>,
-        <Link
-          underline="hover"
-          key="2"
-          color="#1d6ee6"
-          href="/hotels"
-          
-        >
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
           Hotels
-        </Link>,
-        <Link underline="hover" key= "3" color="#1d6ee6" href="" >
-            Country
-        </Link>,
-        <Link underline="hover" key= "4" color="#1d6ee6" href="" >
-            City
-        </Link>,
-        <Typography key="5" sx={{ color: 'grey' }}>
-          Hotel Name
-        </Typography>,
-      ];
-    
-
-
-    return (
-      
-    <Container sx={{display: "flex", 
-      justifyContent: "flex-start", 
-      alignItems: "center", 
-      marginTop: "20px",
-      
-      
-       
-       }}>
-        <Stack spacing={2}>
-        
-        
-
-            <Breadcrumbs sx={{fontSize:"15px"}} separator={<NavigateNextIcon fontSize="small" sx={{ color:"grey"  }} />}
-            aria-label="breadcrumb">
-              {breadcrumbs}
-
-                
-
-
-            </Breadcrumbs>
-            
-        </Stack>
-
-        
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
+          {params.country || "Country"}
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
+          {params.city || "City"}
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0" }} />
+        <Typography variant='subtitle1'>
+          {params.hotelName || "Hotel name"}
+        </Typography>
+      </Box>
     </Container>
-    )
-}
+  );
+};
 
 export default BreadCrumbs;
-
-

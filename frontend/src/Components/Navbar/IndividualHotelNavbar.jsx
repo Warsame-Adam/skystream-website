@@ -1,78 +1,214 @@
-import React from "react"
-import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, Container, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import companyLogo from '../../Components/Assets/company-logo.png';
+import React, { useState } from "react";
+import {
+  AppBar,
+  Menu,
+  Toolbar,
+  IconButton,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  TextField,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Container,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import LanguageIcon from "@mui/icons-material/Language";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import PersonIcon from "@mui/icons-material/Person";
+import MenuIcon from "@mui/icons-material/Menu";
+import FlightIcon from "@mui/icons-material/Flight";
+import HotelIcon from "@mui/icons-material/Hotel";
+import FlagIcon from "@mui/icons-material/Flag";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-
+import companyLogo from "../../Components/Assets/company-logo.png";
+import RSMenu from "../RSMenu";
+import { Link } from "react-router-dom";
 
 const IndividualHotelNavbar = () => {
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
+  const [anchorElUser, setAnchorElUser] = useState(null);
 
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
-    return (
-        
-            <AppBar  sx={{backgroundColor:"#05203c", position:"static", padding:"10px"}}>
-                <Container>
-                <Toolbar sx={{display:"flex",justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                    
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginLeft:"30px" }}>
-                        <IconButton >
-                            <Avatar src={companyLogo}  />
-                        </IconButton>
-                    </Box>
+  const [anchorElLanguage, setAnchorElLanguage] = useState(null);
 
-                    <Box sx={{display:"flex", gap:"6px", alignItems:"center", padding:"7px"}}>
-                        <Typography underLine="hover" sx={{fontSize:"14px",cursor:"pointer"}}>
-                            Help
-                        </Typography>
-                        <Typography  sx={{border:"0.5px solid grey", 
-                            padding:"8px 15px", 
-                            borderRadius:"5px",
-                            fontSize:"11px", 
-                            backgroundColor:"rgba(255, 255, 255, 0.11)",
-                            '&:hover': {
-                                backgroundColor:"black"},
-                                cursor:"pointer"
-                            }}>
-                            United Kingdom - English (UK) • £ GBP
-                        </Typography>
-                        <IconButton>
-                            <FavoriteIcon sx={{
-                                color:"white", 
-                                '&:hover': {
-                                backgroundColor:"grey"},
-                                cursor:"pointer"
-                          
-                                
-                                }} />
-                        </IconButton>
-                        <Box sx={{ 
-                            border:"0.5px solid grey", 
-                            padding:"7px 25px",
-                            color:"black",
-                            fontWeight:"bold",
-                            backgroundColor:"#e0e4e9", 
-                            borderRadius:"10px",
-                            '&:hover': {
-                                backgroundColor:"#c1c7cf"},
-                                cursor:"pointer"
-                          }}>
-                            Log in
+  const handleOpenLanguageMenu = (event) => {
+    console.log("Event Target (anchorEl):", event.currentTarget);
+    setAnchorElLanguage(event.currentTarget);
+  };
 
-                        </Box>
-                    </Box>
-                
+  const handleCloseLanguageMenu = () => {
+    setAnchorElLanguage(null);
+  };
 
-                </Toolbar>
-                </Container>
-            </AppBar>
-            
+  const pages = [
+    { icon: <FlightIcon />, label: "Flights" },
+    { icon: <HotelIcon />, label: "Hotels" },
+    { icon: <FlagIcon />, label: "Regional settings" },
+    { icon: <LocalOfferIcon />, label: "Explore Everywhere" },
+    { icon: <HelpOutlineIcon />, label: "Help" },
+  ];
+  const links = [
+    { key: "language", icon: <LanguageIcon /> },
+    { key: "favorite", icon: <FavoriteIcon /> },
+    { key: "person", icon: <PersonIcon /> },
+    { key: "menu", icon: <MenuIcon /> },
+  ];
+  const iconButtonStyles = {
+    color: "white",
+    mx: 0.3,
+    width: "auto",
+    height: "35px",
+    borderRadius: "10px",
+    "&:hover": {
+      backgroundColor: "rgba(74,86,99,255)",
+    },
+    "&:active": {
+      outline: "2px solid rgba(rgba(74,86,99,255))",
+      backgroundColor: "rgba(rgba(74,86,99,255))",
+    },
+  };
 
-        
+  return (
+    <AppBar
+      position='static'
+      sx={{ padding: "0", backgroundColor: "common.blue" }}
+    >
+      <Container className='container'>
+        <Toolbar
+          disableGutters
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            padding: "24px 0px",
+            "&.MuiToolbar-root": {
+              minHeight: "unset",
+            },
+          }}
+        >
+          <Box
+            component={Link}
+            to='/'
+            sx={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <IconButton sx={{ p: 0 }}>
+              <Avatar src={companyLogo} sx={{ mr: { xs: 1, md: 2 } }} />
+            </IconButton>
+            <Typography
+              variant={matchesSM ? "h6" : "h5"}
+              sx={{
+                color: "text.primary",
+                letterSpacing: ".1rem",
+                fontWeight: 700,
+              }}
+            >
+              SkyStream
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {links.slice(0, 2).map((item) => (
+              <IconButton
+                key={item.key}
+                sx={iconButtonStyles}
+                onClick={
+                  item.key === "language" ? handleOpenLanguageMenu : null
+                }
+              >
+                {item.icon}
+              </IconButton>
+            ))}
+            {links.some((link) => link.key === "language") &&
+              anchorElLanguage && (
+                <RSMenu
+                  open={Boolean(anchorElLanguage)}
+                  onClose={handleCloseLanguageMenu}
+                />
+              )}
+            <IconButton sx={iconButtonStyles}>
+              <PersonIcon />
+              {!matchesSM && (
+                <Typography
+                  variant='body1'
+                  sx={{ mx: 0.2, color: "background.paper" }}
+                >
+                  Log in
+                </Typography>
+              )}
+            </IconButton>
+            {links.slice(3).map((item, i) => (
+              <IconButton
+                onClick={handleOpenUserMenu}
+                key={item.key}
+                sx={{
+                  ...iconButtonStyles,
 
-    )
-}
+                  mr: links.slice(3).length === i + 1 ? "-8px" : "0.3",
+                }}
+              >
+                {item.icon}
+              </IconButton>
+            ))}
+            <Menu
+              sx={{ my: 0.2, ml: -1, borderRadius: "10px" }}
+              id='menu-appbar'
+              PaperProps={{
+                sx: {
+                  width: "280px",
+                  maxWidth: "none",
+                },
+              }}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              anchorEl={anchorElUser}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page.label} onClick={handleCloseUserMenu}>
+                  <IconButton sx={{ color: "#0665e3", mr: 1 }}>
+                    {page.icon}
+                  </IconButton>
 
+                  <Typography
+                    sx={{ color: "black", fontSize: "15px", marginLeft: "5px" }}
+                  >
+                    {page.label}
+                  </Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+};
 
 export default IndividualHotelNavbar;
