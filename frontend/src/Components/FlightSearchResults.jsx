@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -16,6 +16,8 @@ import {
   IconButton,
   Collapse,
   Container,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   FavoriteBorder,
@@ -27,6 +29,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 
 const FlightSearchResults = () => {
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [sortBy, setSortBy] = useState("best");
   const [stops, setStops] = useState(["direct", "oneStop"]);
   const [selectedAirlines, setSelectedAirlines] = useState([
@@ -169,6 +173,16 @@ const FlightSearchResults = () => {
     },
   ];
 
+  useEffect(() => {
+    if (matchesSM) {
+      setExpandedSections({
+        stops: false,
+        departureTimes: false,
+        journeyDuration: false,
+        airlines: false,
+      });
+    }
+  }, [matchesSM]);
   const handleToggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,

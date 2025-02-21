@@ -43,7 +43,7 @@ const NavFlights = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            padding: "24px 0px 16px",
+            padding: "24px 0px 4px",
           }}
         >
           <Grid container alignItems='center' justifyContent={"space-between"}>
@@ -160,19 +160,27 @@ const NavFlights = () => {
                   boxSizing: "border-box",
                   fontSize: "13.5px",
                   backgroundColor:
-                    pathname === "/flights" ? "primary.main" : "transparent",
+                    pathname === "/" || pathname.includes("/flights")
+                      ? "primary.main"
+                      : "transparent",
                   color: "text.primary",
                   textTransform: "none",
                   "&:hover": {
                     border: "0.5px solid",
                     borderColor:
-                      pathname === "/flights" ? "primary.main" : "#154679",
+                      pathname === "/" || pathname.includes("/flights")
+                        ? "primary.main"
+                        : "#154679",
                     backgroundColor:
-                      pathname === "/flights" ? "primary.main" : "#154679",
+                      pathname === "/" || pathname.includes("/flights")
+                        ? "primary.main"
+                        : "#154679",
                   },
                   border: "0.5px solid",
                   borderColor:
-                    pathname === "/flights" ? "primary.main" : "#6a7b8b",
+                    pathname === "/" || pathname.includes("/flights")
+                      ? "primary.main"
+                      : "#6a7b8b",
                   borderRadius: "75px",
                   padding: "5px 15px",
                   mx: 0.5,
@@ -192,19 +200,23 @@ const NavFlights = () => {
                 sx={{
                   fontSize: "13.5px",
                   backgroundColor: "transparent",
-                  backgroundColor:
-                    pathname === "/hotels" ? "primary.main" : "transparent",
+                  backgroundColor: pathname.includes("/hotels")
+                    ? "primary.main"
+                    : "transparent",
                   color: "text.primary",
                   textTransform: "none",
                   border: "0.5px solid",
-                  borderColor:
-                    pathname === "/hotels" ? "primary.main" : "#6a7b8b",
+                  borderColor: pathname.includes("/hotels")
+                    ? "primary.main"
+                    : "#6a7b8b",
                   "&:hover": {
                     border: "0.5px solid",
-                    borderColor:
-                      pathname === "/hotels" ? "primary.main" : "#154679",
-                    backgroundColor:
-                      pathname === "/hotels" ? "primary.main" : "#154679",
+                    borderColor: pathname.includes("/hotels")
+                      ? "primary.main"
+                      : "#154679",
+                    backgroundColor: pathname.includes("/hotels")
+                      ? "primary.main"
+                      : "#154679",
                   },
                   borderRadius: "75px",
                   padding: "5px 15px",

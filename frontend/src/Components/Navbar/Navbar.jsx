@@ -96,10 +96,10 @@ const Navbar = ({ open, onClose }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            //   height: "390px",
-            // mx: 4,
-            padding: "25px 0px 0px",
-            //  transform: "translateX(-29px)",
+            padding: "45px 0px 0px",
+            "&.MuiToolbar-root": {
+              minHeight: "unset",
+            },
           }}
         >
           <Box

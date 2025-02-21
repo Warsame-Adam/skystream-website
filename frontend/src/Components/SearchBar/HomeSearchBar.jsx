@@ -17,7 +17,7 @@ import HotelIcon from "@mui/icons-material/Hotel";
 import CloseIcon from "@mui/icons-material/Close";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   setDepartureDate,
   setReturnDate,
@@ -48,7 +48,10 @@ const cities = [
 ];
 
 const HomeSearchbar = () => {
+  const { pathname } = useLocation();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
   const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
 
   const departureDateRef = useRef();
@@ -151,19 +154,18 @@ const HomeSearchbar = () => {
     dispatch(showCalendar());
   };
 
-  const handleTravellersInputClick = () => {
-    dispatch(setTravellersOpen(true));
+  const handleTravellersInputClick = (e) => {
+    setTravellersAnchorEl(e.currentTarget);
+
+    //    dispatch(setTravellersOpen(true));
   };
 
   return (
-    <Box
-      sx={{ width: "100%", backgroundColor: "common.blue", minHeight: "390px" }}
-    >
-      <Container className='container' sx={{ py: "16px" }}>
+    <Box sx={{ width: "100%", backgroundColor: "common.blue", pb: "48px" }}>
+      <Container className='container' sx={{ pt: "24px", pb: "16px" }}>
         <Box
           sx={{
             display: "flex",
-            //     marginTop: "-320px",
             gap: 0.5,
           }}
         >
@@ -172,14 +174,28 @@ const HomeSearchbar = () => {
               sx={{
                 boxSizing: "border-box",
                 fontSize: "13.5px",
-                backgroundColor: "transparent",
+                backgroundColor:
+                  pathname === "/" || pathname.includes("/flights")
+                    ? "primary.main"
+                    : "transparent",
                 color: "text.primary",
                 textTransform: "none",
                 "&:hover": {
-                  border: "0.5px solid #154679",
-                  backgroundColor: "#154679",
+                  border: "0.5px solid",
+                  borderColor:
+                    pathname === "/" || pathname.includes("/flights")
+                      ? "primary.main"
+                      : "#154679",
+                  backgroundColor:
+                    pathname === "/" || pathname.includes("/flights")
+                      ? "primary.main"
+                      : "#154679",
                 },
-                border: "0.5px solid #6a7b8b",
+                border: "0.5px solid",
+                borderColor:
+                  pathname === "/" || pathname.includes("/flights")
+                    ? "primary.main"
+                    : "#6a7b8b",
                 borderRadius: "75px",
                 padding: "5px 15px",
                 mx: 0.5,
@@ -221,7 +237,12 @@ const HomeSearchbar = () => {
         <Box sx={{ marginTop: "30px", marginBottom: "30px" }}>
           <Typography
             variant='h3'
-            sx={{ color: "text.primary", fontSize: "30px", fontWeight: "bold" }}
+            sx={{
+              color: "text.primary",
+              fontSize: "32px",
+              fontWeight: "700",
+              lineHeight: "40px",
+            }}
           >
             Millions of cheap flights. One simple search.
           </Typography>
@@ -454,55 +475,45 @@ const HomeSearchbar = () => {
               <CloseIcon onClick={handleClearReturn} sx={crossIconStyle} />
             )}
           </Grid>
-          <ClickAwayListener
-            onClickAway={() => dispatch(setTravellersOpen(false))}
-          >
-            <Grid
-              item
-              sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
-            >
-              <Typography
-                variant='subtitle2'
-                sx={{
-                  ...inputLableStyle,
-                  cursor: "pointer",
-                  textWrap: "nowrap",
-                  textOverflow: "ellipsis",
-                  boxSizing: "border-box",
-                  width: "100%",
-                  overflowX: "hidden",
-                }}
-                onClick={handleTravellersInputClick}
-              >
-                Travellers and cabin class
-              </Typography>
 
-              <Input
-                placeholder='Travellers and cabin class'
-                disableUnderline
-                sx={{
-                  ...inputStyle,
-                  borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
-                  marginRight: "8px",
-                  width: "100%",
-                }}
-                onClick={handleTravellersInputClick}
-                value={travellersLabel}
-              />
-              {travellersOpen && (
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: "calc(100% + 8px)",
-                    left: 0,
-                    zIndex: 9999,
-                  }}
-                >
-                  <HomeTravellersDropDown cabinClass={cabinClass} />
-                </Box>
-              )}
-            </Grid>
-          </ClickAwayListener>
+          <Grid
+            item
+            sx={{ position: "relative", width: { md: "210px", xs: "100%" } }}
+          >
+            <Typography
+              variant='subtitle2'
+              sx={{
+                ...inputLableStyle,
+                cursor: "pointer",
+                textWrap: "nowrap",
+                textOverflow: "ellipsis",
+                boxSizing: "border-box",
+                width: "100%",
+                overflowX: "hidden",
+              }}
+              onClick={handleTravellersInputClick}
+            >
+              Travellers and cabin class
+            </Typography>
+
+            <Input
+              placeholder='Travellers and cabin class'
+              disableUnderline
+              sx={{
+                ...inputStyle,
+                borderRadius: { md: "0px 10px 10px 0px", xs: 0 },
+                marginRight: "8px",
+                width: "100%",
+              }}
+              onClick={handleTravellersInputClick}
+              value={travellersLabel}
+            />
+          </Grid>
+          <HomeTravellersDropDown
+            anchorEl={travellersAnchorEl}
+            handleClose={() => setTravellersAnchorEl(null)}
+            cabinClass={cabinClass}
+          />
           <Grid
             item
             sx={{
