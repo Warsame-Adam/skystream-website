@@ -485,10 +485,18 @@ const HeroHotel = () => {
               }}
               sx={{
                 width: "100%",
-
+                "& .MuiInputBase-root": {
+                  pr: "0px !important",
+                },
                 "& .MuiAutocomplete-endAdornment": {
                   right: "10px",
-                  bottom: "30%",
+                  //bottom: "30%",
+                },
+                "& :before": {
+                  borderBottom: "none !important",
+                },
+                "& ::after": {
+                  borderBottom: "none !important",
                 },
               }}
             />

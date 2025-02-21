@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import {
   AppBar,
   Menu,
@@ -29,6 +30,7 @@ import ExpediaImg from "../Components/Assets/Expedia.png";
 import IntercontinentalImg from "../Components/Assets/Intercontinental.png";
 
 const HotelBanner = () => {
+  const params = useParams();
   return (
     <Container className='container' sx={{ pt: "16px" }}>
       <Box
@@ -43,7 +45,15 @@ const HotelBanner = () => {
           Home
         </Typography>
         <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
-        <Typography variant='subtitle1'>Hotels</Typography>
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
+          Hotels
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
+        <Typography variant='subtitle1' sx={{ color: "primary.main" }}>
+          {params.country || "Country"}
+        </Typography>
+        <ArrowRightIcon disabled sx={{ padding: "0", color: "#0003" }} />
+        <Typography variant='subtitle1'>{params.city || "City"}</Typography>
       </Box>
       <Grid
         container
@@ -117,14 +127,15 @@ const HotelBanner = () => {
           ExpediaImg,
           IntercontinentalImg,
         ].map((item, i) => (
-          <img
-            key={i}
-            src={item}
-            style={{
-              width: "120px",
-              height: "60px",
-            }}
-          />
+          <Grid item key={i}>
+            <img
+              src={item}
+              style={{
+                width: "120px",
+                height: "60px",
+              }}
+            />
+          </Grid>
         ))}
       </Grid>
     </Container>

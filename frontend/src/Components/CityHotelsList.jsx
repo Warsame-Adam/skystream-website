@@ -1,132 +1,232 @@
 import React from "react";
-import { AppBar,Menu, Toolbar, IconButton, Avatar, Typography, Button, Box, Container, Divider, TextField, MenuItem, Checkbox, FormControlLabel } from '@mui/material';
+import {
+  AppBar,
+  Menu,
+  Toolbar,
+  IconButton,
+  Avatar,
+  Typography,
+  Button,
+  Box,
+  Container,
+  Divider,
+  TextField,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  CardMedia,
+} from "@mui/material";
 import IMG1 from "../Components/Assets/IMG1.png";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 const CityHotelsData = [
-    {hotelImage: IMG1, hotelName: "Jaz in the city Amsterdam", rating: 4, dFromCityCentre:"4.28", price:"143", },
-    {hotelImage: IMG1, hotelName: "Jaz in the city Amsterdam", rating: 4, dFromCityCentre:"4.28", price:"143", },
-    {hotelImage: IMG1, hotelName: "Jaz in the city Amsterdam", rating: 4, dFromCityCentre:"4.28", price:"143", },
-    {hotelImage: IMG1, hotelName: "Jaz in the city Amsterdam", rating: 4, dFromCityCentre:"4.28", price:"143", },
-    {hotelImage: IMG1, hotelName: "Jaz in the city Amsterdam", rating: 4, dFromCityCentre:"4.28", price:"143", },
-]
-
-
-
-
+  {
+    hotelImage: IMG1,
+    hotelName: "Jaz in the city Amsterdam",
+    rating: 4,
+    dFromCityCentre: "4.28",
+    price: "143",
+  },
+  {
+    hotelImage: IMG1,
+    hotelName: "Jaz in the city Amsterdam",
+    rating: 4,
+    dFromCityCentre: "4.28",
+    price: "143",
+  },
+  {
+    hotelImage: IMG1,
+    hotelName: "Jaz in the city Amsterdam",
+    rating: 4,
+    dFromCityCentre: "4.28",
+    price: "143",
+  },
+  {
+    hotelImage: IMG1,
+    hotelName: "Jaz in the city Amsterdam",
+    rating: 4,
+    dFromCityCentre: "4.28",
+    price: "143",
+  },
+  {
+    hotelImage: IMG1,
+    hotelName: "Jaz in the city Amsterdam",
+    rating: 4,
+    dFromCityCentre: "4.28",
+    price: "143",
+  },
+];
 
 const CityHotelsList = () => {
+  return (
+    <Container className='container' sx={{ mt: "96px" }}>
+      {CityHotelsData.map((city, index) => (
+        <Box
+          sx={{
+            width: "100%",
+            boxShadow: "0 1px 3px 0 #25201f4d",
+            minHeight: "17rem",
+            display: "flex",
+            alignItems: "flex-start",
+            flexDirection: { md: "row", xs: "column" },
+            marginBottom: "16px",
+            borderRadius: "8px",
+            "&:hover": {
+              boxShadow: "0 4px 14px 0 #25201f40",
+            },
+          }}
+        >
+          <CardMedia
+            image={city.hotelImage}
+            alt='Hotel Image'
+            sx={{
+              minHeight: "inherit",
+              width: { lg: "33%", md: "40%", xs: "100%" },
+              borderRadius: {
+                md: "10px 0px 0px 10px",
+                xs: "10px 10px 0px 0px",
+              },
+            }}
+          />
+          {/* <Box
+            sx={{
+              width: { md: "33%", xs: "100%" },
+              height: "100%",
+              overflow: "hidden",
+              borderRadius: {
+                md: "10px 0px 0px 10px",
+                xs: "10px 10px 0px 0px",
+              },
+            }}
+          >
+            <img
+              src={city.hotelImage}
+              alt='Hotel Image'
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </Box> */}
 
-
-    return (
-        <Container sx={{marginBottom:"200px", transform: 'translateX(-45px)',}}>
-
-
-            {CityHotelsData.map((city, index) => (
-                
-                
-                <Box
+          <Box
+            sx={{
+              boxSizing: "border-box",
+              width: { md: "47%", xs: "100%" },
+              display: "flex",
+              flexDirection: "column",
+              px: { md: "25px", xs: "10px" },
+              paddingTop: { md: "30px", xs: "8px" },
+            }}
+          >
+            <Typography
+              variant='subtitle1'
+              sx={{
+                color: "#05203c",
+                fontWeight: 700,
+                fontSize: { md: "25px", xs: "16px" },
+              }}
+            >
+              {city.hotelName}
+            </Typography>
+            <Typography
+              variant='body2'
+              sx={{
+                mt: { md: "10px", xs: "0px" },
+                color: "#626971",
+                display: "flex",
+              }}
+            >
+              <LocationOnIcon
                 sx={{
-                    width: "100%",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
+                  display: { md: "unset", xs: "none" },
+                  fontSize: "20px",
+                  paddingRight: { md: "8px", xs: "4px" },
+                }}
+              />
+              {city.dFromCityCentre} miles from city centre
+            </Typography>
+          </Box>
 
-                    height: "280px",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    marginBottom: "25px",
-                    borderRadius: "10px",
-                    
-                    }}>
-                        
-                        
-                        
-                <Box
+          <Divider
+            orientation='vertical'
+            flexItem
+            sx={{ display: { md: "unset", xs: "none" } }}
+          />
+
+          <Box
+            sx={{
+              boxSizing: "border-box",
+              width: { md: "20%", xs: "100%" },
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: { md: "flex-end", xs: "flex-start" },
+              paddingTop: { md: "30px", xs: "5px" },
+              px: { md: "25px", xs: "10px" },
+            }}
+          >
+            <Typography
+              align='right'
+              sx={{
+                display: { md: "unset", xs: "none" },
+                fontSize: "13px",
+                fontWeight: "bold",
+              }}
+            >
+              Lowest price
+            </Typography>
+            <Typography
+              align='right'
+              sx={{ display: { md: "unset", xs: "none" }, fontSize: "11px" }}
+            >
+              We found for this hotel
+            </Typography>
+            <Box
+              sx={{
+                mt: { md: "50px", xs: "0px" },
+                display: "flex",
+                alignItems: { md: "flex-end", xs: "center" },
+                flexDirection: { md: "column", xs: "row" },
+                gap: { md: 0, xs: "6px" },
+              }}
+            >
+              <Typography
+                variant='h6'
                 sx={{
-                    width: "33%",
-                    height: "100%",
-                    overflow: "hidden",
-                    borderRadius:"10px 0px 0px 10px"
-                    }}>
-                        
-                        <img
-                        src={city.hotelImage}
-                        alt="Hotel Image"
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                        }}/>
-                        
-                </Box>
-                
-                
-                <Box sx={{ width: "47%", display:"flex", flexDirection:"column", paddingLeft:"25px", paddingTop:"30px" }}>
-                    <Typography sx={{marginBottom:"10px", fontSize:"25px"}}>
-                        {city.hotelName}
-                    </Typography>
-                    <Typography sx={{fontSize:"15px"}}>
-                        <LocationOnIcon sx={{fontSize:"20px", paddingRight:"8px"}} />
-                        {city.dFromCityCentre} miles from city centre
-                    </Typography>
+                  fontSize: "35px",
+                }}
+              >
+                £{city.price}
+              </Typography>
+              <Typography variant='subtitle1' sx={{ color: "grey" }}>
+                a night
+              </Typography>
+            </Box>
 
-                    <Typography>
-                    
-                    </Typography>
-                    
-                </Box>
-                
-                
-                
-                <Divider orientation="vertical" flexItem />
-
-                <Box
-  sx={{
-    width: "20%",
-    height: "100%", 
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start", 
-    alignItems: "flex-end", 
-    paddingTop:"30px",
-    paddingRight:"25px"
-  }}
->
-  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-    Lowest price
-  </Typography>
-  <Typography sx={{ fontSize: "11px" }}>
-    We found for this hotel
-  </Typography>
-
-  <Typography sx={{fontSize:"35px", marginTop:"50px"}}>
-    £{city.price}
-  </Typography>
-  <Typography sx={{color:"grey"}}>
-    a night
-  </Typography>
-
-  <Box sx={{backgroundColor:"#05203c", "&:Hover": {backgroundColor:"#154679"}, color:"white", width:"180px", borderRadius:"10px", cursor:"pointer", marginTop:"25px", display:"flex", alignItems:"center", justifyContent: "center", padding:"8px 10px"}}>
-    <Typography>
-        View hotels
-    </Typography>
-
-  </Box>
-</Box>
-
-                
-
-                </Box>
-                            
-            ))}
-
-
-
-
-
-        </Container>
-
-    )
-}
-
+            <Button
+              variant='outlined'
+              sx={{
+                width: { md: "unset", xs: "100%" },
+                color: "text.primary",
+                backgroundColor: "#05203c",
+                borderRadius: "10px",
+                mt: { md: "10px", xs: "5px" },
+                padding: "8px 10px",
+                textTransform: "none",
+                "&:hover": { backgroundColor: "#154679" },
+                mb: "10px",
+              }}
+            >
+              View hotels
+            </Button>
+          </Box>
+        </Box>
+      ))}
+    </Container>
+  );
+};
 
 export default CityHotelsList;

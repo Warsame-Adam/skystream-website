@@ -9,7 +9,7 @@
   font-family: "SkyStreamRelative";
   font-style: italic;
   font-weight: 400;
-  src: url("./fonts/primary-font-normal-italic.woff2") format("woff2"),
+  src: url("./fonts/primary-font-normal-italic.woff2") format("truetype"),
     url("./fonts/primary-font-normal-italic.woff") format("truetype"),
     url("./fonts/primary-font-normal-italic.ttf") format("truetype");
 }
@@ -18,7 +18,7 @@
   font-family: "SkyStreamRelative";
   font-style: normal;
   font-weight: 500;
-  src: url("./fonts/primary-font-medium.woff2") format("woff2"),
+  src: url("./fonts/primary-font-medium.woff2") format("truetype"),
     url("./fonts/primary-font-medium.woff") format("truetype"),
     url("./fonts/primary-font-medium.ttf") format("truetype");
 }
@@ -27,7 +27,7 @@
   font-family: "SkyStreamRelative";
   font-style: italic;
   font-weight: 500;
-  src: url("./fonts/primary-font-medium-italic.woff2") format("woff2"),
+  src: url("./fonts/primary-font-medium-italic.woff2") format("truetype"),
     url("./fonts/primary-font-medium-italic.woff") format("truetype"),
     url("./fonts/primary-font-medium-italic.ttf") format("truetype");
 }
@@ -36,7 +36,7 @@
   font-family: "SkyStreamRelative";
   font-style: normal;
   font-weight: 700;
-  src: url("./fonts/primary-font-bold.woff2") format("woff2"),
+  src: url("./fonts/primary-font-bold.woff2") format("truetype"),
     url("./fonts/primary-font-bold.woff") format("truetype"),
     url("./fonts/primary-font-bold.ttf") format("truetype");
 }
@@ -45,7 +45,7 @@
   font-family: "SkyStreamRelative";
   font-style: italic;
   font-weight: 700;
-  src: url("./fonts/primary-font-bold-italic.woff2") format("woff2"),
+  src: url("./fonts/primary-font-bold-italic.woff2") format("truetype"),
     url("./fonts/primary-font-bold-italic.woff") format("truetype"),
     url("./fonts/primary-font-bold-italic.ttf") format("truetype");
 }
@@ -54,7 +54,7 @@
   font-family: "SkyStreamRelative";
   font-style: normal;
   font-weight: 900;
-  src: url("./fonts/primary-font-extra-bold.woff2") format("woff2"),
+  src: url("./fonts/primary-font-extra-bold.woff2") format("truetype"),
     url("./fonts/primary-font-extra-bold.woff") format("truetype"),
     url("./fonts/primary-font-extra-bold.ttf") format("truetype");
 }
@@ -63,7 +63,7 @@
   font-family: "SkyStreamRelative";
   font-style: italic;
   font-weight: 900;
-  src: url("./fonts/primary-font-extra-bold-italic.woff2") format("woff2"),
+  src: url("./fonts/primary-font-extra-bold-italic.woff2") format("truetype"),
     url("./fonts/primary-font-extra-bold-italic.woff") format("truetype"),
     url("./fonts/primary-font-extra-bold-italic.ttf") format("truetype");
 }

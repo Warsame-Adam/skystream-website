@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import {
   AppBar,
   Menu,
@@ -200,6 +201,7 @@ const Locations = [
 ];
 
 const CityHotelsSearchBar = () => {
+  const params = useParams();
   const dispatch = useDispatch();
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
@@ -209,7 +211,9 @@ const CityHotelsSearchBar = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(
+    Locations.find((x) => x.name === params?.city)?.name || ""
+  );
 
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -288,31 +292,29 @@ const CityHotelsSearchBar = () => {
     <Box
       sx={{
         backgroundColor: "common.blue",
+        pt: "24px",
+        pb: "16px",
       }}
     >
       <Container className='container'>
         <Typography
           variant={"h1"}
           sx={{
-            fontSize: { md: "64px", xs: "32px" },
-            letterSpacing: "-.04em",
-            fontWeight: "900",
-            lineHeight: { md: "64px", xs: "48px" },
+            fontSize: { md: "40px", xs: "32px" },
+            fontWeight: "700",
+            lineHeight: { md: "48px", xs: "32px" },
             color: "text.primary",
-            pt: "24px",
-            textShadow: "1px 1px 2px rgba(0,0,0, 0.25)",
           }}
         >
-          City Hotels
+          Hotels in {params?.city}
         </Typography>
         <Box
           sx={{
             boxSizing: "border-box",
             width: "100%",
             backgroundColor: "common.blue",
-            padding: { md: "20px", xs: "20px 0px" },
             borderRadius: { md: "8px", xs: 0 },
-            mt: { md: "24px", xs: "10px" },
+            mt: { md: "40px", xs: "10px" },
           }}
         >
           <Grid
@@ -495,10 +497,18 @@ const CityHotelsSearchBar = () => {
                 }}
                 sx={{
                   width: "100%",
-
+                  "& .MuiInputBase-root": {
+                    pr: "0px !important",
+                  },
                   "& .MuiAutocomplete-endAdornment": {
                     right: "10px",
-                    bottom: "30%",
+                    //bottom: "30%",
+                  },
+                  "& :before": {
+                    borderBottom: "none !important",
+                  },
+                  "& ::after": {
+                    borderBottom: "none !important",
                   },
                 }}
               />
@@ -764,7 +774,7 @@ const inputStyle = {
   fontWeight: 500,
   fontSize: "16px",
   "&.MuiAutocomplete-input, input": {
-    border: "none",
+    border: "none !important",
     p: "8px 16px !important",
   },
 };
