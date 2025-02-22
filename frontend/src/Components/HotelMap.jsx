@@ -91,7 +91,7 @@ const HotelMap = () => {
   }
 
   return (
-    <Container className='container' sx={{ mt: "50px" }}>
+    <Container className='container' sx={{ mt: "96px" }}>
       <GoogleMap
         mapContainerStyle={{ width: "100%", height: "400px" }}
         center={hotelLocation}

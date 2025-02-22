@@ -131,7 +131,13 @@ const FastfactsandAmenties = () => {
               minHeight: "74px",
             }}
           >
-            <item.icon sx={{ fontSize: "24px", mb: "10px", color: "#000" }} />{" "}
+            <item.icon
+              sx={{
+                fontSize: "24px",
+                mb: { md: "20px", xs: "10px" },
+                color: "#000",
+              }}
+            />{" "}
             {/* Icon */}
             <Typography
               variant='body2'

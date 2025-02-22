@@ -62,7 +62,7 @@ const IndividualHotelFAQ = () => {
   };
 
   return (
-    <Container className='container' sx={{ pt: "50px" }}>
+    <Container className='container' sx={{ pt: { md: "96px", xs: "60px" } }}>
       {IndividualHotelFaqData.map((hotel, hotelIndex) => (
         <Box key={hotelIndex}>
           <Typography
