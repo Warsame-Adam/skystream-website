@@ -29,6 +29,7 @@ const BreadCrumbs = () => {
         sx={{
           display: "flex",
           justifyContent: "flex-start",
+          flexWrap: "wrap",
           alignItems: "center",
           color: "#626971",
         }}

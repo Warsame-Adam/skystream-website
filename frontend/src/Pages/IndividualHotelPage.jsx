@@ -10,7 +10,8 @@ import TravellerReviews from "../Components/TravellerReviews";
 import HotelMap from "../Components/HotelMap";
 import IndividualHotelFAQ from "../Components/IndividualHotelFAQ";
 import RecommendedHotels from "../Components/RecommendedHotels";
-import CentredFooter from "../Components/Footer/CentredFooter";
+// import CentredFooter from "../Components/Footer/CentredFooter";
+import CentredFooter from "../Components/Footer/HomeFooter";
 
 const IndividualHotelPage = () => {
   return (
