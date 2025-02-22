@@ -1,7 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
-import { Container } from '@mui/material';
-
+import React, { useState, useEffect, useRef } from "react";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  InfoWindow,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import { Container } from "@mui/material";
 
 import HotelIcon from "../Components/Assets/hotel_Icon.jpg";
 import MuseumIcon from "../Components/Assets/museum_Icon.jpg";
@@ -11,39 +16,38 @@ import PlaneIcon from "../Components/Assets/plane_Icon.jpg";
 const HotelMap = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ['places'],
+    libraries: ["places"],
   });
 
-  const hotelLocation = { lat: 51.5227, lng: -0.1250 };
-  const [nearbyPlaces, setNearbyPlaces] = useState([]); 
-  const [selectedMarker, setSelectedMarker] = useState(null); 
-  const mapRef = useRef(null); 
+  const hotelLocation = { lat: 51.5227, lng: -0.125 };
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const mapRef = useRef(null);
 
-  
   const mapOptions = {
     mapTypeControl: false,
     zoomControl: true,
     streetViewControl: false,
-    fullscreenControl: true
+    fullscreenControl: true,
   };
-
 
   const placeTypeIcons = {
     museum: MuseumIcon,
     train_station: TrainIcon,
-    airport: PlaneIcon
+    airport: PlaneIcon,
   };
 
-  
   const fetchNearbyPlaces = () => {
     if (mapRef.current && isLoaded) {
-      const service = new window.google.maps.places.PlacesService(mapRef.current);
+      const service = new window.google.maps.places.PlacesService(
+        mapRef.current
+      );
 
       service.nearbySearch(
         {
           location: hotelLocation,
           radius: 1000,
-          type: ["museum", "train_station", "airport"] 
+          type: ["museum", "train_station", "airport"],
         },
         (results, status) => {
           if (status === window.google.maps.places.PlacesServiceStatus.OK) {
@@ -60,7 +64,7 @@ const HotelMap = () => {
                 position: place.geometry.location,
                 type: primaryType,
                 icon: placeTypeIcons[primaryType] || null,
-                address: place.vicinity
+                address: place.vicinity,
               };
             });
 
@@ -71,7 +75,6 @@ const HotelMap = () => {
     }
   };
 
-  
   const handleMapLoad = (map) => {
     mapRef.current = map;
     fetchNearbyPlaces();
@@ -88,38 +91,35 @@ const HotelMap = () => {
   }
 
   return (
-    <Container sx={{ marginTop: "50px" }}>
+    <Container className='container' sx={{ mt: "50px" }}>
       <GoogleMap
-        mapContainerStyle={{ width: '100%', height: '400px' }}
+        mapContainerStyle={{ width: "100%", height: "400px" }}
         center={hotelLocation}
         zoom={14}
         options={mapOptions}
         onLoad={handleMapLoad}
       >
-        
         <Marker
           position={hotelLocation}
           icon={{
             url: HotelIcon,
-            scaledSize: { width: 35, height: 35 }
+            scaledSize: { width: 35, height: 35 },
           }}
-          title="Kimpton - Fitzroy London"
+          title='Kimpton - Fitzroy London'
         />
 
-        
         {nearbyPlaces.map((place) => (
           <Marker
             key={place.id}
             position={place.position}
             icon={{
               url: place.icon,
-              scaledSize: { width: 35, height: 35 }
+              scaledSize: { width: 35, height: 35 },
             }}
             onClick={() => setSelectedMarker(place)}
           />
         ))}
 
-        
         {selectedMarker && (
           <InfoWindow
             position={selectedMarker.position}
