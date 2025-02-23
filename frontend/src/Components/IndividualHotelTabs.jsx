@@ -64,25 +64,35 @@ const IndividualHotelTabs = () => {
       {[
         {
           label: "Rooms and prices",
-          link: "#rooms",
+          link: "rooms",
         },
         {
           label: "Amenities",
-          link: "#amenities",
+          link: "amenities",
         },
         {
           label: "Ratings and reviews",
-          link: "#ratings",
+          link: "ratings",
         },
         {
           label: "Explore the area",
-          link: "#explore",
+          link: "explore",
         },
       ].map((item, i) => (
         <Tab
           key={i}
           LinkComponent={Link}
-          to={item.link}
+          to={`#${item.link}`}
+          onClick={() => {
+            let ele = document.getElementById(item.link);
+            if (ele) {
+              ele.scrollIntoView({
+                block: "start",
+                inline: "start",
+                behavior: "smooth",
+              });
+            }
+          }}
           label={item.label}
           disableRipple
           sx={{
@@ -167,7 +177,7 @@ const IndividualHotelTabs = () => {
           }}
         >
           <Box sx={{ width: "100%", backgroundColor: "common.blue" }}>
-            <Container className='container'>
+            {/* <Container className='container'>
               <Box
                 sx={{
                   display: "flex",
@@ -217,7 +227,7 @@ const IndividualHotelTabs = () => {
                   <ArrowForwardOutlinedIcon />
                 </Box>
               </Box>
-            </Container>
+            </Container> */}
           </Box>
           <Container className='container'>{tabsPricing}</Container>
         </Box>

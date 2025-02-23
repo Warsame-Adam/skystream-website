@@ -138,6 +138,7 @@ const TravellerReviews = () => {
           gap: { md: "0px", xs: "8px" },
           width: "100%",
         }}
+        id='ratings'
       >
         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
           <Typography

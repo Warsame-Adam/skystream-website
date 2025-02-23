@@ -204,6 +204,7 @@ const RoomsAndPrices = () => {
           flexDirection: { sm: "row", xs: "column" },
           alignItems: { sm: "center", xs: "flex-start" },
         }}
+        id='rooms'
       >
         <Typography variant='subtitle1' sx={{ fontWeight: 700 }}>
           We compare 100s of sites to get you the best deal

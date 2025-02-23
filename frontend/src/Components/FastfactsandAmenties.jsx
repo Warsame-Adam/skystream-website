@@ -99,6 +99,7 @@ const FastfactsandAmenties = () => {
           fontWeight: "bold",
           mb: { md: "40px", xs: "20px" },
         }}
+        id='amenities'
       >
         Amenities
       </Typography>
