@@ -185,7 +185,7 @@ const RoomsAndPrices = () => {
     //    dispatch(setTravellersOpen(true));
   };
   return (
-    <Container sx={{ marginTop: "50px" }}>
+    <Container className='container' sx={{ pt: { md: "50px", xs: "30px" } }}>
       <Typography
         variant='h6'
         sx={{

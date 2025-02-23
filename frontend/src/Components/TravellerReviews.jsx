@@ -424,7 +424,7 @@ const TravellerReviews = () => {
                   justifySelf: "start",
                 }}
               >
-                <Typography sx={{ fontSize: "12.5px", my: { md: 2, xs: 1 } }}>
+                <Typography sx={{ fontSize: "12.5px", mb: { md: 2, xs: 1 } }}>
                   <span style={{ fontSize: "20px", fontWeight: "bold" }}>
                     {Traveller.rating}
                   </span>

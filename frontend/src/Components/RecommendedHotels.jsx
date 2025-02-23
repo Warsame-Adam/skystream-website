@@ -208,91 +208,98 @@ const RecommendedHotels = () => {
         </IconButton>
       </Box>
 
-      <Box
+      <Grid
+        container
+        spacing={3}
         sx={{
-          display: "flex",
-          gap: 3,
           flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "flex-start",
+          mt: "20px",
         }}
       >
         {currentHotels.map((hotel, index) => (
-          <Card key={index} sx={{ width: 350, borderRadius: 3, boxShadow: 4 }}>
-            <Box sx={{ position: "relative" }}>
-              <CardMedia
-                component='img'
-                height='200'
-                image={hotel.hotelImage}
-                alt={hotel.hotelName}
-                sx={{ borderRadius: "12px 12px 0 0" }}
-              />
+          <Grid item md={4} xs={12}>
+            <Card
+              key={index}
+              sx={{
+                borderRadius: "12px",
+                boxShadow: "rgba(0, 0, 0, 0.12) 0px 1px 3px",
+              }}
+            >
+              <Box sx={{ position: "relative" }}>
+                <CardMedia
+                  component='img'
+                  height='200'
+                  image={hotel.hotelImage}
+                  alt={hotel.hotelName}
+                  sx={{ borderRadius: "12px 12px 0 0" }}
+                />
 
-              <Box
-                sx={{
-                  position: "absolute",
-                  bottom: 10,
-                  left: 10,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Typography
-                  variant='body1'
+                <Box
                   sx={{
-                    fontWeight: "bold",
-                    fontSize: "1rem",
-                    color: "white",
-                    textShadow: "1px 1px 4px rgba(0, 0, 0, 0.8)",
+                    position: "absolute",
+                    bottom: 10,
+                    left: 10,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
                   }}
                 >
-                  {hotel.hotelName}
-                </Typography>
+                  <Typography
+                    variant='body1'
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "1rem",
+                      color: "white",
+                      textShadow: "1px 1px 4px rgba(0, 0, 0, 0.8)",
+                    }}
+                  >
+                    {hotel.hotelName}
+                  </Typography>
 
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {Array.from({ length: 5 }).map((_, starIndex) =>
-                    starIndex < hotel.stars ? (
-                      <StarIcon
-                        key={starIndex}
-                        fontSize='small'
-                        sx={{ color: "orange" }}
-                      />
-                    ) : (
-                      <StarBorderIcon
-                        key={starIndex}
-                        fontSize='small'
-                        sx={{ color: "white" }}
-                      />
-                    )
-                  )}
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    {Array.from({ length: 5 }).map((_, starIndex) =>
+                      starIndex < hotel.stars ? (
+                        <StarIcon
+                          key={starIndex}
+                          fontSize='small'
+                          sx={{ color: "orange" }}
+                        />
+                      ) : (
+                        <StarBorderIcon
+                          key={starIndex}
+                          fontSize='small'
+                          sx={{ color: "white" }}
+                        />
+                      )
+                    )}
+                  </Box>
                 </Box>
               </Box>
-            </Box>
 
-            <CardContent sx={{ textAlign: "center", padding: "8px 16px" }}>
-              <Typography
-                variant='body2'
-                sx={{ color: "#5c5c5c", fontSize: "0.75rem" }}
-              >
-                {hotel.dFromHotel}
-              </Typography>
+              <CardContent sx={{ padding: "8px 16px" }}>
+                <Typography
+                  variant='body2'
+                  sx={{ color: "#5c5c5c", fontSize: "0.75rem" }}
+                >
+                  {hotel.dFromHotel}
+                </Typography>
 
-              <Typography
-                variant='h6'
-                sx={{
-                  marginTop: "8px",
-                  fontWeight: "bold",
-                  color: "black",
-                  fontSize: "1rem",
-                }}
-              >
-                {hotel.Price}
-              </Typography>
-            </CardContent>
-          </Card>
+                <Typography
+                  variant='h6'
+                  sx={{
+                    marginTop: "8px",
+                    fontWeight: "bold",
+                    color: "black",
+                    fontSize: "1rem",
+                  }}
+                >
+                  {hotel.Price}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </Box>
+      </Grid>
     </Container>
   );
 };
