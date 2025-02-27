@@ -79,7 +79,7 @@ const Hero = () => {
         <Grid item sm={4} xs={12}>
           <Box
             component={Link}
-            to='/hotels'
+            to='/flights'
             sx={{ ...HeroStyles, marginRight: 0 }}
           >
             <IconButton disabled>
