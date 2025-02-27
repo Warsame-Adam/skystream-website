@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Grid2 as Grid, Typography, Button } from "@mui/material";
+import { Grid, Typography, Button } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";

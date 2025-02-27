@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
   AppBar,
   Menu,
@@ -23,12 +23,26 @@ import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link, useLocation } from "react-router-dom";
+import { GlobalContext } from "../../context/GlobalContext";
+import { jwtKey } from "../../data/websiteInfo";
+import LoginModal from "../Login/LoginModal";
 
 const NavFlights = () => {
+  const { user: globalUser, setAuth } = useContext(GlobalContext);
+
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const { pathname } = useLocation();
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
 
+  const logoutHandler = async () => {
+    try {
+      await localStorage.removeItem(jwtKey);
+      setAuth(null);
+    } catch (e) {
+      console.log("faled to logout", e);
+    }
+  };
   return (
     <AppBar
       position='static'
@@ -111,7 +125,16 @@ const NavFlights = () => {
                 />
               </IconButton>
               {matchesSM ? (
-                <IconButton sx={{ p: 0 }}>
+                <IconButton
+                  sx={{ p: 0 }}
+                  onClick={() => {
+                    if (globalUser) {
+                      logoutHandler();
+                    } else {
+                      setShowLoginDialog(true);
+                    }
+                  }}
+                >
                   <AccountCircleIcon
                     sx={{
                       color: "text.primary",
@@ -140,13 +163,23 @@ const NavFlights = () => {
                     },
                     cursor: "pointer",
                   }}
+                  onClick={() => {
+                    if (globalUser) {
+                      logoutHandler();
+                    } else {
+                      setShowLoginDialog(true);
+                    }
+                  }}
                 >
-                  Log in
+                  {globalUser ? "Logout" : "Log in"}
                 </Button>
               )}
             </Box>
           </Grid>
-
+          <LoginModal
+            open={showLoginDialog}
+            handleClose={() => setShowLoginDialog(false)}
+          />
           <Grid
             container
             sx={{

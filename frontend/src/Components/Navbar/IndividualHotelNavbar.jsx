@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   AppBar,
   Menu,
@@ -16,7 +16,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import LanguageIcon from "@mui/icons-material/Language";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PersonIcon from "@mui/icons-material/Person";
@@ -31,11 +30,16 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import companyLogo from "../../Components/Assets/company-logo.png";
 import RSMenu from "../RSMenu";
 import { Link } from "react-router-dom";
+import { jwtKey } from "../../data/websiteInfo";
+import { GlobalContext } from "../../context/GlobalContext";
+import LoginModal from "../Login/LoginModal";
 
 const IndividualHotelNavbar = () => {
+  const { user: globalUser, setAuth } = useContext(GlobalContext);
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -84,6 +88,14 @@ const IndividualHotelNavbar = () => {
     },
   };
 
+  const logoutHandler = async () => {
+    try {
+      await localStorage.removeItem(jwtKey);
+      setAuth(null);
+    } catch (e) {
+      console.log("faled to logout", e);
+    }
+  };
   return (
     <AppBar
       position='static'
@@ -144,17 +156,30 @@ const IndividualHotelNavbar = () => {
                   onClose={handleCloseLanguageMenu}
                 />
               )}
-            <IconButton sx={iconButtonStyles}>
+            <IconButton
+              sx={iconButtonStyles}
+              onClick={() => {
+                if (globalUser) {
+                  logoutHandler();
+                } else {
+                  setShowLoginDialog(true);
+                }
+              }}
+            >
               <PersonIcon />
               {!matchesSM && (
                 <Typography
                   variant='body1'
                   sx={{ mx: 0.2, color: "background.paper" }}
                 >
-                  Log in
+                  {globalUser ? "Logout" : "Log in"}
                 </Typography>
               )}
             </IconButton>
+            <LoginModal
+              open={showLoginDialog}
+              handleClose={() => setShowLoginDialog(false)}
+            />
             {links.slice(3).map((item, i) => (
               <IconButton
                 onClick={handleOpenUserMenu}

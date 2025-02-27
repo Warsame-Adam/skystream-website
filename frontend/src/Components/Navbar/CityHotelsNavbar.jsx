@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 
 import {
   AppBar,
@@ -20,8 +20,22 @@ import companyLogo from "../../Components/Assets/company-logo.png";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import LoginModal from "../Login/LoginModal";
+import { GlobalContext } from "../../context/GlobalContext";
+import { jwtKey } from "../../data/websiteInfo";
 
 const CityHotelNavbar = () => {
+  const { user: globalUser, setAuth } = useContext(GlobalContext);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+
+  const logoutHandler = async () => {
+    try {
+      await localStorage.removeItem(jwtKey);
+      setAuth(null);
+    } catch (e) {
+      console.log("faled to logout", e);
+    }
+  };
   return (
     <AppBar
       position='static'
@@ -140,9 +154,21 @@ const CityHotelNavbar = () => {
               },
               cursor: "pointer",
             }}
+            onClick={() => {
+              if (globalUser) {
+                logoutHandler();
+              } else {
+                setShowLoginDialog(true);
+              }
+            }}
           >
             Log in
           </Box>
+
+          <LoginModal
+            open={showLoginDialog}
+            handleClose={() => setShowLoginDialog(false)}
+          />
         </Box>
       </Toolbar>
     </AppBar>
