@@ -7,7 +7,11 @@ const reducer = (state, action) => {
         ...state,
         user: action.payload,
       };
-
+    case actionTypes.SET_VISITOR_DATA:
+      return {
+        ...state,
+        visitorData: action.payload,
+      };
     default:
       return state;
   }
