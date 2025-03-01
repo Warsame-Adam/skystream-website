@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   Input,
@@ -14,37 +15,21 @@ import {
   FormControlLabel,
   Popper,
   Autocomplete,
-  ClickAwayListener,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
 import { useSelector, useDispatch } from "react-redux";
 import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
-import { setTravellersOpen } from "../Slices/HomeTravellersddSlice";
 import { setActiveInput } from "../Slices/ReusableCalendar";
-import { setTo } from "../Slices/flightSearchSlice";
+import { setTo, setOtherOptions } from "../Slices/flightSearchSlice";
 import { format } from "date-fns";
 import ReusableDatePicker from "../ReusableDatePicker";
 import HomeTravellersDropDown from "../HomeTravellersDropDown";
-import { useNavigate } from "react-router-dom";
-
-const cities = [
-  { city: "Paris", code: "CDG", country: "France" },
-  { city: "Athens", code: "ATH", country: "Greece" },
-  { city: "Sydney", code: "SYD", country: "Australia" },
-  { city: "Antalya", code: "AYT", country: "Turkey" },
-  { city: "Rome", code: "FCO", country: "Italy" },
-  { city: "Cardiff", code: "CWL", country: "Wales" },
-  { city: "Edinburgh", code: "EDI", country: "Scotland" },
-  { city: "Dublin", code: "DUB", country: "Ireland" },
-  { city: "Dubai", code: "DXB", country: "UAE" },
-  { city: "Amsterdam", code: "AMS", country: "Netherlands" },
-  { city: "Istanbul", code: "IST", country: "Turkey" },
-  { city: "Bangkok", code: "BKK", country: "Thailand" },
-];
+import { GlobalContext } from "../../context/GlobalContext";
 
 const ReturnSearchBar = () => {
+  const { locations } = useContext(GlobalContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -57,15 +42,11 @@ const ReturnSearchBar = () => {
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
   const searchType = useSelector((state) => state.search.searchType);
-  const isCalendarVisible = useSelector(
-    (state) => state.CalendarVisible.isCalendarVisible
-  );
-  const activeInput = useSelector((state) => state.CalendarVisible.activeInput);
-  const { from, to } = useSelector((state) => state.flightSearch);
-  const { adults, children, travellersOpen } = useSelector(
+
+  const { from, to, otherOptions } = useSelector((state) => state.flightSearch);
+  const { cabinClass, adults, children } = useSelector(
     (state) => state.travellers
   );
-  const [cabinClass] = useState("Economy");
 
   const travellersLabel = React.useMemo(() => {
     const total = adults + children;
@@ -151,6 +132,15 @@ const ReturnSearchBar = () => {
             marginRight: "20px",
           },
         }}
+        checked={otherOptions.nearbyAirports}
+        onChange={(e) =>
+          dispatch(
+            setOtherOptions({
+              ...otherOptions,
+              nearbyAirports: e.target.checked,
+            })
+          )
+        }
       />
       <FormControlLabel
         control={
@@ -175,6 +165,12 @@ const ReturnSearchBar = () => {
             marginRight: "20px",
           },
         }}
+        checked={otherOptions.direct}
+        onChange={(e) =>
+          dispatch(
+            setOtherOptions({ ...otherOptions, direct: e.target.checked })
+          )
+        }
       />
       <FormControlLabel
         control={
@@ -200,6 +196,12 @@ const ReturnSearchBar = () => {
             marginRight: "20px",
           },
         }}
+        checked={otherOptions.otherOptions}
+        onChange={(e) =>
+          dispatch(
+            setOtherOptions({ ...otherOptions, otherOptions: e.target.checked })
+          )
+        }
       />
     </Box>
   );
@@ -224,7 +226,7 @@ const ReturnSearchBar = () => {
             From
           </Typography>
           <Input
-            value={`${from.city} (${from.code}),  U.K`}
+            value={`${from.cityName} (${from.cityCode}), ${from.countryName} (${from.countryCode}) `}
             placeholder='From'
             disableUnderline
             sx={{
@@ -260,10 +262,10 @@ const ReturnSearchBar = () => {
             onClose={() => setIsOpenDestinationPopup(false)}
             ref={destinationRef}
             freeSolo
-            options={cities}
+            options={locations}
             getOptionLabel={(option) =>
-              option && option.city && option.code
-                ? `${option.city} (${option.code})`
+              option && option.cityName && option.cityCode
+                ? `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
                 : ""
             }
             filterOptions={(options, state) => {
@@ -275,9 +277,10 @@ const ReturnSearchBar = () => {
 
               return options.filter(
                 (option) =>
-                  option.city.toLowerCase().includes(inputValue) ||
-                  option.code.toLowerCase().includes(inputValue) ||
-                  option.country.toLowerCase().includes(inputValue)
+                  option.cityName.toLowerCase().includes(inputValue) ||
+                  option.cityCode.toLowerCase().includes(inputValue) ||
+                  option.countryName.toLowerCase().includes(inputValue) ||
+                  option.countryCode.toLowerCase().includes(inputValue)
               );
             }}
             onChange={(event, value) => {
@@ -305,10 +308,10 @@ const ReturnSearchBar = () => {
                       fontSize: "14px",
                     }}
                   >
-                    {option.city} ({option.code})
+                    {option.cityName} ({option.cityCode})
                   </div>
                   <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
-                    {option.country}
+                    {option.countryName} ({option.countryCode})
                   </div>
                 </div>
               </li>
@@ -325,7 +328,7 @@ const ReturnSearchBar = () => {
                     border: 0,
                   },
                 }}
-                placeholder='Country, city or airport'
+                placeholder='Country, city'
                 variant='standard'
                 sx={{
                   boxSizing: "border-box",
@@ -458,7 +461,6 @@ const ReturnSearchBar = () => {
             value={travellersLabel}
           />
           <HomeTravellersDropDown
-            cabinClass={cabinClass}
             anchorEl={travellersAnchorEl}
             handleClose={() => setTravellersAnchorEl(null)}
           />
@@ -482,17 +484,31 @@ const ReturnSearchBar = () => {
 
               if (
                 from &&
-                from.code &&
+                from.cityCode &&
                 to &&
-                to.code &&
+                to.cityCode &&
                 isDate(departureDate) &&
                 isDate(returnDate)
               ) {
-                navigate(
-                  `/flights/${from.code}/${to.code}/${departureDate}/${
-                    searchType === "oneway" ? "" : returnDate
-                  }`
-                );
+                let path = `/flights/${from.countryCode}/${from.cityCode}/${
+                  to.countryCode
+                }/${to.cityCode}/${departureDate}/${
+                  searchType === "oneway" ? "" : returnDate
+                }?cabinClass=${cabinClass}`;
+
+                if (adults > 0) {
+                  path += `&adults=${adults}`;
+                }
+                if (children > 0) {
+                  path += `&children=${children}`;
+                }
+                if (otherOptions.direct) {
+                  path += `&direct=${otherOptions.direct ? "true" : "false"}`;
+                }
+                if (searchType === "oneway") {
+                  path += `&oneway=true`;
+                }
+                navigate(path);
               }
             }}
           >

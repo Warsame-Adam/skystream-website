@@ -68,7 +68,7 @@ export default function SignupForm({ onLoginClick }) {
 
     try {
       setLoading(true);
-      const response = await axiosInstance.post("/users/signup", {
+      const response = await axiosInstance.post("/auth/signup", {
         name: formData.name,
         email: formData.email,
         password: formData.password,

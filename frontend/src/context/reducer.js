@@ -12,6 +12,26 @@ const reducer = (state, action) => {
         ...state,
         visitorData: action.payload,
       };
+    case actionTypes.SET_LOCATIONS:
+      return {
+        ...state,
+        locations: action.payload,
+      };
+    case actionTypes.SET_AIRLINES:
+      return {
+        ...state,
+        airlines: action.payload,
+      };
+    case actionTypes.SET_AIRPORTS:
+      return {
+        ...state,
+        airports: action.payload,
+      };
+    case actionTypes.SET_CLASSES:
+      return {
+        ...state,
+        classes: action.payload,
+      };
     default:
       return state;
   }

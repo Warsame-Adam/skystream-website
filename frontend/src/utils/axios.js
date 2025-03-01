@@ -9,9 +9,9 @@ const instance = axios.create({
 // Function to set up interceptors, receiving a function that retrieves the token
 export const setupAxiosInterceptors = (getToken) => {
   instance.interceptors.request.use(
-    async (config) => {
+    (config) => {
       try {
-        const token = await getToken(); // Get the latest token dynamically
+        const token = getToken(); // Get the latest token dynamically
 
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;

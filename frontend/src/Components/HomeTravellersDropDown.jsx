@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -13,14 +13,10 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useDispatch, useSelector } from "react-redux";
 import { handleChangeTravellers } from "./Slices/HomeTravellersddSlice";
+import { GlobalContext } from "../context/GlobalContext";
 
-const HomeTravellersDropDown = ({
-  anchorEl,
-
-  handleClose,
-
-  cabinClass = "Economy",
-}) => {
+const HomeTravellersDropDown = ({ anchorEl, handleClose }) => {
+  const { classes } = useContext(GlobalContext);
   const maxAdults = 5;
   const minAdults = 1;
   const maxChildren = 5;
@@ -33,8 +29,13 @@ const HomeTravellersDropDown = ({
   };
 
   const dispatch = useDispatch();
+  const origin = useSelector((state) => state.flightSearch.from);
+  const destination = useSelector((state) => state.flightSearch.to);
 
-  const { adults, children, childAges } = useSelector(
+  const departureDate = useSelector((state) => state.dates.departureDate);
+  const returnDate = useSelector((state) => state.dates.returnDate);
+
+  const { cabinClass, adults, children, childAges } = useSelector(
     (state) => state.travellers
   );
 
@@ -94,6 +95,9 @@ const HomeTravellersDropDown = ({
     dispatch(handleChangeTravellers({ adults, children, childAges: newAges }));
   };
 
+  const handleCabinClassChange = (newValue) => {
+    dispatch(handleChangeTravellers({ cabinClass: newValue }));
+  };
   return (
     <Menu
       id='basic-menu'
@@ -124,16 +128,37 @@ const HomeTravellersDropDown = ({
       >
         Cabin class
       </Typography>
-      <Typography
-        sx={{ color: "#000", fontSize: "13px", color: "#5a5a5a", mb: 2 }}
-      >
-        We can only show {cabinClass} prices for this search.
-        <br />
-        To see Business, Premium Economy, and First Class options, please tell
-        us your travel dates and destination.
-      </Typography>
+      {origin && destination && departureDate && returnDate ? (
+        <Select
+          variant='outlined'
+          fullWidth
+          size='small'
+          value={cabinClass}
+          onChange={(e) => handleCabinClassChange(e.target.value)}
+          sx={{
+            "&:hover": {
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#161616",
+              },
+            },
+          }}
+        >
+          {classes.map((c) => (
+            <MenuItem key={c.id} value={c.type}>
+              {c.type}
+            </MenuItem>
+          ))}
+        </Select>
+      ) : (
+        <Typography sx={{ color: "#000", fontSize: "13px", color: "#5a5a5a" }}>
+          We can only show {cabinClass} prices for this search.
+          <br />
+          To see Business, Premium Economy, and First Class options, please tell
+          us your travel dates and destination.
+        </Typography>
+      )}
 
-      <Divider sx={{ mb: 2 }} />
+      <Divider sx={{ my: 2 }} />
 
       <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <Box sx={{ flex: 1 }}>
@@ -160,7 +185,7 @@ const HomeTravellersDropDown = ({
               <RemoveIcon />
             </IconButton>
           </Tooltip>
-          <Typography sx={{ width: 20, textAlign: "center" }}>
+          <Typography sx={{ color: "#161616", width: 20, textAlign: "center" }}>
             {adults}
           </Typography>
           <Tooltip
@@ -206,7 +231,7 @@ const HomeTravellersDropDown = ({
               <RemoveIcon />
             </IconButton>
           </Tooltip>
-          <Typography sx={{ width: 20, textAlign: "center" }}>
+          <Typography sx={{ color: "#161616", width: 20, textAlign: "center" }}>
             {children}
           </Typography>
           <Tooltip
@@ -229,14 +254,30 @@ const HomeTravellersDropDown = ({
 
       {Array.from({ length: children }).map((_, index) => (
         <Box key={index} sx={{ mt: 2 }}>
-          <Typography sx={{ fontSize: "13px", fontWeight: 600, mb: 0.5 }}>
+          <Typography
+            sx={{
+              color: "#5a5a5a",
+              fontSize: "13px",
+              fontWeight: 600,
+              mb: 0.5,
+            }}
+          >
             Age of child {index + 1}
           </Typography>
           <Select
             size='small'
             value={childAges[index] || 0}
             onChange={(e) => handleChildAgeChange(index, e.target.value)}
-            sx={{ width: "100%", color: "black" }}
+            sx={{
+              width: "100%",
+              color: "black",
+
+              "&:hover": {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#161616",
+                },
+              },
+            }}
             MenuProps={{
               disablePortal: true,
               anchorOrigin: { vertical: "bottom", horizontal: "left" },

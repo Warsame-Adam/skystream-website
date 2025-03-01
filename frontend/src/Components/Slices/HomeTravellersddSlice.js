@@ -1,56 +1,46 @@
+import { createSlice } from "@reduxjs/toolkit";
 
-import { createSlice} from "@reduxjs/toolkit";
-
-const initialState ={
-    travellersOpen: false,
-    adults: 1,
-    children: 0,
-    childAges: [],
-
-}
-
-
+const initialState = {
+  cabinClass: "Economy",
+  adults: 1,
+  children: 0,
+  childAges: [],
+};
 
 const HomeTravellersddSlice = createSlice({
+  name: "travellers",
+  initialState,
 
-    name: "travellers",
-    initialState,
-
-    reducers: {
-
-
-        setTravellersOpen: (state, action) => {
-            state.travellersOpen = action.payload
-        },
-
-
-
-        setAdults: (state, action) => {
-            state.adults = action.payload
-        },
-
-        setChildren: (state, action) => {
-            state.children = action.payload
-        },
-
-        setChildAges: (state, action) => {
-            state.childAges = action.payload
-        },
-
-        handleChangeTravellers: (state, action) => {
-            const { adults, children, childAges } = action.payload;
-            state.adults = adults;
-            state.children = children;
-            state.childAges = childAges;
-          },
-    }
-
-
-
+  reducers: {
+    setAdults: (state, action) => {
+      state.adults = action.payload;
+    },
+    setChildren: (state, action) => {
+      state.children = action.payload;
+    },
+    setChildAges: (state, action) => {
+      state.childAges = action.payload;
+    },
+    setCabinClass: (state, action) => {
+      state.cabinClass = action.payload;
+    },
+    handleChangeTravellers: (state, action) => {
+      const { cabinClass, adults, children, childAges } = action.payload;
+      if (adults) state.adults = adults;
+      if (children) state.children = children;
+      if (cabinClass) state.cabinClass = cabinClass;
+      if (childAges) state.childAges = childAges;
+    },
+  },
 });
 
+export const {
+  setTravellersOpen,
+  setAdults,
+  setChildren,
+  setChildAges,
+  setCabinClass,
+  handleChangeTravellers,
+} = HomeTravellersddSlice.actions;
 
-export const { setTravellersOpen, setAdults, setChildren, setChildAges, handleChangeTravellers} = HomeTravellersddSlice.actions;
-
-
-export default HomeTravellersddSlice.reducer
+export default HomeTravellersddSlice.reducer;

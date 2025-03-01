@@ -1,18 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./App.css";
-import Navbar from "./Components/Navbar/Navbar";
-import homeSearchbar from "./Components/SearchBar/HomeSearchBar.jsx";
 import { ThemeProvider } from "@mui/material";
 import Theme from "./Theme.js";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { enGB } from "date-fns/locale";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./Pages/HomePage";
 import FlightPage from "./Pages/FlightPage.jsx";
 import HotelPage from "./Pages/HotelPage.jsx";
@@ -21,11 +14,36 @@ import CityHotelsPage from "./Pages/CityHotelsPage.jsx";
 import FlightSearchResultsPage from "./Pages/FlightSearchResultsPage.jsx";
 import { GlobalContext, GlobalProvider } from "./context/GlobalContext.js";
 import { jwtKey, visitorDataKey } from "./data/websiteInfo.js";
-import axiosInstance from "./utils/axios.js";
+import axiosInstance, { setupAxiosInterceptors } from "./utils/axios.js";
+import {
+  getLocations,
+  getAirlines,
+  getFlightClasses,
+  getAirports,
+} from "./services/flight.js";
+import { useDispatch } from "react-redux";
+import { setFrom } from "./Components/Slices/flightSearchSlice";
 
 function AuthCheck({ children }) {
-  const { setAuth, visitorData, setVisitorData } = useContext(GlobalContext);
+  const {
+    user: globalUser,
+    setAuth,
+    visitorData,
+    setVisitorData,
+    setLocationsData,
+    setAirlinesData,
+    setClassesData,
+    setAirportsData,
+  } = useContext(GlobalContext);
+  const dispatch = useDispatch();
 
+  //Setting up Axios Interceptors
+  useEffect(() => {
+    const getToken = () => (globalUser ? globalUser.token : "");
+    setupAxiosInterceptors(getToken);
+  }, [globalUser]);
+
+  //Checking for JWT Token in Local Storage
   useEffect(() => {
     const fetchToken = async () => {
       let Token = null;
@@ -37,15 +55,11 @@ function AuthCheck({ children }) {
 
       if (Token) {
         try {
-          const result = await axiosInstance.post(
-            "/users/validateToken",
-            null,
-            {
-              headers: {
-                authorization: "Bearer " + Token,
-              },
-            }
-          );
+          const result = await axiosInstance.post("/auth/validateToken", null, {
+            headers: {
+              authorization: "Bearer " + Token,
+            },
+          });
           if (result.data.success) {
             setAuth({ ...result.data.data.user, token: Token });
           }
@@ -55,6 +69,8 @@ function AuthCheck({ children }) {
     };
     fetchToken();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  //Fetching Visitor Data
   useEffect(() => {
     if (visitorData !== null) {
       return;
@@ -112,15 +128,15 @@ function AuthCheck({ children }) {
             currency: payload?.currency,
             country: payload?.location?.country?.name,
             countryCode: payload?.location?.country?.code,
-            phoneCode: payload.location?.country?.calling_code,
+            phoneCode: payload?.location?.country?.calling_code,
             capital: payload?.location?.country.capital,
             city: payload?.location?.city,
             postal: payload?.location?.postal,
             state: payload?.location?.region?.name,
             language: payload?.location?.language?.name,
             languageCode: payload?.location?.language?.code,
-            timeZone: payload.time_zone.id,
-            timeZoneOffset: payload.time_zone.offset,
+            timeZone: payload?.time_zone?.id,
+            timeZoneOffset: payload?.time_zone?.offset,
           };
           setVisitorData(visitorInfo);
           localStorage.setItem(visitorDataKey, JSON.stringify(visitorInfo));
@@ -151,6 +167,46 @@ function AuthCheck({ children }) {
         });
     }
   }, []);
+
+  //initial Data
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      const locationResponse = await getLocations();
+      if (locationResponse.success) {
+        setLocationsData(locationResponse.data);
+      }
+
+      const airlineResponse = await getAirlines();
+      if (airlineResponse.success) {
+        setAirlinesData(airlineResponse.data);
+      }
+
+      const classesResponse = await getFlightClasses();
+      if (classesResponse.success) {
+        setClassesData(classesResponse.data);
+      }
+
+      const airportResponse = await getAirports();
+      if (airportResponse.success) {
+        setAirportsData(classesResponse.data);
+      }
+    };
+    fetchInitialData();
+  }, []);
+
+  //seting up from location automatically based on visitor location
+  useEffect(() => {
+    if (visitorData) {
+      dispatch(
+        setFrom({
+          cityName: visitorData.city,
+          cityCode: visitorData.cityCode,
+          countryName: visitorData.country,
+          countryCode: visitorData.countryCode,
+        })
+      );
+    }
+  }, [visitorData]);
   return children;
 }
 function AppRoutes() {
@@ -159,7 +215,7 @@ function AppRoutes() {
       <Route path='/' element={<HomePage />} />
       <Route path='/flights' element={<FlightPage />} />
       <Route
-        path='/flights/:origin/:destination/:departureDate/:returnDate'
+        path='/flights/:originCountry/:originCity/:destinationCountry/:destinationCity/:departureDate/:returnDate'
         element={<FlightSearchResultsPage />}
       />
       <Route path='/hotels' element={<HotelPage />} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import {
   Input,
   Button,
@@ -8,8 +8,6 @@ import {
   Autocomplete,
   TextField,
   Popper,
-  ClickAwayListener,
-  styled,
   Grid,
 } from "@mui/material";
 import FlightIcon from "@mui/icons-material/Flight";
@@ -23,31 +21,14 @@ import {
   setReturnDate,
   clearDepartureDate,
   clearReturnDate,
-  setIsSelectingDepartDate,
 } from "../Slices/dateStore";
 import { setTo } from "../Slices/flightSearchSlice";
-import { setTravellersOpen } from "../Slices/HomeTravellersddSlice";
-
-import { showCalendar } from "../Slices/calendarVisible";
-
 import HomeTravellersDropDown from "../HomeTravellersDropDown";
 import CalandarMenu from "../CalandarMenu";
-const cities = [
-  { city: "Paris", code: "CDG", country: "France" },
-  { city: "Athens", code: "ATH", country: "Greece" },
-  { city: "Sydney", code: "SYD", country: "Australia" },
-  { city: "Antalya", code: "AYT", country: "Turkey" },
-  { city: "Rome", code: "FCO", country: "Italy" },
-  { city: "Cardiff", code: "CWL", country: "Wales" },
-  { city: "Edinburgh", code: "EDI", country: "Scotland" },
-  { city: "Dublin", code: "DUB", country: "Ireland" },
-  { city: "Dubai", code: "DXB", country: "UAE" },
-  { city: "Amsterdam", code: "AMS", country: "Netherlands" },
-  { city: "Istanbul", code: "IST", country: "Turkey" },
-  { city: "Bangkok", code: "BKK", country: "Thailand" },
-];
+import { GlobalContext } from "../../context/GlobalContext";
 
 const HomeSearchbar = () => {
+  const { locations } = useContext(GlobalContext);
   const { pathname } = useLocation();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -66,33 +47,28 @@ const HomeSearchbar = () => {
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
 
-  const { adults, children, childAges, travellersOpen } = useSelector(
+  const { cabinClass, adults, children } = useSelector(
     (state) => state.travellers
   );
 
-  const formatDateToYYMMDD = (date) => {
-    const d = new Date(date);
-    const year = String(d.getFullYear()).slice(-2);
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}${month}${day}`;
-  };
-
   const handleSearch = () => {
-    const originCode = origin?.code || origin;
-    const destinationCode = destination?.code || destination;
+    const isDate = (val) => !isNaN(new Date(val).getTime());
 
-    const formattedDepDate = formatDateToYYMMDD(departureDate);
-    const formattedRetDate = formatDateToYYMMDD(returnDate);
+    if (
+      origin &&
+      origin.cityCode &&
+      destination &&
+      destination.cityCode &&
+      isDate(departureDate) &&
+      isDate(returnDate)
+    ) {
+      const path = `/flights/${origin.countryCode}/${origin.cityCode}/${destination.countryCode}/${destination.cityCode}/${departureDate}/${returnDate}/?adults=${adults}&children=${children}&cabinClass=${cabinClass}`;
 
-    const path = `/flights/${originCode}/${destinationCode}/${formattedDepDate}/${formattedRetDate}`;
-
-    navigate(path);
+      navigate(path);
+    }
   };
 
   const [showCrossIcons, setShowCrossIcons] = useState(false);
-
-  const [cabinClass] = useState("Economy");
 
   const travellersLabel = React.useMemo(() => {
     const total = adults + children;
@@ -142,22 +118,8 @@ const HomeSearchbar = () => {
     dispatch(clearReturnDate());
   };
 
-  const handleClickDepart = () => {
-    setShowCrossIcons(true);
-    dispatch(setIsSelectingDepartDate(true));
-    dispatch(showCalendar());
-  };
-
-  const handleClickReturn = () => {
-    setShowCrossIcons(true);
-    dispatch(setIsSelectingDepartDate(false));
-    dispatch(showCalendar());
-  };
-
   const handleTravellersInputClick = (e) => {
     setTravellersAnchorEl(e.currentTarget);
-
-    //    dispatch(setTravellersOpen(true));
   };
 
   return (
@@ -268,7 +230,7 @@ const HomeSearchbar = () => {
               From
             </Typography>
             <Input
-              value={`${origin.city} (${origin.code}), ${origin.country}`}
+              value={`${origin.cityName} (${origin.cityCode}), ${origin.countryName} (${origin.countryCode})`}
               placeholder='From'
               disableUnderline
               sx={{
@@ -304,10 +266,10 @@ const HomeSearchbar = () => {
               onClose={() => setIsOpenDestinationPopup(false)}
               ref={destinationRef}
               freeSolo
-              options={cities}
+              options={locations}
               getOptionLabel={(option) =>
-                option && option.city && option.code
-                  ? `${option.city} (${option.code})`
+                option && option.cityName && option.cityCode
+                  ? `${option.cityName} (${option.cityCode})`
                   : ""
               }
               filterOptions={(options, state) => {
@@ -317,9 +279,10 @@ const HomeSearchbar = () => {
                 }
                 return options.filter(
                   (option) =>
-                    option.city.toLowerCase().includes(inputValue) ||
-                    option.code.toLowerCase().includes(inputValue) ||
-                    option.country.toLowerCase().includes(inputValue)
+                    option.cityName.toLowerCase().includes(inputValue) ||
+                    option.cityCode.toLowerCase().includes(inputValue) ||
+                    option.countryName.toLowerCase().includes(inputValue) ||
+                    option.countryCode.toLowerCase().includes(inputValue)
                 );
               }}
               onChange={(event, value) => {
@@ -347,10 +310,10 @@ const HomeSearchbar = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {option.city} ({option.code})
+                      {option.cityName} ({option.cityCode})
                     </div>
                     <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
-                      {option.country}
+                      {option.countryName} ({option.countryCode})
                     </div>
                   </div>
                 </li>
@@ -368,7 +331,7 @@ const HomeSearchbar = () => {
                       border: 0,
                     },
                   }}
-                  placeholder='Country, city or airport'
+                  placeholder='Country, city'
                   variant='standard'
                   sx={{
                     boxSizing: "border-box",
@@ -512,7 +475,6 @@ const HomeSearchbar = () => {
           <HomeTravellersDropDown
             anchorEl={travellersAnchorEl}
             handleClose={() => setTravellersAnchorEl(null)}
-            cabinClass={cabinClass}
           />
           <Grid
             item

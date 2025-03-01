@@ -206,7 +206,7 @@ const CalandarMenu = ({ anchorEl, handleClose }) => {
         alignItems='stretch'
         justifyContent='center'
       >
-        <Grid item xs={6} sx={{ height: "auto" }}>
+        <Grid item sm={6} xs={12} sx={{ height: "auto" }}>
           <Box sx={{ position: "relative", mb: "24px" }}>
             <Box sx={{ position: "absolute", top: "4px", left: "20px" }}>
               <IconButton
@@ -236,7 +236,7 @@ const CalandarMenu = ({ anchorEl, handleClose }) => {
             renderInput={(params) => null}
           />
         </Grid>
-        <Grid item xs={6} sx={{ height: "auto" }}>
+        <Grid item sm={6} xs={12} sx={{ height: "auto" }}>
           <Box sx={{ position: "relative", mb: "24px" }}>
             <Box sx={{ position: "absolute", top: "4px", right: "20px" }}>
               <IconButton

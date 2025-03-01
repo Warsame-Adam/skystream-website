@@ -21,7 +21,7 @@ function GoogleButton({ onSuccess }) {
     });
 
     try {
-      const result = await axios.post(`/users/externalLogin`, {
+      const result = await axios.post(`/auth/externalLogin`, {
         token: googleData.code,
         method: "google",
       });

@@ -23,7 +23,7 @@ import { styled } from "@mui/material/styles";
 import peopleBeach from "../../Components/Assets/peopleBeach.png";
 import { useSelector, useDispatch } from "react-redux";
 import ReturnSearchBar from "../SearchBar/ReturnSearchBar";
-import MultiCitySearchBar from "../SearchBar/MultiCitySearchBar";
+// import MultiCitySearchBar from "../SearchBar/MultiCitySearchBar";
 import { setSearchType } from "../Slices/SearchBarSlice";
 
 const HeroFlights = () => {
@@ -38,8 +38,8 @@ const HeroFlights = () => {
         return <ReturnSearchBar />;
       case "oneway":
         return <ReturnSearchBar />;
-      case "multiCity":
-        return <MultiCitySearchBar />;
+      // case "multiCity":
+      //   return <MultiCitySearchBar />;
       default:
         return <ReturnSearchBar />;
     }
@@ -97,7 +97,7 @@ const HeroFlights = () => {
             }}
           />
 
-          <FormControlLabel
+          {/* <FormControlLabel
             value='multiCity'
             control={
               <Radio
@@ -117,7 +117,7 @@ const HeroFlights = () => {
                 marginRight: "5px",
               },
             }}
-          />
+          /> */}
         </RadioGroup>
       </Box>
 
