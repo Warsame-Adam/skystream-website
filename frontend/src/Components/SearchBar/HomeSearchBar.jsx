@@ -62,8 +62,7 @@ const HomeSearchbar = () => {
       isDate(departureDate) &&
       isDate(returnDate)
     ) {
-      const path = `/flights/${origin.countryCode}/${origin.cityCode}/${destination.countryCode}/${destination.cityCode}/${departureDate}/${returnDate}/?adults=${adults}&children=${children}&cabinClass=${cabinClass}`;
-
+      const path = `/flights/search?originCountry=${origin.countryCode}&originCity=${origin.cityCode}&destinationCountry=${destination.countryCode}&destinationCity=${destination.cityCode}&departureDate=${departureDate}&returnDate=${returnDate}&adults=${adults}&children=${children}&cabinClass=${cabinClass}`;
       navigate(path);
     }
   };

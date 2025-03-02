@@ -214,10 +214,7 @@ function AppRoutes() {
     <Routes>
       <Route path='/' element={<HomePage />} />
       <Route path='/flights' element={<FlightPage />} />
-      <Route
-        path='/flights/:originCountry/:originCity/:destinationCountry/:destinationCity/:departureDate/:returnDate'
-        element={<FlightSearchResultsPage />}
-      />
+      <Route path='/flights/search' element={<FlightSearchResultsPage />} />
       <Route path='/hotels' element={<HotelPage />} />
       <Route
         path='/hotels/:country/:city/:hotelName/:hotelId'

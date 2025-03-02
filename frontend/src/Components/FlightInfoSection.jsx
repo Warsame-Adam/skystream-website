@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Typography,
@@ -11,8 +11,10 @@ import {
 } from "@mui/material";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import HotelIcon from "@mui/icons-material/Hotel";
+import { GlobalContext } from "../context/GlobalContext";
 
 const FlightInfoSection = () => {
+  const { locations, airlines } = useContext(GlobalContext);
   const [selectedTab, setSelectedTab] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -72,7 +74,6 @@ const FlightInfoSection = () => {
   return (
     <Container className='container' sx={{ pt: "40px" }}>
       {/* Top Text and Icons */}
-
       <Box sx={{}}>
         <Typography
           sx={{ fontSize: "25px", fontWeight: "bold", marginBottom: "10px" }}
@@ -197,15 +198,7 @@ const FlightInfoSection = () => {
             },
           }}
         />
-        <Tab
-          label='Popular flight routes'
-          sx={{
-            "&.Mui-selected": {
-              backgroundColor: "#05203c !important",
-              color: "white !important",
-            },
-          }}
-        />
+
         <Tab
           label='Top airlines'
           sx={{
@@ -215,16 +208,30 @@ const FlightInfoSection = () => {
             },
           }}
         />
+
+        {/* <Tab
+          label='Popular flight routes'
+          sx={{
+            "&.Mui-selected": {
+              backgroundColor: "#05203c !important",
+              color: "white !important",
+            },
+          }}
+        /> */}
       </Tabs>
 
       {/* Tab Content */}
       <Box sx={{ paddingTop: 3 }}>
         {selectedTab === 0 && (
           <Grid container spacing={2}>
-            {popularCities.map((city, index) => (
-              <Grid item xs={6} sm={4} key={index}>
-                <Link href='#' underline='hover' sx={{ color: "#1868e5" }}>
-                  Flights to {city}
+            {locations.map((loc) => (
+              <Grid item xs={6} sm={4} key={loc._id}>
+                <Link
+                  href={`/flights/search?&originCountry=${loc?.countryCode}&originCity=${loc?.cityCode}`}
+                  underline='hover'
+                  sx={{ color: "#1868e5" }}
+                >
+                  Flights to {loc.cityName}
                 </Link>
               </Grid>
             ))}
@@ -232,16 +239,37 @@ const FlightInfoSection = () => {
         )}
         {selectedTab === 1 && (
           <Grid container spacing={2}>
-            {popularCountries.map((country, index) => (
-              <Grid item xs={6} sm={4} key={index}>
-                <Link href='#' underline='hover' sx={{ color: "#1868e5" }}>
-                  Flights to {country}
+            {locations.map((loc) => (
+              <Grid item xs={6} sm={4} key={loc._id}>
+                <Link
+                  href={`/flights/search?&originCountry=${loc?.countryCode}`}
+                  underline='hover'
+                  sx={{ color: "#1868e5" }}
+                >
+                  Flights to {locations.countryName}
                 </Link>
               </Grid>
             ))}
           </Grid>
         )}
+
         {selectedTab === 2 && (
+          <Grid container spacing={2}>
+            {airlines.map((airline) => (
+              <Grid item xs={6} sm={4} key={airline._id}>
+                <Link
+                  href={`/flights/search?outboundAirline=${airline.name}`}
+                  underline='hover'
+                  sx={{ color: "#1868e5" }}
+                >
+                  {airline.name}
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+
+        {/* {selectedTab === 3 && (
           <Grid container spacing={2}>
             {popularFlightRoutes.map((route, index) => (
               <Grid item xs={12} sm={6} key={index}>
@@ -251,18 +279,7 @@ const FlightInfoSection = () => {
               </Grid>
             ))}
           </Grid>
-        )}
-        {selectedTab === 3 && (
-          <Grid container spacing={2}>
-            {topAirlines.map((airline, index) => (
-              <Grid item xs={6} sm={4} key={index}>
-                <Link href='#' underline='hover' sx={{ color: "#1868e5" }}>
-                  {airline}
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        )} */}
       </Box>
     </Container>
   );

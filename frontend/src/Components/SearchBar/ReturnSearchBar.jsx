@@ -490,12 +490,29 @@ const ReturnSearchBar = () => {
                 isDate(departureDate) &&
                 isDate(returnDate)
               ) {
-                let path = `/flights/${from.countryCode}/${from.cityCode}/${
-                  to.countryCode
-                }/${to.cityCode}/${departureDate}/${
-                  searchType === "oneway" ? "" : returnDate
-                }?cabinClass=${cabinClass}`;
+                let path = `/flights/search?`;
 
+                if (from.countryCode) {
+                  path += `&originCountry=${from.countryCode}`;
+                }
+                if (from.cityCode) {
+                  path += `&originCity=${from.cityCode}`;
+                }
+                if (to.countryCode) {
+                  path += `&destinationCountry=${to.countryCode}`;
+                }
+                if (to.cityCode) {
+                  path += `&destinationCity=${to.cityCode}`;
+                }
+                if (departureDate) {
+                  path += `&departureDate=${departureDate}`;
+                }
+                if (searchType !== "oneway" && returnDate) {
+                  path += `&returnDate=${returnDate}`;
+                }
+                if (cabinClass) {
+                  path += `&cabinClass=${cabinClass}`;
+                }
                 if (adults > 0) {
                   path += `&adults=${adults}`;
                 }
