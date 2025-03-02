@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   AppBar,
   Menu,
@@ -14,8 +15,9 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import FlightIcon from "@mui/icons-material/Flight";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -32,196 +34,68 @@ import Dubai from "../../Components/Assets/dubai.png";
 import Amsterdam from "../../Components/Assets/Amsterdam-Netherlands.png";
 import Istanbul from "../../Components/Assets/Istanbul-Turkey.png";
 import Bangkok from "../../Components/Assets/Bangkok-Thailand.png";
-import { Link } from "react-router-dom";
-const flightDeals = [
-  {
-    image: Paris,
-    destinationCityCode: "CDG",
-    destinationCity: "Paris",
-    destinationCountry: "France",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo1.jpg", // Placeholder for the airline logo
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "LTN - FUE with easyJet", // Placeholder for departing airport details
-    returnDetails: "FUE - LGW with easyJet", // Placeholder for returning airport details
-    price: "£24", // Placeholder for the price
-  },
-  {
-    image: Athens,
-    destinationCityCode: "ATH",
-    destinationCity: "Athens",
-    destinationCountry: "Greece",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Sydney,
-    destinationCityCode: "SYD",
-    destinationCity: "Sydney",
-    destinationCountry: "Australia",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Antalya,
-    destinationCityCode: "AYT",
-    destinationCity: "Antalya",
-    destinationCountry: "Turkey",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Rome,
-    destinationCityCode: "FCO",
-    destinationCity: "Rome",
-    destinationCountry: "Italy",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Cardiff,
-    destinationCityCode: "CWL",
-    destinationCity: "Cardiff",
-    destinationCountry: "Wales",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Edinburgh,
-    destinationCityCode: "EDI",
-    destinationCity: "Edinburgh",
-    destinationCountry: "Scotland",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Dublin,
-    destinationCityCode: "DUB",
-    destinationCity: "Dublin",
-    destinationCountry: "Ireland",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Dubai,
-    destinationCityCode: "DXB",
-    destinationCity: "Dubai",
-    destinationCountry: "UAE",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Amsterdam,
-    destinationCityCode: "AMS",
-    destinationCity: "Amsterdam",
-    destinationCountry: "Netherlands",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Istanbul,
-    destinationCityCode: "IST",
-    destinationCity: "Istanbul",
-    destinationCountry: "Turkey",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  {
-    image: Bangkok,
-    destinationCityCode: "BKK",
-    destinationCity: "Bangkok",
-    destinationCountry: "Thailand",
-    originCityCode: "LHR",
-    originCity: "London",
-    originCountry: "United Kingdom",
-    airlineLogo: "/path/to/airline-logo2.jpg",
-    departDate: "Thu Nov 20 2025 02:40:40 GMT+0500", // Placeholder for the departure date
-    returnDate: "Thu Nov 26 2025 02:40:40 GMT+0500", // Placeholder for the return date
-    departDetails: "BFS - MAN with easyJet",
-    returnDetails: "MAN - BFS with easyJet",
-    price: "£24",
-  },
-  // Add other objects as needed
-];
+
+import { getFlights } from "../../services/flight";
+import { GlobalContext } from "../../context/GlobalContext";
 
 const FlightLocations = () => {
+  const { visitorData } = useContext(GlobalContext);
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState({
+    active: false,
+    action: "",
+  });
+  const [error, setError] = useState({
+    active: false,
+    message: "",
+    action: "",
+  });
   const [showAll, setShowAll] = useState(true);
 
-  const displayedDeals = showAll ? flightDeals : flightDeals.slice(0, 6);
+  const fetchFlights = async () => {
+    setLoading({
+      active: true,
+      action: "page",
+    });
+    const res = await getFlights({
+      departureLocation: {
+        cityCode: visitorData?.cityCode,
+        countryCode: visitorData?.countryCode,
+      },
+      departureTime: new Date().getTime(),
+    });
+    if (res.success) {
+      if (res.data && res.data?.length > 0) setFlights(res.data);
+    } else {
+      setError({
+        active: true,
+        message: res.error,
+        action: "page",
+      });
+    }
 
+    setLoading({
+      active: false,
+      action: "",
+    });
+  };
+  useEffect(() => {
+    fetchFlights();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const displayedDeals = showAll ? flights : flights.slice(0, 6);
+
+  const loadingUI = (
+    <Box
+      minHeight='80px'
+      display='flex'
+      justifyContent='center'
+      alignItems='center'
+    >
+      <CircularProgress size='30px' />
+    </Box>
+  );
   return (
     <Container className='container' sx={{ pt: "16px" }}>
       <Box
@@ -281,7 +155,7 @@ const FlightLocations = () => {
       <Box sx={{ marginTop: "20px" }}>
         <Typography>
           <span style={{ fontSize: "30px", fontWeight: "bold" }}>
-            Flight deals from United Kingdom
+            Flight deals from {visitorData?.country || "United Kingdom"}
           </span>
           <br />
           <span style={{ fontSize: "15px", fontWeight: "normal" }}>
@@ -291,153 +165,198 @@ const FlightLocations = () => {
         </Typography>
       </Box>
 
-      <Box sx={{ padding: 0, marginTop: "20px" }}>
-        <Grid container spacing={2}>
-          {displayedDeals.map((deal, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Link
-                to={`/flights/${deal.originCityCode}/${
-                  deal.destinationCityCode
-                }/${new Date(deal.departDate).getTime()}/${new Date(
-                  deal.returnDate
-                ).getTime()}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Card
-                  sx={{
-                    borderRadius: "12px",
-                    boxShadow: "0 1px 3px 0 #25201f4d",
-                    "&:hover": {
-                      boxShadow: "0 4px 14px 0 #25201f40",
-                    },
-                    transition: "all .2s ease-in-out",
-                  }}
+      {loading.active && loading.action === "page" ? (
+        loadingUI
+      ) : error.active && error.action === "page" ? (
+        <Alert severity='error' sx={{ mt: "20px" }}>
+          {error.message}
+        </Alert>
+      ) : (
+        <Box sx={{ padding: 0, marginTop: "20px" }}>
+          <Grid container spacing={2}>
+            {displayedDeals.map((deal, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Link
+                  to={`/flights/${deal.location?.departureCity?.countryCode}/${
+                    deal.location?.departureCity?.cityCode
+                  }/${deal.location?.arrivalCity?.countryCode}/${
+                    deal.location?.arrivalCity?.cityCode
+                  }/${new Date(
+                    deal.schedule.departureTime
+                  ).getTime()}/${new Date(
+                    deal.schedule.arrivalTime
+                  ).getTime()}`}
+                  style={{ textDecoration: "none" }}
                 >
-                  {/* Image Section */}
-                  <CardMedia
-                    sx={{ height: "160px" }}
-                    component='img'
-                    height='140'
-                    image={deal.image}
-                    alt={`${deal.city} Image`}
-                  />
+                  <Card
+                    sx={{
+                      borderRadius: "12px",
+                      boxShadow: "0 1px 3px 0 #25201f4d",
+                      "&:hover": {
+                        boxShadow: "0 4px 14px 0 #25201f40",
+                      },
+                      transition: "all .2s ease-in-out",
+                    }}
+                  >
+                    {/* Image Section */}
+                    <CardMedia
+                      sx={{ height: "160px" }}
+                      component='img'
+                      height='140'
+                      image={`${process.env.REACT_APP_BACKEND_URL}/flights/${deal.image}`}
+                      alt={`${deal.image} Image`}
+                    />
 
-                  <CardContent>
-                    {/* City/Town and Country */}
-                    <Typography
-                      variant='h6'
-                      sx={{
-                        fontWeight: "bold",
-                        color: "#000",
-                        lineHeight: "24px",
-                      }}
-                    >
-                      {deal.destinationCity}
-                    </Typography>
-                    <Typography variant='body2' sx={{ color: "#626971" }}>
-                      {deal.destinationCountry}
-                    </Typography>
-
-                    {/* Departure Ticket Information */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "12px",
-                        alignItems: "center",
-                        marginTop: "18px",
-                      }}
-                    >
-                      <img
-                        src={deal.airlineLogo}
-                        alt='Airline Logo'
-                        style={{ width: 20, height: 20 }}
-                      />
-                      <Box>
-                        <Typography
-                          variant='body2'
-                          sx={{ fontWeight: "bold", color: "black" }}
-                        >
-                          {new Date(deal.departDate).toDateString()}
-                        </Typography>
-                        <Typography sx={{ color: "grey", fontSize: "12px" }}>
-                          {deal.departDetails}
-                        </Typography>
-                      </Box>
+                    <CardContent>
+                      {/* City/Town and Country */}
                       <Typography
-                        variant='body2'
+                        variant='h6'
                         sx={{
-                          marginLeft: "auto",
-                          color: "black",
                           fontWeight: "bold",
+                          color: "#000",
+                          lineHeight: "24px",
                         }}
                       >
-                        Direct
+                        {deal.location?.arrivalCity?.cityName}
                       </Typography>
-                    </Box>
+                      <Typography variant='body2' sx={{ color: "#626971" }}>
+                        {deal.location?.arrivalCity?.countryName}
+                      </Typography>
 
-                    {/* Return Ticket Information */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "12px",
-                        alignItems: "center",
-                        marginTop: 1,
-                      }}
-                    >
-                      <img
-                        src={deal.airlineLogo}
-                        alt='Airline Logo'
-                        style={{ width: 20, height: 20 }}
-                      />
-                      <Box>
-                        <Typography
-                          variant='body2'
-                          sx={{ fontWeight: "bold", color: "black" }}
-                        >
-                          {new Date(deal.returnDate).toDateString()}
-                        </Typography>
-                        <Typography sx={{ color: "grey", fontSize: "12px" }}>
-                          {deal.returnDetails}
-                        </Typography>
-                      </Box>
-                      <Typography
-                        variant='body2'
+                      {/* Departure Ticket Information */}
+                      <Box
                         sx={{
-                          marginLeft: "auto",
-                          color: "black",
-                          fontWeight: "bold",
+                          display: "flex",
+                          gap: "12px",
+                          alignItems: "center",
+                          marginTop: "18px",
                         }}
                       >
-                        Direct
+                        <img
+                          src={`${process.env.REACT_APP_BACKEND_URL}/airlines/${deal.outboundAirline.logo}`}
+                          alt='Airline Logo'
+                          style={{ width: 20, height: 20 }}
+                        />
+                        <Box>
+                          <Typography
+                            variant='body2'
+                            sx={{ fontWeight: "bold", color: "black" }}
+                          >
+                            {new Date(
+                              deal.schedule.departureTime
+                            ).toDateString()}
+                          </Typography>
+                          <Typography sx={{ color: "grey", fontSize: "12px" }}>
+                            {deal.location?.departureCity?.cityCode} -{" "}
+                            {deal.location?.arrivalCity?.cityCode} with{" "}
+                            {deal.outboundAirline.name}
+                          </Typography>
+                        </Box>
+                        <Typography
+                          variant='body2'
+                          sx={{
+                            marginLeft: "auto",
+                            color: "black",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {deal.location?.outboundDirect
+                            ? "Direct"
+                            : `${deal.location.outboundStops.length} Stop${
+                                deal.location.outboundStops.length > 1
+                                  ? "s"
+                                  : ""
+                              }`}
+                        </Typography>
+                      </Box>
+
+                      {/* Return Ticket Information */}
+                      {deal.twoWay && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: "12px",
+                            alignItems: "center",
+                            marginTop: 1,
+                          }}
+                        >
+                          <img
+                            src={`${process.env.REACT_APP_BACKEND_URL}/airlines/${deal.outboundAirline.logo}`}
+                            alt='Airline Logo'
+                            style={{ width: 20, height: 20 }}
+                          />
+                          <Box>
+                            <Typography
+                              variant='body2'
+                              sx={{ fontWeight: "bold", color: "black" }}
+                            >
+                              {new Date(
+                                deal.schedule.returnDepartureTime
+                              ).toDateString()}
+                            </Typography>
+                            <Typography
+                              sx={{ color: "grey", fontSize: "12px" }}
+                            >
+                              {deal.location?.arrivalCity?.cityCode} -{" "}
+                              {deal.location?.departureCity?.cityCode} with{" "}
+                              {deal.returnAirline.name}
+                            </Typography>
+                          </Box>
+                          <Typography
+                            variant='body2'
+                            sx={{
+                              marginLeft: "auto",
+                              color: "black",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {deal.location?.returnDirect
+                              ? "Direct"
+                              : `${deal.location.returnStops.length} Stop${
+                                  deal.location.returnStops.length > 1
+                                    ? "s"
+                                    : ""
+                                }`}
+                          </Typography>
+                        </Box>
+                      )}
+
+                      {/* Price Tag */}
+                      <Typography
+                        sx={{
+                          textAlign: "right",
+                          marginTop: 2,
+                          color: "#0062e3",
+                          fontWeight: "bold",
+                          fontSize: "14.5px",
+                        }}
+                      >
+                        from{" "}
+                        {deal.classes.reduce(
+                          (minClass, currentClass) =>
+                            currentClass.price < minClass.price
+                              ? currentClass
+                              : minClass,
+                          deal.classes[0]
+                        )}
                       </Typography>
-                    </Box>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </Grid>
+            ))}
+          </Grid>
 
-                    {/* Price Tag */}
-                    <Typography
-                      sx={{
-                        textAlign: "right",
-                        marginTop: 2,
-                        color: "#0062e3",
-                        fontWeight: "bold",
-                        fontSize: "14.5px",
-                      }}
-                    >
-                      from {deal.price}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* "See Fewer Details" or "See More Details" Button */}
-        <Box sx={{ textAlign: "center", marginTop: 3 }}>
-          <Button onClick={() => setShowAll(!showAll)} variant='text'>
-            {showAll ? "See Fewer Details" : "See More Details"}
-          </Button>
+          {/* "See Fewer Details" or "See More Details" Button */}
+          {flights.length > 6 && (
+            <Box sx={{ textAlign: "center", marginTop: 3 }}>
+              <Button onClick={() => setShowAll(!showAll)} variant='text'>
+                {showAll ? "See Fewer Details" : "See More Details"}
+              </Button>
+            </Box>
+          )}
         </Box>
-      </Box>
+      )}
     </Container>
   );
 };
