@@ -58,10 +58,8 @@ const FlightLocations = () => {
       action: "page",
     });
     const res = await getFlights({
-      departureLocation: {
-        cityCode: visitorData?.cityCode,
-        countryCode: visitorData?.countryCode,
-      },
+      originCity: visitorData?.cityCode,
+      originCountry: visitorData?.countryCode,
       departureTime: new Date().getTime(),
     });
     if (res.success) {

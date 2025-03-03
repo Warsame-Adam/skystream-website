@@ -24,7 +24,10 @@ const flightSearchSlice = createSlice({
       state.to = action.payload;
     },
     setOtherOptions: (state, action) => {
-      state.otherOptions = action.payload;
+      state.otherOptions = {
+        ...state.otherOptions,
+        ...action.payload,
+      };
     },
   },
 });

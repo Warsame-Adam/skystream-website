@@ -493,7 +493,7 @@ const ReturnSearchBar = () => {
                 let path = `/flights/search?`;
 
                 if (from.countryCode) {
-                  path += `&originCountry=${from.countryCode}`;
+                  path += `originCountry=${from.countryCode}`;
                 }
                 if (from.cityCode) {
                   path += `&originCity=${from.cityCode}`;
@@ -524,6 +524,8 @@ const ReturnSearchBar = () => {
                 }
                 if (searchType === "oneway") {
                   path += `&oneway=true`;
+                } else {
+                  path += `&oneway=false`;
                 }
                 navigate(path);
               }

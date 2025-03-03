@@ -1,17 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import { setDepartureDate, setReturnDate } from "./Slices/dateStore.js";
-import {
-  setAdults,
-  setChildAges,
-  setChildren,
-  handleChangeTravellers,
-  setTravellersOpen,
-} from "./Slices/HomeTravellersddSlice";
-import { setTo } from "./Slices/flightSearchSlice";
+import { useParams, useSearchParams } from "react-router-dom";
 
-import { setShowInputs } from "./Slices/FlightSearchUI.js";
 import {
   Container,
   Box,
@@ -33,24 +23,20 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import FlightIcon from "@mui/icons-material/Flight";
 import HomeTravellersDropDown from "./HomeTravellersDropDown";
-import { setActiveInput } from "./Slices/ReusableCalendar";
 import ReusableDatePicker from "./ReusableDatePicker.jsx";
 import ReturnSearchBar from "./SearchBar/ReturnSearchBar.jsx";
+import { GlobalContext } from "../context/GlobalContext.js";
+import { setDepartureDate, setReturnDate } from "./Slices/dateStore.js";
+import { setActiveInput } from "./Slices/ReusableCalendar";
+import {
+  setAdults,
+  setChildren,
+  setCabinClass,
+} from "./Slices/HomeTravellersddSlice";
+import { setFrom, setTo, setOtherOptions } from "./Slices/flightSearchSlice";
+import { setShowInputs } from "./Slices/FlightSearchUI.js";
+import { setSearchType } from "./Slices/SearchBarSlice";
 
-const cities = [
-  { city: "Paris", code: "CDG", country: "France" },
-  { city: "Athens", code: "ATH", country: "Greece" },
-  { city: "Sydney", code: "SYD", country: "Australia" },
-  { city: "Antalya", code: "AYT", country: "Turkey" },
-  { city: "Rome", code: "FCO", country: "Italy" },
-  { city: "Cardiff", code: "CWL", country: "Wales" },
-  { city: "Edinburgh", code: "EDI", country: "Scotland" },
-  { city: "Dublin", code: "DUB", country: "Ireland" },
-  { city: "Dubai", code: "DXB", country: "UAE" },
-  { city: "Amsterdam", code: "AMS", country: "Netherlands" },
-  { city: "Istanbul", code: "IST", country: "Turkey" },
-  { city: "Bangkok", code: "BKK", country: "Thailand" },
-];
 const isDate = (val) => !isNaN(new Date(val).getTime());
 
 const inputStyle = {
@@ -65,77 +51,27 @@ const inputStyle = {
 
 const FlightSearchUI = () => {
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const showInputs = useSelector((state) => state.flightSearchui.showInputs);
-
   const newOrigin = useSelector((state) => state.flightSearch.from);
   const newDestination = useSelector((state) => state.flightSearch.to);
-
   const CurrentDepartureDate = useSelector(
     (state) => state.dates.departureDate
   );
   const CurrentReturnDate = useSelector((state) => state.dates.returnDate);
-
-  useEffect(() => {
-    dispatch(setShowInputs(false));
-    dispatch(setTravellersOpen(false));
-  }, []);
-
-  const { origin, destination, departureDate, returnDate } = useParams();
-
-  useEffect(() => {
-    if (departureDate && isDate(departureDate * 1)) {
-      dispatch(setDepartureDate(departureDate * 1));
-    }
-    if (returnDate && isDate(returnDate * 1)) {
-      dispatch(setReturnDate(returnDate * 1));
-    }
-
-    const foundCity = cities.find((city) => city.code === destination);
-
-    if (foundCity) {
-      dispatch(setTo(foundCity));
-    } else {
-      dispatch(setTo({ city: "", code: destination, country: "" }));
-    }
-  }, [destination, departureDate, returnDate]);
-
-  const { adults, children, childAges, travellersOpen } = useSelector(
+  const { cabinClass, adults, children } = useSelector(
     (state) => state.travellers
   );
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const showInputs = useSelector((state) => state.flightSearchui.showInputs);
   const departInputRef = useRef(null);
   const returnInputRef = useRef(null);
 
-  const [cabinClass] = useState("Economy");
+  useEffect(() => {
+    dispatch(setShowInputs(false));
+  }, []);
 
   function formatArrowDate(dateObj) {
     return format(dateObj, "EEE, dd MMM");
-  }
-
-  function formatInputDate(dateObj) {
-    if (!dateObj) return "";
-    return format(dateObj, "dd/MM/yyyy");
-  }
-
-  const formatDateToYYMMDD = (date) => {
-    const d = new Date(date);
-    const year = String(d.getFullYear()).slice(-2);
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}${month}${day}`;
-  };
-
-  function toYyMmDd(dateObj) {
-    const yy = dateObj.getFullYear() % 100;
-    const mm = dateObj.getMonth() + 1; // 1-12
-    const dd = dateObj.getDate(); // 1-31
-
-    const yyStr = String(yy).padStart(2, "0");
-    const mmStr = String(mm).padStart(2, "0");
-    const ddStr = String(dd).padStart(2, "0");
-
-    return yyStr + mmStr + ddStr;
   }
 
   const handleDateChange = (type, step) => {
@@ -165,13 +101,6 @@ const FlightSearchUI = () => {
     ? formatArrowDate(CurrentReturnDate)
     : "Return date";
 
-  const inputFormattedDepartureDate = CurrentDepartureDate
-    ? format(new Date(CurrentDepartureDate), "dd/MM/yyyy")
-    : "";
-  const inputFormattedReturnDate = CurrentReturnDate
-    ? format(new Date(CurrentReturnDate), "dd/MM/yyyy")
-    : "";
-
   const travellersLabel = React.useMemo(() => {
     const total = adults + children;
     if (total === 1 && adults === 1) {
@@ -192,10 +121,6 @@ const FlightSearchUI = () => {
   };
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
-    // dispatch(calendarShow());
-  };
-  const handleTravellersInputClick = () => {
-    dispatch(setTravellersOpen(true));
   };
 
   return (
@@ -254,7 +179,7 @@ const FlightSearchUI = () => {
                 width: "100%",
               }}
             >
-              {`${newOrigin.city} (${newOrigin.code}) . ${travellersLabel} `}
+              {`${newOrigin.cityName} (${newOrigin.cityCode}) . ${travellersLabel} `}
             </Typography>
           </Grid>
 
@@ -383,12 +308,12 @@ const FlightSearchUI = () => {
               </Grid>
             </Grid>
           </Grid>
-          {/* <ReusableDatePicker
+          <ReusableDatePicker
             anchorEl={anchorEl}
             handleClose={() => setAnchorEl(null)}
             departInputRef={departInputRef}
             returnInputRef={returnInputRef}
-          /> */}
+          />
         </Grid>
 
         {showInputs && (
