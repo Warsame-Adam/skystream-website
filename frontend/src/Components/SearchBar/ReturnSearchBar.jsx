@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Grid,
   Input,
@@ -29,6 +29,7 @@ import HomeTravellersDropDown from "../HomeTravellersDropDown";
 import { GlobalContext } from "../../context/GlobalContext";
 
 const ReturnSearchBar = () => {
+  const { pathname } = useLocation();
   const { locations } = useContext(GlobalContext);
   const navigate = useNavigate();
   const theme = useTheme();
@@ -73,13 +74,17 @@ const ReturnSearchBar = () => {
   };
 
   useEffect(() => {
-    const currentDate = new Date();
-    const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
-    dispatch(setDepartureDate(departure.getTime()));
+    if (pathname !== "/flights/search") {
+      const currentDate = new Date();
+      const departure = new Date(
+        currentDate.setDate(currentDate.getDate() + 7)
+      );
+      dispatch(setDepartureDate(departure.getTime()));
 
-    const returnD = new Date(departure);
-    returnD.setDate(departure.getDate() + 7);
-    dispatch(setReturnDate(returnD.getTime()));
+      const returnD = new Date(departure);
+      returnD.setDate(departure.getDate() + 7);
+      dispatch(setReturnDate(returnD.getTime()));
+    }
   }, [dispatch]);
 
   const formattedDepartureDate = departureDate

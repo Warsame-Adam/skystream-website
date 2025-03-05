@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Card,
@@ -27,21 +28,84 @@ import {
   ArrowForward,
 } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
+import { GlobalContext } from "../context/GlobalContext";
+import * as moment from "moment";
+function formatFlightDuration(departureTime, arrivalTime) {
+  const dep = moment(departureTime);
+  const arr = moment(arrivalTime);
 
-const FlightSearchResults = () => {
+  const duration = moment.duration(arr.diff(dep)); // Get duration
+
+  const days = duration.days();
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+
+  let formattedDuration = "";
+  if (days > 0) formattedDuration += `${days}d `;
+  if (hours > 0 || days > 0) formattedDuration += `${hours}h `;
+  formattedDuration += `${minutes.toString().padStart(2, "0")}`;
+
+  return formattedDuration.trim();
+}
+
+const getDurationInHours = (departureTime, arrivalTime) => {
+  if (!departureTime || !arrivalTime) return null;
+
+  const diff = Math.abs(new Date(arrivalTime) - new Date(departureTime));
+  return (diff / (1000 * 60 * 60)).toFixed(1); // Convert ms to hours (1 decimal place)
+};
+const getHour = (dateTime) => (dateTime ? new Date(dateTime).getHours() : null);
+
+const FlightSearchResults = ({ loading, error, flights }) => {
+  // Extract durations from flights
+  const allDurations = flights
+    .flatMap((flight) => [
+      getDurationInHours(
+        flight.schedule?.departureTime,
+        flight.schedule?.arrivalTime
+      ),
+      getDurationInHours(
+        flight.schedule?.returnDepartureTime,
+        flight.schedule?.returnArrivalTime
+      ),
+    ])
+    .filter(Boolean); // Remove null values
+  const minDuration = allDurations.length > 0 ? Math.min(...allDurations) : 0;
+  const maxDuration = allDurations.length > 0 ? Math.max(...allDurations) : 24;
+
+  const allOutboundTimes = flights
+    .map((flight) => getHour(flight.schedule?.departureTime))
+    .filter(Boolean);
+  const allReturnTimes = flights
+    .map((flight) => getHour(flight.schedule?.returnDepartureTime))
+    .filter(Boolean);
+  const minDepartureTime =
+    allOutboundTimes.length > 0 ? Math.min(...allOutboundTimes) : 0;
+  const maxDepartureTime =
+    allOutboundTimes.length > 0 ? Math.max(...allOutboundTimes) : 24;
+
+  const minReturnTime =
+    allReturnTimes.length > 0 ? Math.min(...allReturnTimes) : 0;
+  const maxReturnTime =
+    allReturnTimes.length > 0 ? Math.max(...allReturnTimes) : 24;
+  const [searchParams] = useSearchParams();
+
+  const { airlines } = useContext(GlobalContext);
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [sortBy, setSortBy] = useState("best");
-  const [stops, setStops] = useState(["direct", "oneStop"]);
-  const [selectedAirlines, setSelectedAirlines] = useState([
-    "WizzAir",
-    "EasyJet",
-    "British Airways",
-    "Airline Combinations",
+  const [stops, setStops] = useState([]);
+  const [selectedAirlines, setSelectedAirlines] = useState([]);
+  const [departureTime, setDepartureTime] = useState([
+    minDepartureTime,
+    maxDepartureTime,
   ]);
-  const [departureTime, setDepartureTime] = useState([0, 24]);
-  const [returnTime, setReturnTime] = useState([0, 24]);
-  const [journeyDuration, setJourneyDuration] = useState([3, 13]);
+  const [returnTime, setReturnTime] = useState([minReturnTime, maxReturnTime]);
+  const [journeyDuration, setJourneyDuration] = useState([
+    minDuration,
+    maxDuration,
+  ]);
+
   const [expandedSections, setExpandedSections] = useState({
     stops: true,
     departureTimes: true,
@@ -50,128 +114,128 @@ const FlightSearchResults = () => {
   });
   const showInputs = useSelector((state) => state.flightSearch.showInputs);
 
-  const flights = [
-    {
-      id: 1,
-      outboundAirline: "WizzAir",
-      returnAirline: "WizzAir",
-      departureTime: "06:10",
-      arrivalTime: "10:15",
-      returnDepartureTime: "18:00",
-      returnArrivalTime: "22:05",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 21,
-      outboundDuration: "4h 05",
-      returnDuration: "4h 05",
-      direct: true,
-    },
-    {
-      id: 2,
-      outboundAirline: "EasyJet",
-      returnAirline: "EasyJet",
-      departureTime: "15:00",
-      arrivalTime: "19:10",
-      returnDepartureTime: "23:00",
-      returnArrivalTime: "03:10",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 25,
-      outboundDuration: "4h 10",
-      returnDuration: "4h 10",
-      direct: true,
-    },
-    {
-      id: 3,
-      outboundAirline: "British Airways",
-      returnAirline: "British Airways",
-      departureTime: "09:30",
-      arrivalTime: "12:50",
-      returnDepartureTime: "20:00",
-      returnArrivalTime: "23:20",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 35,
-      outboundDuration: "3h 20",
-      returnDuration: "3h 20",
-      direct: true,
-    },
-    {
-      id: 4,
-      outboundAirline: "WizzAir",
-      returnAirline: "Ryanair",
-      departureTime: "08:25",
-      arrivalTime: "17:15",
-      returnDepartureTime: "19:45",
-      returnArrivalTime: "08:00",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 47,
-      outboundDuration: "7h 50",
-      returnDuration: "11h 15",
-      direct: false,
-      oneStop: {
-        outbound: true,
-        outboundStop: "BUD",
-      },
-      selfTransfer: true,
-    },
-    {
-      id: 5,
-      outboundAirline: "EasyJet",
-      returnAirline: "Ryanair",
-      departureTime: "10:30",
-      arrivalTime: "14:50",
-      returnDepartureTime: "18:15",
-      returnArrivalTime: "22:40",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 53,
-      outboundDuration: "4h 20",
-      returnDuration: "4h 25",
-      direct: false,
-      oneStop: {
-        return: true,
-        returnStop: "FRA",
-      },
-      selfTransfer: true,
-    },
-    {
-      id: 6,
-      outboundAirline: "British Airways",
-      returnAirline: "British Airways",
-      departureTime: "07:00",
-      arrivalTime: "11:00",
-      returnDepartureTime: "20:00",
-      returnArrivalTime: "00:15",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 40,
-      outboundDuration: "4h 00",
-      returnDuration: "4h 15",
-      direct: false,
-      oneStop: {
-        outbound: true,
-        outboundStop: "CDG",
-      },
-      selfTransfer: false,
-    },
-    {
-      id: 7,
-      outboundAirline: "WizzAir",
-      returnAirline: "WizzAir",
-      departureTime: "06:45",
-      arrivalTime: "10:55",
-      returnDepartureTime: "19:15",
-      returnArrivalTime: "22:45",
-      departureAirport: "LHR",
-      arrivalAirport: "TIA",
-      price: 50,
-      outboundDuration: "4h 10",
-      returnDuration: "3h 30",
-      direct: true,
-    },
-  ];
+  // const flights = [
+  //   {
+  //     id: 1,
+  //     outboundAirline: "WizzAir",
+  //     returnAirline: "WizzAir",
+  //     departureTime: "06:10",
+  //     arrivalTime: "10:15",
+  //     returnDepartureTime: "18:00",
+  //     returnArrivalTime: "22:05",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 21,
+  //     outboundDuration: "4h 05",
+  //     returnDuration: "4h 05",
+  //     direct: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     outboundAirline: "EasyJet",
+  //     returnAirline: "EasyJet",
+  //     departureTime: "15:00",
+  //     arrivalTime: "19:10",
+  //     returnDepartureTime: "23:00",
+  //     returnArrivalTime: "03:10",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 25,
+  //     outboundDuration: "4h 10",
+  //     returnDuration: "4h 10",
+  //     direct: true,
+  //   },
+  //   {
+  //     id: 3,
+  //     outboundAirline: "British Airways",
+  //     returnAirline: "British Airways",
+  //     departureTime: "09:30",
+  //     arrivalTime: "12:50",
+  //     returnDepartureTime: "20:00",
+  //     returnArrivalTime: "23:20",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 35,
+  //     outboundDuration: "3h 20",
+  //     returnDuration: "3h 20",
+  //     direct: true,
+  //   },
+  //   {
+  //     id: 4,
+  //     outboundAirline: "WizzAir",
+  //     returnAirline: "Ryanair",
+  //     departureTime: "08:25",
+  //     arrivalTime: "17:15",
+  //     returnDepartureTime: "19:45",
+  //     returnArrivalTime: "08:00",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 47,
+  //     outboundDuration: "7h 50",
+  //     returnDuration: "11h 15",
+  //     direct: false,
+  //     oneStop: {
+  //       outbound: true,
+  //       outboundStop: "BUD",
+  //     },
+  //     selfTransfer: true,
+  //   },
+  //   {
+  //     id: 5,
+  //     outboundAirline: "EasyJet",
+  //     returnAirline: "Ryanair",
+  //     departureTime: "10:30",
+  //     arrivalTime: "14:50",
+  //     returnDepartureTime: "18:15",
+  //     returnArrivalTime: "22:40",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 53,
+  //     outboundDuration: "4h 20",
+  //     returnDuration: "4h 25",
+  //     direct: false,
+  //     oneStop: {
+  //       return: true,
+  //       returnStop: "FRA",
+  //     },
+  //     selfTransfer: true,
+  //   },
+  //   {
+  //     id: 6,
+  //     outboundAirline: "British Airways",
+  //     returnAirline: "British Airways",
+  //     departureTime: "07:00",
+  //     arrivalTime: "11:00",
+  //     returnDepartureTime: "20:00",
+  //     returnArrivalTime: "00:15",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 40,
+  //     outboundDuration: "4h 00",
+  //     returnDuration: "4h 15",
+  //     direct: false,
+  //     oneStop: {
+  //       outbound: true,
+  //       outboundStop: "CDG",
+  //     },
+  //     selfTransfer: false,
+  //   },
+  //   {
+  //     id: 7,
+  //     outboundAirline: "WizzAir",
+  //     returnAirline: "WizzAir",
+  //     departureTime: "06:45",
+  //     arrivalTime: "10:55",
+  //     returnDepartureTime: "19:15",
+  //     returnArrivalTime: "22:45",
+  //     departureAirport: "LHR",
+  //     arrivalAirport: "TIA",
+  //     price: 50,
+  //     outboundDuration: "4h 10",
+  //     returnDuration: "3h 30",
+  //     direct: true,
+  //   },
+  // ];
 
   useEffect(() => {
     if (matchesSM) {
@@ -183,6 +247,13 @@ const FlightSearchResults = () => {
       });
     }
   }, [matchesSM]);
+
+  const directParams = searchParams.get("direct");
+  useEffect(() => {
+    if (directParams === "true") {
+      setStops([0]);
+    }
+  }, [directParams]);
   const handleToggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -222,63 +293,123 @@ const FlightSearchResults = () => {
   const handleJourneyDurationChange = (event, newValue) => {
     setJourneyDuration(newValue);
   };
-
   const filteredFlights = flights.filter((flight) => {
-    const outboundDeparture = parseInt(flight.departureTime.split(":")[0], 10);
-    const returnDeparture = parseInt(
-      flight.returnDepartureTime.split(":")[0],
-      10
+    const outboundDuration = getDurationInHours(
+      flight.schedule?.departureTime,
+      flight.schedule?.arrivalTime
     );
-    const outboundDuration = parseFloat(flight.outboundDuration);
-    const returnDuration = parseFloat(flight.returnDuration);
 
-    const isAirlineCombination =
-      flight.outboundAirline !== flight.returnAirline;
-    const matchesAirlineSelection = selectedAirlines.some((airline) => {
-      if (airline === "Airline Combinations") {
-        return isAirlineCombination;
-      } else {
-        return (
-          flight.outboundAirline.includes(airline) ||
-          flight.returnAirline.includes(airline)
-        );
+    const returnDuration = getDurationInHours(
+      flight.schedule?.returnDepartureTime,
+      flight.schedule?.returnArrivalTime
+    );
+    const outboundDepHour = getHour(flight.schedule?.departureTime);
+    const returnDepHour = getHour(flight.schedule?.returnDepartureTime);
+
+    // 🛑 Stops Filter
+    if (stops.length > 0) {
+      const flightStops = flight.location.outboundDirect
+        ? 0
+        : flight.location.outboundStops.length;
+      if (
+        !stops.includes(
+          flightStops === 0 ? "0" : flightStops === 1 ? "1" : "2+"
+        )
+      ) {
+        return false;
       }
-    });
+    }
 
-    return (
-      stops.includes(flight.direct ? "direct" : "oneStop") &&
-      matchesAirlineSelection &&
-      outboundDeparture >= departureTime[0] &&
-      outboundDeparture <= departureTime[1] &&
-      returnDeparture >= returnTime[0] &&
-      returnDeparture <= returnTime[1] &&
-      outboundDuration >= journeyDuration[0] &&
-      outboundDuration <= journeyDuration[1]
-    );
+    // 🛑 Airlines Filter
+    if (selectedAirlines.length > 0) {
+      const outboundAirlineId = flight.outboundAirline._id.toString();
+      const returnAirlineId = flight.returnAirline._id.toString();
+
+      if (
+        !selectedAirlines.includes(outboundAirlineId) &&
+        (!returnAirlineId || !selectedAirlines.includes(returnAirlineId))
+      ) {
+        return false;
+      }
+    }
+
+    // 🛑 Journey Duration Filter
+    if (
+      outboundDuration < journeyDuration[0] ||
+      outboundDuration > journeyDuration[1]
+    ) {
+      return false;
+    }
+    if (
+      returnDuration &&
+      (returnDuration < journeyDuration[0] ||
+        returnDuration > journeyDuration[1])
+    ) {
+      return false;
+    }
+
+    // 🛑 Departure Time Filter
+    if (
+      outboundDepHour < departureTime[0] ||
+      outboundDepHour > departureTime[1]
+    ) {
+      return false;
+    }
+    if (
+      returnDepHour &&
+      (returnDepHour < returnTime[0] || returnDepHour > returnTime[1])
+    ) {
+      return false;
+    }
+
+    return true;
   });
 
   const sortedFlights = [...filteredFlights].sort((a, b) => {
+    const minPriceA = Math.min(...a.classes.map((cls) => cls.price));
+    const minPriceB = Math.min(...b.classes.map((cls) => cls.price));
+
+    const outboundDurationA = getDurationInHours(
+      a.schedule?.departureTime,
+      a.schedule?.arrivalTime
+    );
+    const outboundDurationB = getDurationInHours(
+      b.schedule?.departureTime,
+      b.schedule?.arrivalTime
+    );
+
+    const returnDurationA = getDurationInHours(
+      a.schedule?.returnDepartureTime,
+      a.schedule?.returnArrivalTime
+    );
+    const returnDurationB = getDurationInHours(
+      b.schedule?.returnDepartureTime,
+      b.schedule?.returnArrivalTime
+    );
+
+    const totalDurationA = outboundDurationA + (returnDurationA || 0);
+    const totalDurationB = outboundDurationB + (returnDurationB || 0);
+
     if (sortBy === "cheapest") {
-      return a.price - b.price;
+      return minPriceA - minPriceB;
     } else if (sortBy === "outbound") {
-      return parseFloat(a.outboundDuration) - parseFloat(b.outboundDuration);
+      return outboundDurationA - outboundDurationB;
     } else if (sortBy === "return") {
-      return parseFloat(a.returnDuration) - parseFloat(b.returnDuration);
+      return returnDurationA - returnDurationB;
     } else if (sortBy === "fastest") {
-      return (
-        parseFloat(a.outboundDuration + a.returnDuration) -
-        parseFloat(b.outboundDuration + b.returnDuration)
-      );
+      return totalDurationA - totalDurationB;
     } else {
       return (
-        a.price * 0.5 +
-        parseFloat(a.outboundDuration + a.returnDuration) * 0.5 -
-        (b.price * 0.5 +
-          parseFloat(b.outboundDuration + b.returnDuration) * 0.5)
+        minPriceA * 0.5 +
+        totalDurationA * 0.5 -
+        (minPriceB * 0.5 + totalDurationB * 0.5)
       );
     }
   });
 
+  const favoriteClickHandler = (flightId) => {
+    console.log(flightId);
+  };
   return (
     <Box sx={{ width: "100%", backgroundColor: "#EFF3F8", pt: "30px" }}>
       <Container className='container'>
@@ -329,8 +460,9 @@ const FlightSearchResults = () => {
                     <FormControlLabel
                       control={
                         <Checkbox
-                          checked={stops.includes("direct")}
-                          onChange={() => handleStopsChange("direct")}
+                          disabled={directParams === "true"}
+                          checked={stops.includes(0)}
+                          onChange={() => handleStopsChange(0)}
                           sx={{
                             color: "#626971",
                             marginRight: "10px",
@@ -356,31 +488,64 @@ const FlightSearchResults = () => {
                         </Typography>
                       }
                     />
-                    <FormControlLabel
-                      sx={{ mt: "15px" }}
-                      control={
-                        <Checkbox
-                          checked={stops.includes("oneStop")}
-                          onChange={() => handleStopsChange("oneStop")}
-                          sx={{
-                            color: "#626971",
-                            marginRight: "10px",
-                            marginLeft: "12px",
-                            "&.Mui-checked": { color: "#0062e3" },
-                            "&.MuiButtonBase-root": {
-                              backgroundColor: "white",
-                              width: "18px",
-                              height: "10px",
-                            },
-                          }}
+                    {directParams !== "true" && (
+                      <>
+                        <FormControlLabel
+                          sx={{ mt: "15px" }}
+                          control={
+                            <Checkbox
+                              checked={stops.includes(1)}
+                              onChange={() => handleStopsChange(1)}
+                              sx={{
+                                color: "#626971",
+                                marginRight: "10px",
+                                marginLeft: "12px",
+                                "&.Mui-checked": { color: "#0062e3" },
+                                "&.MuiButtonBase-root": {
+                                  backgroundColor: "white",
+                                  width: "18px",
+                                  height: "10px",
+                                },
+                              }}
+                            />
+                          }
+                          label={
+                            <Typography
+                              sx={{ color: "black", fontSize: "14px" }}
+                            >
+                              One stop
+                            </Typography>
+                          }
                         />
-                      }
-                      label={
-                        <Typography sx={{ color: "black", fontSize: "14px" }}>
-                          One stop
-                        </Typography>
-                      }
-                    />
+                        <FormControlLabel
+                          sx={{ mt: "15px" }}
+                          control={
+                            <Checkbox
+                              checked={stops.includes("2+")}
+                              onChange={() => handleStopsChange("2+")}
+                              sx={{
+                                color: "#626971",
+                                marginRight: "10px",
+                                marginLeft: "12px",
+                                "&.Mui-checked": { color: "#0062e3" },
+                                "&.MuiButtonBase-root": {
+                                  backgroundColor: "white",
+                                  width: "18px",
+                                  height: "10px",
+                                },
+                              }}
+                            />
+                          }
+                          label={
+                            <Typography
+                              sx={{ color: "black", fontSize: "14px" }}
+                            >
+                              Two or More stop
+                            </Typography>
+                          }
+                        />
+                      </>
+                    )}
                   </Box>
                 </Collapse>
 
@@ -430,7 +595,7 @@ const FlightSearchResults = () => {
                     variant='subtitle1'
                     sx={{ color: "#161616", mt: "-2px" }}
                   >
-                    {departureTime[0]}:00 - {departureTime[1]}:00
+                    {minDepartureTime} hour(s) - {maxDepartureTime} hour(s)
                   </Typography>
                   <Box
                     sx={{
@@ -442,8 +607,8 @@ const FlightSearchResults = () => {
                     <Slider
                       value={departureTime}
                       onChange={handleDepartureTimeChange}
-                      min={0}
-                      max={24}
+                      min={minDepartureTime}
+                      max={maxDepartureTime}
                       valueLabelDisplay='auto'
                       valueLabelFormat={(value) => `${value}:00`}
                       sx={{
@@ -463,7 +628,7 @@ const FlightSearchResults = () => {
                     variant='subtitle1'
                     sx={{ color: "#161616", mt: "-2px" }}
                   >
-                    {returnTime[0]}:00 - {returnTime[1]}:00
+                    {minReturnTime} hour(s) - {maxReturnTime} hour(s)
                   </Typography>
                   <Box
                     sx={{
@@ -475,8 +640,8 @@ const FlightSearchResults = () => {
                     <Slider
                       value={returnTime}
                       onChange={handleReturnTimeChange}
-                      min={0}
-                      max={24}
+                      min={minReturnTime}
+                      max={maxReturnTime}
                       valueLabelDisplay='auto'
                       valueLabelFormat={(value) => `${value}:00`}
                       sx={{
@@ -528,13 +693,13 @@ const FlightSearchResults = () => {
                     variant='subtitle1'
                     sx={{ color: "#161616", mt: "16px" }}
                   >
-                    {journeyDuration[0]} hours - {journeyDuration[1]} hours
+                    {minDuration} hour(s) - {maxDuration} hour(s)
                   </Typography>
                   <Slider
                     value={journeyDuration}
                     onChange={handleJourneyDurationChange}
-                    min={3}
-                    max={13}
+                    min={minDuration}
+                    max={maxDuration}
                     valueLabelDisplay='auto'
                     valueLabelFormat={(value) => `${value} hours`}
                     sx={{
@@ -588,19 +753,14 @@ const FlightSearchResults = () => {
                       mt: "15px",
                     }}
                   >
-                    {[
-                      "WizzAir",
-                      "EasyJet",
-                      "British Airways",
-                      "Airline Combinations",
-                    ].map((airline) => (
+                    {airlines.map((airline) => (
                       <FormControlLabel
                         sx={{ mb: "15px" }}
-                        key={airline}
+                        key={airline._id}
                         control={
                           <Checkbox
-                            checked={selectedAirlines.includes(airline)}
-                            onChange={() => handleAirlineChange(airline)}
+                            checked={selectedAirlines.includes(airline._id)}
+                            onChange={() => handleAirlineChange(airline._id)}
                             sx={{
                               color: "#626971",
                               marginRight: "10px",
@@ -621,7 +781,7 @@ const FlightSearchResults = () => {
                               fontSize: "14px",
                             }}
                           >
-                            {airline}
+                            {airline.name}
                           </Typography>
                         }
                       />
@@ -696,6 +856,7 @@ const FlightSearchResults = () => {
                     <IconButton
                       size='small'
                       sx={{ position: "absolute", top: 0, right: 0 }}
+                      onClick={() => favoriteClickHandler(flight._id)}
                     >
                       <FavoriteBorder />
                     </IconButton>
@@ -717,7 +878,7 @@ const FlightSearchResults = () => {
                                 whiteSpace: "nowrap",
                               }}
                             >
-                              {flight.outboundAirline}
+                              {flight?.outboundAirline?.name}
                             </Typography>
                           </Grid>
                           <Grid item sx={{ flex: 1, position: "relative" }}>
@@ -737,10 +898,12 @@ const FlightSearchResults = () => {
                                 }}
                               >
                                 <Typography variant='h6'>
-                                  {flight.departureTime}
+                                  {moment(
+                                    flight?.schedule?.departureTime
+                                  ).format("yyyy-MM-dd HH:mm")}
                                 </Typography>
                                 <Typography>
-                                  {flight.departureAirport}
+                                  {flight?.location?.departureAirport?.name}
                                 </Typography>
                               </Box>
                               <Box
@@ -752,20 +915,24 @@ const FlightSearchResults = () => {
                                   width: "70%",
                                 }}
                               >
-                                {flight.oneStop?.outbound && (
-                                  <Box
-                                    sx={{
-                                      position: "absolute",
-                                      left: "53.5%",
-                                      top: "-4px",
-                                      transform: "translateX(-50%)",
-                                      backgroundColor: "#c6007e",
-                                      width: "8px",
-                                      height: "8px",
-                                      borderRadius: "50%",
-                                    }}
-                                  />
-                                )}
+                                {!flight.location?.outboundDirect &&
+                                  flight.location.outboundStops.map((_, i) => (
+                                    <Box
+                                      key={i}
+                                      sx={{
+                                        position: "absolute",
+                                        left: `${53.5 + i * 10}%`,
+                                        top: "-4px",
+                                        transform: `translateX(-${
+                                          50 + i * 10
+                                        }%)`,
+                                        backgroundColor: "#c6007e",
+                                        width: "8px",
+                                        height: "8px",
+                                        borderRadius: "50%",
+                                      }}
+                                    />
+                                  ))}
                               </Box>
                               <Flight
                                 sx={{
@@ -783,9 +950,13 @@ const FlightSearchResults = () => {
                                 }}
                               >
                                 <Typography variant='h6'>
-                                  {flight.arrivalTime}
+                                  {moment(flight?.schedule?.arrivalTime).format(
+                                    "yyyy-MM-dd HH:mm"
+                                  )}
                                 </Typography>
-                                <Typography>{flight.arrivalAirport}</Typography>
+                                <Typography>
+                                  {flight?.location?.arrivalAirport?.name}
+                                </Typography>
                               </Box>
                             </Box>
                             <Typography
@@ -797,8 +968,12 @@ const FlightSearchResults = () => {
                                 fontSize: "12px",
                               }}
                             >
-                              {flight.oneStop?.outbound
-                                ? `1 stop at ${flight.oneStop.outboundStop}`
+                              {!flight.location?.outboundDirect
+                                ? `${
+                                    flight.location.outboundStops.length
+                                  } stop at ${flight.location.outboundStops
+                                    .map((x) => x.stopAtCity?.cityCode)
+                                    .join(",")}`
                                 : "Direct"}
                             </Typography>
                             <Typography
@@ -813,123 +988,147 @@ const FlightSearchResults = () => {
                                 transform: "translateX(-50%)",
                               }}
                             >
-                              {flight.outboundDuration}
+                              {formatFlightDuration(
+                                flight.schedule?.departureTime,
+                                flight.schedule?.arrivalTime
+                              )}
                             </Typography>
                           </Grid>
                         </Grid>
 
-                        <Grid container alignItems='center'>
-                          <Grid item md={4} xs={3}>
-                            <Typography
-                              variant='subtitle1'
-                              color='black'
-                              sx={{
-                                textAlign: "left",
-                                mb: 1,
-                                whiteSpace: "nowrap",
-                              }}
-                            >
-                              {flight.returnAirline}
-                            </Typography>
-                          </Grid>
-                          <Grid item sx={{ flex: 1, position: "relative" }}>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                position: "relative",
-                              }}
-                            >
+                        {flight.twoWay && (
+                          <Grid container alignItems='center'>
+                            <Grid item md={4} xs={3}>
+                              <Typography
+                                variant='subtitle1'
+                                color='black'
+                                sx={{
+                                  textAlign: "left",
+                                  mb: 1,
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {flight?.returnAirline?.name}
+                              </Typography>
+                            </Grid>
+                            <Grid item sx={{ flex: 1, position: "relative" }}>
                               <Box
                                 sx={{
                                   display: "flex",
-                                  flexDirection: "column",
-                                }}
-                              >
-                                <Typography
-                                  variant='h6'
-                                  sx={{ color: "#697279" }}
-                                >
-                                  {flight.returnDepartureTime}
-                                </Typography>
-                                <Typography sx={{ color: "#697279" }}>
-                                  {flight.arrivalAirport}
-                                </Typography>
-                              </Box>
-                              <Box
-                                sx={{
-                                  mx: 1,
-                                  flex: 1,
-                                  borderTop: "1px solid #ccc",
+                                  alignItems: "center",
                                   position: "relative",
-                                  width: "70%",
                                 }}
                               >
-                                {flight.oneStop?.return && (
-                                  <Box
-                                    sx={{
-                                      position: "absolute",
-                                      left: "53.5%",
-                                      top: "-4px",
-                                      transform: "translateX(-50%)",
-                                      backgroundColor: "#c6007e",
-                                      width: "8px",
-                                      height: "8px",
-                                      borderRadius: "50%",
-                                    }}
-                                  />
-                                )}
-                              </Box>
-                              <Flight
-                                sx={{
-                                  fontSize: "17px",
-                                  marginleft: "10px",
-                                  marginRight: "5px",
-                                  transform: "rotate(90deg)",
-                                  color: "#697279",
-                                }}
-                              />
-                              <Box sx={{ ml: "-3px" }}>
-                                <Typography
-                                  variant='h6'
-                                  sx={{ color: "#697279" }}
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                  }}
                                 >
-                                  {flight.returnArrivalTime}
-                                </Typography>
-                                <Typography sx={{ color: "#697279" }}>
-                                  {flight.departureAirport}
-                                </Typography>
+                                  <Typography
+                                    variant='h6'
+                                    sx={{ color: "#697279" }}
+                                  >
+                                    {moment(
+                                      flight?.schedule?.returnDepartureTime
+                                    ).format("yyyy-MM-dd HH:mm")}
+                                  </Typography>
+                                  <Typography sx={{ color: "#697279" }}>
+                                    {flight?.location?.arrivalAirport?.name}
+                                  </Typography>
+                                </Box>
+                                <Box
+                                  sx={{
+                                    mx: 1,
+                                    flex: 1,
+                                    borderTop: "1px solid #ccc",
+                                    position: "relative",
+                                    width: "70%",
+                                  }}
+                                >
+                                  {!flight.location?.returnDirect &&
+                                    flight.location.returnStops.map((_, i) => (
+                                      <Box
+                                        key={i}
+                                        sx={{
+                                          position: "absolute",
+                                          left: `${53.5 + i * 10}%`,
+                                          top: "-4px",
+                                          transform: `translateX(-${
+                                            50 + i * 10
+                                          }%)`,
+                                          backgroundColor: "#c6007e",
+                                          width: "8px",
+                                          height: "8px",
+                                          borderRadius: "50%",
+                                        }}
+                                      />
+                                    ))}
+                                </Box>
+                                <Flight
+                                  sx={{
+                                    fontSize: "17px",
+                                    marginleft: "10px",
+                                    marginRight: "5px",
+                                    transform: "rotate(90deg)",
+                                    color: "#697279",
+                                  }}
+                                />
+                                <Box sx={{ ml: "-3px" }}>
+                                  <Typography
+                                    variant='h6'
+                                    sx={{ color: "#697279" }}
+                                  >
+                                    {moment(
+                                      flight?.schedule?.returnArrivalTime
+                                    ).format("yyyy-MM-dd HH:mm")}
+                                  </Typography>
+                                  <Typography sx={{ color: "#697279" }}>
+                                    {flight?.location?.departureAirport?.name}
+                                  </Typography>
+                                </Box>
                               </Box>
-                            </Box>
-                            <Typography
-                              sx={{
-                                textAlign: "center",
-                                mb: 2,
-                                mt: -3,
-                                color: "#0c838a",
-                                fontSize: "12px",
-                              }}
-                            >
-                              {flight.oneStop?.return
-                                ? `1 stop at ${flight.oneStop.returnStop}`
-                                : "Direct"}
-                            </Typography>
-                            <Typography
-                              variant='body2'
-                              color='black'
-                              sx={{
-                                textAlign: "center",
+                              <Typography
+                                sx={{
+                                  textAlign: "center",
+                                  mb: 2,
+                                  mt: -3,
+                                  color: "#0c838a",
+                                  fontSize: "12px",
+                                }}
+                              >
+                                {flight.oneStop?.return
+                                  ? `1 stop at ${flight.oneStop.returnStop}`
+                                  : "Direct"}
 
-                                position: "absolute",
-                                top: "8px",
-                                left: "50%",
-                                transform: "translateX(-50%)",
-                              }}
-                            >
-                              {flight.returnDuration}
-                            </Typography>
+                                {!flight.location?.returnDirect
+                                  ? `${
+                                      flight.location.returnStops.length
+                                    } stop at ${flight.location.returnStops
+                                      .map((x) => x.stopAtCity?.cityCode)
+                                      .join(",")}`
+                                  : "Direct"}
+                              </Typography>
+                              <Typography
+                                variant='body2'
+                                color='black'
+                                sx={{
+                                  textAlign: "center",
+
+                                  position: "absolute",
+                                  top: "8px",
+                                  left: "50%",
+                                  transform: "translateX(-50%)",
+                                }}
+                              >
+                                {formatFlightDuration(
+                                  flight.schedule?.returnDepartureTime,
+                                  flight.schedule?.returnArrivalTime
+                                )}
+                              </Typography>
+                            </Grid>
                           </Grid>
-                        </Grid>
+                        )}
                       </Grid>
                       <Grid item md={3} xs={12}>
                         <Box
@@ -955,31 +1154,42 @@ const FlightSearchResults = () => {
                                 textAlign: "center",
                               }}
                             >
-                              X deals from
+                              deals from
                             </Typography>
                             <Typography
                               variant='h6'
                               gutterBottom
                               sx={{ color: "black", textAlign: "center" }}
                             >
-                              £{flight.price}
+                              £
+                              {flight.classes.reduce((minPrice, classObj) => {
+                                return Math.min(minPrice, classObj.price);
+                              }, Infinity)}
                             </Typography>
                           </Box>
-                          <Button
-                            variant='contained'
-                            endIcon={<ArrowForward sx={{ fontSize: "20px" }} />}
-                            sx={{
-                              backgroundColor: "#05203c",
-                              padding: "8px 20px",
-                              borderRadius: "8px",
-                              ":hover": { backgroundColor: "#154679" },
-                              textTransform: "none",
-                            }}
+                          <a
+                            href={flight.externalURL}
+                            target='_blank'
+                            style={{ textDecoration: "none" }}
                           >
-                            Select{" "}
-                          </Button>
+                            <Button
+                              variant='contained'
+                              endIcon={
+                                <ArrowForward sx={{ fontSize: "20px" }} />
+                              }
+                              sx={{
+                                backgroundColor: "#05203c",
+                                padding: "8px 20px",
+                                borderRadius: "8px",
+                                ":hover": { backgroundColor: "#154679" },
+                                textTransform: "none",
+                              }}
+                            >
+                              Select{" "}
+                            </Button>
+                          </a>
 
-                          {flight.oneStop && flight.selfTransfer && (
+                          {flight.selfTransfer && (
                             <Typography
                               variant='body2'
                               sx={{ mt: 1, color: "#c6007e" }}
@@ -1008,19 +1218,21 @@ const FlightSearchResults = () => {
                       style={{ width: "150px", height: "150px" }}
                     />
                   </Box>
-                  <Box sx={{ textAlign: "center" }}>
-                    <Button
-                      variant='outlined'
-                      color='primary'
-                      onClick={() => {
-                        setDepartureTime([0, 24]);
-                        setReturnTime([0, 24]);
-                        setJourneyDuration([3, 13]);
-                      }}
-                    >
-                      Show all {flights.length} results
-                    </Button>
-                  </Box>
+                  {filteredFlights.length > 0 && (
+                    <Box sx={{ textAlign: "center" }}>
+                      <Button
+                        variant='outlined'
+                        color='primary'
+                        onClick={() => {
+                          setDepartureTime([0, 24]);
+                          setReturnTime([0, 24]);
+                          setJourneyDuration([minDuration, maxDuration]);
+                        }}
+                      >
+                        Show all {flights.length} results
+                      </Button>
+                    </Box>
+                  )}
                 </CardContent>
               </Card>
             )}

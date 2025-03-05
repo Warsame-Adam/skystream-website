@@ -50,6 +50,8 @@ const inputStyle = {
 };
 
 const FlightSearchUI = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const dispatch = useDispatch();
   const newOrigin = useSelector((state) => state.flightSearch.from);
   const newDestination = useSelector((state) => state.flightSearch.to);
@@ -70,6 +72,13 @@ const FlightSearchUI = () => {
     dispatch(setShowInputs(false));
   }, []);
 
+  const handleParamChange = (name, value) => {
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set(name, value); // Update if exists, add if not
+      return newParams;
+    });
+  };
   function formatArrowDate(dateObj) {
     return format(dateObj, "EEE, dd MMM");
   }
@@ -88,8 +97,10 @@ const FlightSearchUI = () => {
 
     if (type === "departure") {
       dispatch(setDepartureDate(newStr));
+      handleParamChange("departureDate", newStr);
     } else {
       dispatch(setReturnDate(newStr));
+      handleParamChange("returnDate", newStr);
     }
   };
 
