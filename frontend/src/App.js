@@ -10,7 +10,7 @@ import HomePage from "./Pages/HomePage";
 import FlightPage from "./Pages/FlightPage.jsx";
 import HotelPage from "./Pages/HotelPage.jsx";
 import IndividualHotelPage from "./Pages/IndividualHotelPage.jsx";
-import CityHotelsPage from "./Pages/CityHotelsPage.jsx";
+import CityHotelPage from "./Pages/CityHotelPage.jsx";
 import FlightSearchResultsPage from "./Pages/FlightSearchResultsPage.jsx";
 import { GlobalContext, GlobalProvider } from "./context/GlobalContext.js";
 import { jwtKey, visitorDataKey } from "./data/websiteInfo.js";
@@ -216,11 +216,11 @@ function AppRoutes() {
       <Route path='/flights' element={<FlightPage />} />
       <Route path='/flights/search' element={<FlightSearchResultsPage />} />
       <Route path='/hotels' element={<HotelPage />} />
+      <Route path='/hotels/:country/:city' element={<CityHotelPage />} />
       <Route
         path='/hotels/:country/:city/:hotelName/:hotelId'
         element={<IndividualHotelPage />}
       />
-      <Route path='/hotels/:country/:city' element={<CityHotelsPage />} />
     </Routes>
   );
 }

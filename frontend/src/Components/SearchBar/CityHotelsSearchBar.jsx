@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState, useMemo, useContext } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   AppBar,
   Menu,
@@ -28,11 +28,12 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import FlightIcon from "@mui/icons-material/Flight";
 import KingBedIcon from "@mui/icons-material/KingBed";
 import { useDispatch, useSelector } from "react-redux";
-
+import { setDestination, setOtherOptions } from "../Slices/hotelSearchSlice";
 import { format } from "date-fns";
 import { setActiveInput } from "../Slices/ReusableCalendar";
 import ReusableDatePicker from "../ReusableDatePicker";
 import HotelTravellersDropDown from "../HotelTravellersDropDown";
+import { GlobalContext } from "../../context/GlobalContext";
 
 const Locations = [
   // Cities
@@ -201,8 +202,12 @@ const Locations = [
 ];
 
 const CityHotelsSearchBar = () => {
-  const params = useParams();
+  const { locations } = useContext(GlobalContext);
+
   const dispatch = useDispatch();
+  const { destination, otherOptions } = useSelector(
+    (state) => state.hotelSearch
+  );
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
   const departInputRef = useRef(null);
@@ -211,9 +216,7 @@ const CityHotelsSearchBar = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
-  const [inputValue, setInputValue] = useState(
-    Locations.find((x) => x.name === params?.city)?.name || ""
-  );
+  const [inputValue, setInputValue] = useState("");
 
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
@@ -306,7 +309,7 @@ const CityHotelsSearchBar = () => {
             color: "text.primary",
           }}
         >
-          Hotels in {params?.city}
+          Hotels in {destination?.cityName}
         </Typography>
         <Box
           sx={{
@@ -337,10 +340,18 @@ const CityHotelsSearchBar = () => {
                 id='destination'
                 disableUnderline
                 freeSolo
-                options={Locations}
-                getOptionLabel={(option) => (option?.name ? option.name : "")}
+                options={locations}
+                getOptionLabel={(option) =>
+                  option && option.cityName && option.cityCode
+                    ? `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
+                    : ""
+                }
                 inputValue={inputValue}
                 onInputChange={(_, val) => setInputValue(val)}
+                onChange={(event, value) => {
+                  dispatch(setDestination(value));
+                }}
+                value={destination}
                 filterOptions={(options, state) => {
                   const val = state.inputValue.trim().toLowerCase();
                   if (val === "") {

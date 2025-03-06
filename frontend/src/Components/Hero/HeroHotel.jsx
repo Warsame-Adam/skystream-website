@@ -41,18 +41,13 @@ const HeroHotel = () => {
   const { destination, otherOptions } = useSelector(
     (state) => state.hotelSearch
   );
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef(null);
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
-
-  const inputRef = useRef(null);
-
-  const [inputValue, setInputValue] = useState("");
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
-  const [childAges, setChildAges] = useState([]);
-  const [rooms, setRooms] = useState(1);
+  const { rooms, adults, children } = useSelector(
+    (state) => state.hotelsTravellers
+  );
 
   const travellersLabel = useMemo(() => {
     const parts = [];
@@ -78,6 +73,8 @@ const HeroHotel = () => {
 
     return parts.join(", ");
   }, [adults, children, rooms]);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
 
   const handleClickDepart = (e) => {
     dispatch(setActiveInput("depart"));
@@ -95,13 +92,6 @@ const HeroHotel = () => {
 
   const handleTravellersInputClick = (e) => {
     setTravellersAnchorEl(e.currentTarget);
-  };
-
-  const handleChangeTravellers = ({ adults, children, childAges, rooms }) => {
-    setAdults(adults);
-    setChildren(children);
-    setChildAges(childAges);
-    setRooms(rooms);
   };
 
   useEffect(() => {
@@ -433,12 +423,7 @@ const HeroHotel = () => {
 
             <HotelTravellersDropDown
               anchorEl={travellersAnchorEl}
-              adults={adults}
-              children={children}
-              childAges={childAges}
-              rooms={rooms}
-              onChange={handleChangeTravellers}
-              onClose={() => setTravellersAnchorEl(null)}
+              handleClose={() => setTravellersAnchorEl(null)}
             />
           </Grid>
         </Grid>
@@ -601,13 +586,13 @@ const HeroHotel = () => {
                   isDate(departureDate) &&
                   isDate(returnDate)
                 ) {
-                  let path = `/flights/search?`;
+                  let path = `/flights`;
                   if (destination.cityCode || destination.countryCode) {
                     if (destination.countryCode) {
-                      path += `country=${destination.countryCode}`;
+                      path += `/${destination.countryCode}`;
                     }
                     if (destination.cityCode) {
-                      path += `city=${destination.cityCode}`;
+                      path += `/${destination.cityCode}`;
                     }
                   } else if (inputValue && inputValue.trim().length > 4) {
                     path += `name=${inputValue}`;
@@ -634,9 +619,11 @@ const HeroHotel = () => {
                     }`;
                   }
                   if (otherOptions.fourStar) {
-                    path += `&minReview=4`;
+                    path += otherOptions.fiveStar
+                      ? `&minReview=4`
+                      : `&rating=4`;
                   } else if (otherOptions.fiveStar) {
-                    path += `&minReview=5`;
+                    path += `&rating=5`;
                   }
                 }
               }}

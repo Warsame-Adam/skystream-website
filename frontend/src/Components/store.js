@@ -11,6 +11,7 @@ import singleMonthReducer from "./Slices/singleMonthSlice";
 import flightSearchSlice from "./Slices/flightSearchSlice";
 import hotelSearchSlice from "./Slices/hotelSearchSlice";
 import HomeTravellersddSlice from "./Slices/HomeTravellersddSlice";
+import HotelTravellersddSlice from "./Slices/HotelTravellersddSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     flightSearch: flightSearchSlice,
     hotelSearch: hotelSearchSlice,
     travellers: HomeTravellersddSlice,
+    hotelTravellers: HotelTravellersddSlice,
   },
 });
 

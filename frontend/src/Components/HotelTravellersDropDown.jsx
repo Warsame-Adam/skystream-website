@@ -13,17 +13,9 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import HotelIcon from "@mui/icons-material/Hotel";
 import BoyIcon from "@mui/icons-material/Boy";
-
-const HotelTravellersDropDown = ({
-  open,
-  anchorEl,
-  adults,
-  children,
-  childAges,
-  rooms,
-  onChange,
-  onClose,
-}) => {
+import { useDispatch, useSelector } from "react-redux";
+import { handleChangeTravellers } from "./Slices/HotelTravellersddSlice";
+const HotelTravellersDropDown = ({ anchorEl, handleClose }) => {
   const maxAdults = 5;
   const minAdults = 1;
   const maxChildren = 5;
@@ -31,19 +23,11 @@ const HotelTravellersDropDown = ({
   const maxRooms = 5;
   const minRooms = 1;
 
-  const [tempAdults, setTempAdults] = useState(adults);
-  const [tempChildren, setTempChildren] = useState(children);
-  const [tempRooms, setTempRooms] = useState(rooms);
-  const [tempChildAges, setTempChildAges] = useState(childAges);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (open) {
-      setTempAdults(adults);
-      setTempChildren(children);
-      setTempRooms(rooms);
-      setTempChildAges(childAges);
-    }
-  }, [open, adults, children, childAges, rooms]);
+  const { rooms, adults, children, childAges } = useSelector(
+    (state) => state.hotelTravellers
+  );
 
   const disabledStyle = {
     color: "#999",
@@ -51,58 +35,64 @@ const HotelTravellersDropDown = ({
     opacity: 0.5,
   };
 
+  useEffect(() => {
+    if (childAges.length < children) {
+      const diff = children - childAges.length;
+      const newAges = [...childAges];
+      for (let i = 0; i < diff; i++) {
+        newAges.push(0);
+      }
+      dispatch(handleChangeTravellers({ childAges: newAges }));
+    } else if (childAges.length > children) {
+      const newAges = [...childAges].slice(0, children);
+      dispatch(handleChangeTravellers({ childAges: newAges }));
+    }
+  }, [children]);
+
   const handleDone = () => {
-    onChange({
-      adults: tempAdults,
-      children: tempChildren,
-      childAges: tempChildAges,
-      rooms: tempRooms,
-    });
-    if (onClose) onClose();
+    handleClose();
   };
 
   const handlePlusAdult = () => {
-    if (tempAdults < maxAdults) {
-      setTempAdults(tempAdults + 1);
+    if (adults < maxAdults) {
+      dispatch(handleChangeTravellers({ adults: adults + 1 }));
     }
   };
 
   const handleMinusAdult = () => {
-    if (tempAdults > minAdults) {
-      setTempAdults(tempAdults - 1);
+    if (adults > minAdults) {
+      dispatch(handleChangeTravellers({ adults: adults - 1 }));
     }
   };
 
   const handlePlusChild = () => {
-    if (tempChildren < maxChildren) {
-      setTempChildren(tempChildren + 1);
-      setTempChildAges([...tempChildAges, 0]);
+    if (children < maxChildren) {
+      handleChangeTravellers({ children: children + 1 });
     }
   };
 
   const handleMinusChild = () => {
-    if (tempChildren > minChildren) {
-      setTempChildren(tempChildren - 1);
-      setTempChildAges(tempChildAges.slice(0, -1));
+    if (children > minChildren) {
+      dispatch(handleChangeTravellers({ children: children - 1 }));
     }
   };
 
   const handlePlusRoom = () => {
-    if (tempRooms < maxRooms) {
-      setTempRooms(tempRooms + 1);
+    if (rooms < maxRooms) {
+      dispatch(handleChangeTravellers({ rooms: rooms + 1 }));
     }
   };
 
   const handleMinusRoom = () => {
-    if (tempRooms > minRooms) {
-      setTempRooms(tempRooms - 1);
+    if (rooms > minRooms) {
+      dispatch(handleChangeTravellers({ rooms: rooms - 1 }));
     }
   };
 
   const handleChildAgeChange = (index, newValue) => {
-    const newAges = [...tempChildAges];
+    const newAges = [...childAges];
     newAges[index] = newValue;
-    setTempChildAges(newAges);
+    dispatch(handleChangeTravellers({ childAges: newAges }));
   };
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => ({
@@ -115,7 +105,7 @@ const HotelTravellersDropDown = ({
       id='basic-menu'
       anchorEl={anchorEl}
       open={Boolean(anchorEl)}
-      onClose={onClose}
+      onClose={handleClose}
       MenuListProps={{
         "aria-labelledby": "basic-button",
       }}
@@ -144,26 +134,26 @@ const HotelTravellersDropDown = ({
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Tooltip
-            title={tempAdults === minAdults ? "Can't go lower" : ""}
+            title={adults === minAdults ? "Can't go lower" : ""}
             placement='top'
           >
             <IconButton
               onClick={handleMinusAdult}
-              sx={tempAdults === minAdults ? disabledStyle : { color: "#333" }}
+              sx={adults === minAdults ? disabledStyle : { color: "#333" }}
             >
               <RemoveIcon />
             </IconButton>
           </Tooltip>
           <Typography sx={{ width: 20, textAlign: "center" }}>
-            {tempAdults}
+            {adults}
           </Typography>
           <Tooltip
-            title={tempAdults === maxAdults ? "Max 5 adults" : ""}
+            title={adults === maxAdults ? "Max 5 adults" : ""}
             placement='top'
           >
             <IconButton
               onClick={handlePlusAdult}
-              sx={tempAdults === maxAdults ? disabledStyle : { color: "#333" }}
+              sx={adults === maxAdults ? disabledStyle : { color: "#333" }}
             >
               <AddIcon />
             </IconButton>
@@ -179,37 +169,33 @@ const HotelTravellersDropDown = ({
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Tooltip
-            title={tempChildren === minChildren ? "Can't go lower" : ""}
+            title={children === minChildren ? "Can't go lower" : ""}
             placement='top'
           >
             <IconButton
               onClick={handleMinusChild}
-              sx={
-                tempChildren === minChildren ? disabledStyle : { color: "#333" }
-              }
+              sx={children === minChildren ? disabledStyle : { color: "#333" }}
             >
               <RemoveIcon />
             </IconButton>
           </Tooltip>
           <Typography sx={{ width: 20, textAlign: "center" }}>
-            {tempChildren}
+            {children}
           </Typography>
           <Tooltip
-            title={tempChildren === maxChildren ? "Max 5 children" : ""}
+            title={children === maxChildren ? "Max 5 children" : ""}
             placement='top'
           >
             <IconButton
               onClick={handlePlusChild}
-              sx={
-                tempChildren === maxChildren ? disabledStyle : { color: "#333" }
-              }
+              sx={children === maxChildren ? disabledStyle : { color: "#333" }}
             >
               <AddIcon />
             </IconButton>
           </Tooltip>
         </Box>
       </Box>
-      {tempChildren > 0 && (
+      {children > 0 && (
         <Box
           sx={{
             display: "grid",
@@ -219,7 +205,7 @@ const HotelTravellersDropDown = ({
             mb: 2,
           }}
         >
-          {tempChildAges.map((age, index) => (
+          {childAges.map((age, index) => (
             <Box key={index}>
               <Typography sx={{ fontSize: "13px", fontWeight: 600, mb: 0.5 }}>
                 Child {index + 1} Age
@@ -261,26 +247,26 @@ const HotelTravellersDropDown = ({
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Tooltip
-            title={tempRooms === minRooms ? "Can't go lower" : ""}
+            title={rooms === minRooms ? "Can't go lower" : ""}
             placement='top'
           >
             <IconButton
               onClick={handleMinusRoom}
-              sx={tempRooms === minRooms ? disabledStyle : { color: "#333" }}
+              sx={rooms === minRooms ? disabledStyle : { color: "#333" }}
             >
               <RemoveIcon />
             </IconButton>
           </Tooltip>
           <Typography sx={{ width: 20, textAlign: "center" }}>
-            {tempRooms}
+            {rooms}
           </Typography>
           <Tooltip
-            title={tempRooms === maxRooms ? "Max 5 rooms" : ""}
+            title={rooms === maxRooms ? "Max 5 rooms" : ""}
             placement='top'
           >
             <IconButton
               onClick={handlePlusRoom}
-              sx={tempRooms === maxRooms ? disabledStyle : { color: "#333" }}
+              sx={rooms === maxRooms ? disabledStyle : { color: "#333" }}
             >
               <AddIcon />
             </IconButton>
