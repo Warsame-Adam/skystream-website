@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo, useContext } from "react";
 import {
   Box,
   Checkbox,
@@ -23,6 +23,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import KingBedIcon from "@mui/icons-material/KingBed";
 
 import { useDispatch, useSelector } from "react-redux";
+import { setDestination, setOtherOptions } from "../Slices/hotelSearchSlice";
 import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
 import { setActiveInput } from "../Slices/ReusableCalendar";
 import HotelTravellersDropDown from "../HotelTravellersDropDown";
@@ -30,177 +31,16 @@ import { format } from "date-fns";
 
 import Hotelimg from "../../Components/Assets/HotelHeroimg.jpg";
 import ReusableDatePicker from "../ReusableDatePicker";
-
-const Locations = [
-  // Cities
-  { name: "Paris", type: "city", country: "France" },
-  { name: "Athens", type: "city", country: "Greece" },
-  { name: "Sydney", type: "city", country: "Australia" },
-  { name: "Antalya", type: "city", country: "Turkey" },
-  { name: "Rome", type: "city", country: "Italy" },
-  { name: "Cardiff", type: "city", country: "Wales" },
-  { name: "Edinburgh", type: "city", country: "Scotland" },
-  { name: "Dublin", type: "city", country: "Ireland" },
-  { name: "Dubai", type: "city", country: "United Arab Emirates" },
-  { name: "Amsterdam", type: "city", country: "Netherlands" },
-  { name: "Istanbul", type: "city", country: "Turkey" },
-  { name: "Bangkok", type: "city", country: "Thailand" },
-
-  // Hotels
-  { name: "The Ritz Paris", type: "hotel", city: "Paris", country: "France" },
-  {
-    name: "Athens Grand Hotel",
-    type: "hotel",
-    city: "Athens",
-    country: "Greece",
-  },
-  {
-    name: "Sydney Harbour Hotel",
-    type: "hotel",
-    city: "Sydney",
-    country: "Australia",
-  },
-  {
-    name: "Antalya Beach Resort",
-    type: "hotel",
-    city: "Antalya",
-    country: "Turkey",
-  },
-  { name: "Rome City Hotel", type: "hotel", city: "Rome", country: "Italy" },
-  {
-    name: "Cardiff Bay Hotel",
-    type: "hotel",
-    city: "Cardiff",
-    country: "Wales",
-  },
-  {
-    name: "Edinburgh Castle Hotel",
-    type: "hotel",
-    city: "Edinburgh",
-    country: "Scotland",
-  },
-  {
-    name: "Dublin City Stay",
-    type: "hotel",
-    city: "Dublin",
-    country: "Ireland",
-  },
-  {
-    name: "Hilton Dubai",
-    type: "hotel",
-    city: "Dubai",
-    country: "United Arab Emirates",
-  },
-  {
-    name: "Amsterdam Central Hotel",
-    type: "hotel",
-    city: "Amsterdam",
-    country: "Netherlands",
-  },
-  {
-    name: "Istanbul Grand Palace",
-    type: "hotel",
-    city: "Istanbul",
-    country: "Turkey",
-  },
-  {
-    name: "Bangkok Luxury Stay",
-    type: "hotel",
-    city: "Bangkok",
-    country: "Thailand",
-  },
-
-  // Airports
-  {
-    name: "Charles de Gaulle Airport",
-    type: "airport",
-    city: "Paris",
-    code: "CDG",
-    country: "France",
-  },
-  {
-    name: "Athens International Airport",
-    type: "airport",
-    city: "Athens",
-    code: "ATH",
-    country: "Greece",
-  },
-  {
-    name: "Sydney Kingsford Smith Airport",
-    type: "airport",
-    city: "Sydney",
-    code: "SYD",
-    country: "Australia",
-  },
-  {
-    name: "Antalya Airport",
-    type: "airport",
-    city: "Antalya",
-    code: "AYT",
-    country: "Turkey",
-  },
-  {
-    name: "Rome Fiumicino Airport",
-    type: "airport",
-    city: "Rome",
-    code: "FCO",
-    country: "Italy",
-  },
-  {
-    name: "Cardiff Airport",
-    type: "airport",
-    city: "Cardiff",
-    code: "CWL",
-    country: "Wales",
-  },
-  {
-    name: "Edinburgh Airport",
-    type: "airport",
-    city: "Edinburgh",
-    code: "EDI",
-    country: "Scotland",
-  },
-  {
-    name: "Dublin Airport",
-    type: "airport",
-    city: "Dublin",
-    code: "DUB",
-    country: "Ireland",
-  },
-  {
-    name: "Dubai International Airport",
-    type: "airport",
-    city: "Dubai",
-    code: "DXB",
-    country: "United Arab Emirates",
-  },
-  {
-    name: "Amsterdam Schiphol Airport",
-    type: "airport",
-    city: "Amsterdam",
-    code: "AMS",
-    country: "Netherlands",
-  },
-  {
-    name: "Istanbul Airport",
-    type: "airport",
-    city: "Istanbul",
-    code: "IST",
-    country: "Turkey",
-  },
-  {
-    name: "Bangkok Suvarnabhumi Airport",
-    type: "airport",
-    city: "Bangkok",
-    code: "BKK",
-    country: "Thailand",
-  },
-];
+import { GlobalContext } from "../../context/GlobalContext";
 
 const HeroHotel = () => {
+  const { locations } = useContext(GlobalContext);
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const dispatch = useDispatch();
+  const { destination, otherOptions } = useSelector(
+    (state) => state.hotelSearch
+  );
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -209,7 +49,6 @@ const HeroHotel = () => {
   const inputRef = useRef(null);
 
   const [inputValue, setInputValue] = useState("");
-
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [childAges, setChildAges] = useState([]);
@@ -331,24 +170,31 @@ const HeroHotel = () => {
               id='destination'
               disableUnderline
               freeSolo
-              options={Locations}
-              getOptionLabel={(option) => (option?.name ? option.name : "")}
+              options={locations}
+              getOptionLabel={(option) =>
+                option && option.cityName && option.cityCode
+                  ? `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
+                  : ""
+              }
               inputValue={inputValue}
               onInputChange={(_, val) => setInputValue(val)}
+              onChange={(event, value) => {
+                dispatch(setDestination(value));
+              }}
+              value={destination}
               filterOptions={(options, state) => {
-                const val = state.inputValue.trim().toLowerCase();
+                const val = state?.inputValue?.trim()?.toLowerCase();
                 if (val === "") {
-                  return options.filter((opt) => opt.type === "city");
+                  return options.slice(0, 5);
                 }
 
-                return options.filter((option) => {
-                  const nameMatch = option.name.toLowerCase().includes(val);
-                  const cityMatch =
-                    option.city && option.city.toLowerCase().includes(val);
-                  const codeMatch =
-                    option.code && option.code.toLowerCase().includes(val);
-                  return nameMatch || cityMatch || codeMatch;
-                });
+                return options.filter(
+                  (option) =>
+                    option.cityName?.toLowerCase().includes(val) ||
+                    option.cityCode?.toLowerCase().includes(val) ||
+                    option.countryName?.toLowerCase().includes(val) ||
+                    option.countryCode?.toLowerCase().includes(val)
+                );
               }}
               renderOption={(props, option) => {
                 let IconComp = ApartmentIcon;
@@ -389,10 +235,10 @@ const HeroHotel = () => {
                             color: "black",
                           }}
                         >
-                          {option.name}
+                          {option.cityName} ({option.cityCode})
                         </Typography>
                         <Typography sx={{ fontSize: "12px", color: "black" }}>
-                          {option.country || option.city}
+                          {option.countryName} ({option.countryCode})
                         </Typography>
                       </Box>
                     </Box>
@@ -424,7 +270,7 @@ const HeroHotel = () => {
                       border: 0,
                     },
                   }}
-                  placeholder='Enter destination or hotel name'
+                  placeholder='Select destination or Type hotel name'
                   variant='standard'
                   sx={{
                     width: "100%",
@@ -649,6 +495,15 @@ const HeroHotel = () => {
                   color: "white",
                 },
               }}
+              checked={otherOptions.freeCancellation}
+              onChange={(e) =>
+                dispatch(
+                  setOtherOptions({
+                    ...otherOptions,
+                    freeCancellation: e.target.checked,
+                  })
+                )
+              }
             />
             <FormControlLabel
               control={
@@ -678,6 +533,15 @@ const HeroHotel = () => {
                   color: "white",
                 },
               }}
+              checked={otherOptions.fourStar}
+              onChange={(e) =>
+                dispatch(
+                  setOtherOptions({
+                    ...otherOptions,
+                    fourStar: e.target.checked,
+                  })
+                )
+              }
             />
             <FormControlLabel
               control={
@@ -696,7 +560,7 @@ const HeroHotel = () => {
                   }}
                 />
               }
-              label='3 stars'
+              label='5 stars'
               sx={{
                 "&.MuiFormControlLabel-root": {
                   margin: 0,
@@ -705,6 +569,15 @@ const HeroHotel = () => {
               componentsProps={{
                 typography: { fontSize: "15px", color: "white" },
               }}
+              checked={otherOptions.fiveStar}
+              onChange={(e) =>
+                dispatch(
+                  setOtherOptions({
+                    ...otherOptions,
+                    fiveStar: e.target.checked,
+                  })
+                )
+              }
             />
           </Box>
 
@@ -720,6 +593,53 @@ const HeroHotel = () => {
               variant='contained'
               endIcon={<ArrowForwardOutlinedIcon />}
               sx={{ ...searchButtonStyle, textTransform: "none" }}
+              onClick={() => {
+                const isDate = (val) => !isNaN(new Date(val).getTime());
+                if (
+                  destination &&
+                  destination.cityCode &&
+                  isDate(departureDate) &&
+                  isDate(returnDate)
+                ) {
+                  let path = `/flights/search?`;
+                  if (destination.cityCode || destination.countryCode) {
+                    if (destination.countryCode) {
+                      path += `country=${destination.countryCode}`;
+                    }
+                    if (destination.cityCode) {
+                      path += `city=${destination.cityCode}`;
+                    }
+                  } else if (inputValue && inputValue.trim().length > 4) {
+                    path += `name=${inputValue}`;
+                  }
+                  if (departureDate) {
+                    path += `&availableFrom=${departureDate}`;
+                  }
+                  if (returnDate) {
+                    path += `&availableTo=${returnDate}`;
+                  }
+                  if (adults > 0) {
+                    path += `&adults=${adults}`;
+                  }
+                  if (children > 0) {
+                    path += `&children=${children}`;
+                  }
+                  if (children > 0) {
+                    path += `&rooms=${rooms}`;
+                  }
+
+                  if (otherOptions.freeCancellation) {
+                    path += `&freeCancellation=${
+                      otherOptions.freeCancellation ? "true" : "false"
+                    }`;
+                  }
+                  if (otherOptions.fourStar) {
+                    path += `&minReview=4`;
+                  } else if (otherOptions.fiveStar) {
+                    path += `&minReview=5`;
+                  }
+                }
+              }}
             >
               Search hotels
             </Button>

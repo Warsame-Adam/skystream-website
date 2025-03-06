@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Tabs,
   Tab,
@@ -12,47 +12,106 @@ import {
   Grid,
   useMediaQuery,
   useTheme,
+  Alert,
+  CircularProgress,
+  Rating,
 } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import { cities, hotels } from "../HotelData.js";
-import { useDispatch, useSelector } from "react-redux";
-import { setSelectedCity, setCurrentIndex } from "../Slices/hotelSlice";
-import { Link } from "react-router-dom";
 
+import { Link } from "react-router-dom";
+import { GlobalContext } from "../../context/GlobalContext.js";
+import { getHotels } from "../../services/hotel.js";
+const getMinPrice = (hotel) => {
+  return hotel.deals
+    .flatMap((deal) => deal.rooms) // Flatten rooms from all deals
+    .reduce((min, room) => Math.min(min, room.pricePerNight), Infinity);
+};
 const LocalHotelSelection = () => {
+  const { locations, visitorData } = useContext(GlobalContext);
+  const homeCities = locations.filter(
+    (x) =>
+      x.countryCode === visitorData?.countryCode &&
+      x.cityCode === visitorData?.cityCode
+  );
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const dispatch = useDispatch();
   const nCards = matchesXS ? 1 : matchesSM ? 2 : 3;
-  const selectedCity = useSelector((state) => state.hotels.selectedCity);
-  const currentIndex = useSelector((state) => state.hotels.currentIndex);
+  const [selectedCity, setSelectedCity] = useState(
+    homeCities.length > 0 ? homeCities[0].cityCode : ""
+  );
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState({
+    active: false,
+    action: "",
+  });
+  const [error, setError] = useState({
+    active: false,
+    message: "",
+    action: "",
+  });
 
+  const fetchHotels = async () => {
+    setLoading({
+      active: true,
+      action: "page",
+    });
+    const res = await getHotels({
+      originCountry: visitorData?.countryCode,
+      availableFrom: new Date().getTime(),
+    });
+    if (res.success) {
+      if (res.data && res.data?.length > 0) setHotels(res.data);
+    } else {
+      setError({
+        active: true,
+        message: res.error,
+        action: "page",
+      });
+    }
+
+    setLoading({
+      active: false,
+      action: "",
+    });
+  };
+  useEffect(() => {
+    fetchHotels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const handleCityChange = (event, newValue) => {
-    dispatch(setSelectedCity(newValue));
-    dispatch(setCurrentIndex(0));
+    setSelectedCity(newValue);
+    setCurrentIndex(0);
   };
 
-  const visibleHotels = hotels[selectedCity].hotels.slice(
-    currentIndex,
-    currentIndex + nCards
-  );
+  const cityHotels = hotels.filter((x) => x.city.cityCode === selectedCity);
+  const visibleHotels = cityHotels.slice(currentIndex, currentIndex + nCards);
 
   const handleNext = () => {
-    if (currentIndex + nCards < hotels[selectedCity].hotels.length) {
-      dispatch(setCurrentIndex(currentIndex + nCards));
+    if (currentIndex + nCards < cityHotels.length) {
+      setCurrentIndex(currentIndex + nCards);
     }
   };
 
   const handlePrev = () => {
     if (currentIndex > 0) {
-      dispatch(setCurrentIndex(currentIndex - nCards));
+      setCurrentIndex(currentIndex - nCards);
     }
   };
+
+  const loadingUI = (
+    <Box
+      minHeight='80px'
+      display='flex'
+      justifyContent='center'
+      alignItems='center'
+    >
+      <CircularProgress size='30px' />
+    </Box>
+  );
   return (
     <Container className='container' sx={{ mt: "96px" }}>
       <Typography sx={{ fontWeight: "bold", fontSize: "28px" }}>
@@ -63,195 +122,209 @@ const LocalHotelSelection = () => {
         beyond your doorstep.
       </Typography>
 
-      <Tabs
-        value={selectedCity}
-        onChange={handleCityChange}
-        sx={{
-          "& .MuiTabs-indicator": {
-            display: "none",
-          },
-          "& .MuiTab-root": {
-            padding: "5px 8px",
-            minHeight: "auto",
-            border: "1px solid grey",
-            marginRight: "10px",
-            borderRadius: "5px",
-            color: "black",
-            textTransform: "none",
-          },
-        }}
-      >
-        {cities.map((city, index) => (
-          <Tab
-            key={index}
-            label={city}
-            disableRipple
+      {loading.active && loading.action === "page" ? (
+        loadingUI
+      ) : error.active && error.action === "page" ? (
+        <Alert severity='error' sx={{ mt: "20px" }}>
+          {error.message}
+        </Alert>
+      ) : (
+        <>
+          <Tabs
+            value={selectedCity}
+            onChange={handleCityChange}
             sx={{
-              "&.Mui-selected": {
-                backgroundColor: "#05203c !important",
-                color: "white !important",
+              "& .MuiTabs-indicator": {
+                display: "none",
+              },
+              "& .MuiTab-root": {
+                padding: "5px 8px",
+                minHeight: "auto",
+                border: "1px solid grey",
+                marginRight: "10px",
+                borderRadius: "5px",
+                color: "black",
+                textTransform: "none",
               },
             }}
-          />
-        ))}
-      </Tabs>
-
-      <Box display='flex' justifyContent='center' aliSgnItems='center' my={4}>
-        <Grid container spacing={2}>
-          {visibleHotels.map((hotel, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
-              <Link
-                to={`/hotels/${hotels[selectedCity]?.country}/${hotels[selectedCity]?.city}/${hotel.name}/${hotel.id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Card
-                  sx={{
-                    borderRadius: "12px",
-                    boxShadow: "0 1px 3px 0 #25201f4d",
-                    "&:hover": {
-                      boxShadow: "0 4px 14px 0 #25201f40",
-                    },
-                    transition: "all .2s ease-in-out",
-                  }}
-                >
-                  <CardMedia
-                    component='img'
-                    height='140'
-                    image={hotel.image}
-                    alt={hotel.name}
-                  />
-                  <CardContent sx={{ padding: 0 }}>
-                    <Typography
-                      variant='h6'
-                      style={{
-                        fontWeight: "bold",
-                        color: "black",
-                        fontSize: "20px",
-                        paddingLeft: "15px",
-                      }}
-                    >
-                      {hotel.name}
-                      <span style={{ marginLeft: "80px" }}>
-                        {Array.from({ length: 5 }).map((_, starIndex) =>
-                          starIndex < hotel.stars ? (
-                            <StarIcon
-                              key={starIndex}
-                              fontSize='small'
-                              style={{ color: "#f55d42" }}
-                            />
-                          ) : (
-                            <StarBorderIcon
-                              key={starIndex}
-                              fontSize='small'
-                              style={{ color: "#cccccc" }}
-                            />
-                          )
-                        )}
-                      </span>
-                    </Typography>
-                    <Typography
-                      variant='body2'
-                      style={{
-                        color: "black",
-                        fontSize: "13.5px",
-                        paddingLeft: "15px",
-                      }}
-                    >
-                      x miles from city centre
-                    </Typography>
-                    <hr
-                      style={{
-                        border: "1px solid lightgrey",
-                        margin: "10px 0",
-                      }}
-                    />
-                    <Typography
-                      variant='body1'
-                      style={{
-                        color: "black",
-                        textAlign: "right",
-                        paddingRight: "15px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {hotel.price}
-                    </Typography>
-                    <Typography
-                      style={{
-                        color: "grey",
-                        textAlign: "right",
-                        paddingRight: "15px",
-                        fontSize: "12px",
-                      }}
-                    >
-                      per night
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1,
-          my: 2,
-          width: "100%",
-        }}
-      >
-        <Box
-          sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
-        >
-          <IconButton
-            disabled={currentIndex === 0}
-            onClick={handlePrev}
-            disableRipple
-            sx={{
-              color: currentIndex === 0 ? "#cccccc" : "#0062e3",
-            }}
           >
-            <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
-          </IconButton>
-        </Box>
-
-        <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
-          {Array.from({ length: hotels[selectedCity].hotels.length }).map(
-            (_, index) => (
-              <Box
+            {homeCities.map((city, index) => (
+              <Tab
                 key={index}
+                value={city.cityCode}
+                label={city.cityName}
+                disableRipple
                 sx={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  backgroundColor:
-                    currentIndex === index * nCards ? "darkgrey" : "lightgrey",
+                  "&.Mui-selected": {
+                    backgroundColor: "#05203c !important",
+                    color: "white !important",
+                  },
                 }}
               />
-            )
-          )}
-        </Box>
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}>
-          <IconButton
-            disabled={
-              currentIndex + nCards >= hotels[selectedCity].hotels.length
-            }
-            onClick={handleNext}
-            disableRipple
+            ))}
+          </Tabs>
+
+          <Box
+            display='flex'
+            justifyContent='center'
+            aliSgnItems='center'
+            my={4}
+          >
+            <Grid container spacing={2}>
+              {visibleHotels.map((hotel, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Link
+                    to={`/hotel/${hotel?.city?.countryCode}/${hotel?.city.cityCode}/${hotel.name}/${hotel._id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Card
+                      sx={{
+                        borderRadius: "12px",
+                        boxShadow: "0 1px 3px 0 #25201f4d",
+                        "&:hover": {
+                          boxShadow: "0 4px 14px 0 #25201f40",
+                        },
+                        transition: "all .2s ease-in-out",
+                      }}
+                    >
+                      <CardMedia
+                        component='img'
+                        height='140'
+                        image={hotel.cover}
+                        alt={hotel.name}
+                      />
+                      <CardContent sx={{ padding: 0 }}>
+                        <Typography
+                          variant='h6'
+                          style={{
+                            fontWeight: "bold",
+                            color: "black",
+                            fontSize: "20px",
+                            paddingLeft: "15px",
+                          }}
+                        >
+                          {hotel.name}
+                          <span style={{ marginLeft: "80px" }}>
+                            <Rating
+                              readOnly
+                              value={
+                                hotel.reduce(
+                                  (acc, review) => acc + review.rating,
+                                  0
+                                ) / hotel.reviews.length
+                              }
+                            />
+                          </span>
+                        </Typography>
+                        <Typography
+                          variant='body2'
+                          style={{
+                            color: "black",
+                            fontSize: "13.5px",
+                            paddingLeft: "15px",
+                          }}
+                        >
+                          x miles from city centre
+                        </Typography>
+                        <hr
+                          style={{
+                            border: "1px solid lightgrey",
+                            margin: "10px 0",
+                          }}
+                        />
+                        <Typography
+                          variant='body1'
+                          style={{
+                            color: "black",
+                            textAlign: "right",
+                            paddingRight: "15px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          £{getMinPrice(hotel)}
+                        </Typography>
+                        <Typography
+                          style={{
+                            color: "grey",
+                            textAlign: "right",
+                            paddingRight: "15px",
+                            fontSize: "12px",
+                          }}
+                        >
+                          per night
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
+
+          <Box
             sx={{
-              color:
-                currentIndex + nCards >= hotels[selectedCity].hotels.length
-                  ? "#cccccc"
-                  : "#0062e3",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              my: 2,
+              width: "100%",
             }}
           >
-            <KeyboardArrowRightIcon sx={{ fontSize: "35px" }} />
-          </IconButton>
-        </Box>
-      </Box>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "flex-start",
+              }}
+            >
+              <IconButton
+                disabled={currentIndex === 0}
+                onClick={handlePrev}
+                disableRipple
+                sx={{
+                  color: currentIndex === 0 ? "#cccccc" : "#0062e3",
+                }}
+              >
+                <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
+              </IconButton>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+              {Array.from({ length: cityHotels.length }).map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    backgroundColor:
+                      currentIndex === index * nCards
+                        ? "darkgrey"
+                        : "lightgrey",
+                  }}
+                />
+              ))}
+            </Box>
+            <Box
+              sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
+            >
+              <IconButton
+                disabled={currentIndex + nCards >= cityHotels.length}
+                onClick={handleNext}
+                disableRipple
+                sx={{
+                  color:
+                    currentIndex + nCards >= cityHotels.length
+                      ? "#cccccc"
+                      : "#0062e3",
+                }}
+              >
+                <KeyboardArrowRightIcon sx={{ fontSize: "35px" }} />
+              </IconButton>
+            </Box>
+          </Box>
+        </>
+      )}
     </Container>
   );
 };
