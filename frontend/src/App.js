@@ -29,6 +29,7 @@ function AuthCheck({ children }) {
     user: globalUser,
     setAuth,
     visitorData,
+    locations,
     setVisitorData,
     setLocationsData,
     setAirlinesData,
@@ -72,14 +73,18 @@ function AuthCheck({ children }) {
 
   //Fetching Visitor Data
   useEffect(() => {
-    if (visitorData !== null) {
+    if (locations.length === 0 && visitorData !== null) {
       return;
     }
     let visitorObject = null;
     try {
-      visitorObject = localStorage.getItem(visitorDataKey);
-      if (visitorObject) {
-        visitorObject = JSON.parse(visitorObject);
+      let visitorObjectData = localStorage.getItem(visitorDataKey);
+      if (
+        visitorObjectData &&
+        typeof visitorObjectData === "object" &&
+        Object.keys(visitorObjectData).length > 0
+      ) {
+        visitorObject = JSON.parse(visitorObjectData);
       }
     } catch (e) {
       visitorObject = null;
@@ -124,6 +129,10 @@ function AuthCheck({ children }) {
           return response.json();
         }) //make sure to update data like if  if (visitorObject) { requirement
         .then(function (payload) {
+          const cityCodeObj = locations.find(
+            (x) => x.cityName === payload?.location?.city
+          );
+
           let visitorInfo = {
             currency: payload?.currency,
             country: payload?.location?.country?.name,
@@ -131,6 +140,7 @@ function AuthCheck({ children }) {
             phoneCode: payload?.location?.country?.calling_code,
             capital: payload?.location?.country.capital,
             city: payload?.location?.city,
+            cityCode: cityCodeObj ? cityCodeObj.cityCode : "LHR",
             postal: payload?.location?.postal,
             state: payload?.location?.region?.name,
             language: payload?.location?.language?.name,
@@ -166,7 +176,7 @@ function AuthCheck({ children }) {
           setVisitorData(visitorInfo);
         });
     }
-  }, []);
+  }, [locations]);
 
   //initial Data
   useEffect(() => {

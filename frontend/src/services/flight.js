@@ -3,7 +3,7 @@ import axiosInstance from "../utils/axios";
 // Helper function to handle API responses
 const handleApiResponse = (res) => {
   if (res.data.success) {
-    return { success: true, data: res.data.doc };
+    return { success: true, data: res.data.data.doc };
   } else {
     return { success: false, error: res.data.error || "Something went wrong" };
   }
