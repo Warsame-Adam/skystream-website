@@ -13,7 +13,7 @@ export default function LoginModal({ open, handleClose }) {
     if (globaluser) {
       handleClose();
     }
-  }, []);
+  }, [globaluser]);
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xs'>
       <DialogContent sx={{ p: "32px" }}>

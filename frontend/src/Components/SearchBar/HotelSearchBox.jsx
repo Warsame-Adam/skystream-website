@@ -35,172 +35,6 @@ import ReusableDatePicker from "../ReusableDatePicker";
 import HotelTravellersDropDown from "../HotelTravellersDropDown";
 import { GlobalContext } from "../../context/GlobalContext";
 
-const Locations = [
-  // Cities
-  { name: "Paris", type: "city", country: "France" },
-  { name: "Athens", type: "city", country: "Greece" },
-  { name: "Sydney", type: "city", country: "Australia" },
-  { name: "Antalya", type: "city", country: "Turkey" },
-  { name: "Rome", type: "city", country: "Italy" },
-  { name: "Cardiff", type: "city", country: "Wales" },
-  { name: "Edinburgh", type: "city", country: "Scotland" },
-  { name: "Dublin", type: "city", country: "Ireland" },
-  { name: "Dubai", type: "city", country: "United Arab Emirates" },
-  { name: "Amsterdam", type: "city", country: "Netherlands" },
-  { name: "Istanbul", type: "city", country: "Turkey" },
-  { name: "Bangkok", type: "city", country: "Thailand" },
-
-  // Hotels
-  { name: "The Ritz Paris", type: "hotel", city: "Paris", country: "France" },
-  {
-    name: "Athens Grand Hotel",
-    type: "hotel",
-    city: "Athens",
-    country: "Greece",
-  },
-  {
-    name: "Sydney Harbour Hotel",
-    type: "hotel",
-    city: "Sydney",
-    country: "Australia",
-  },
-  {
-    name: "Antalya Beach Resort",
-    type: "hotel",
-    city: "Antalya",
-    country: "Turkey",
-  },
-  { name: "Rome City Hotel", type: "hotel", city: "Rome", country: "Italy" },
-  {
-    name: "Cardiff Bay Hotel",
-    type: "hotel",
-    city: "Cardiff",
-    country: "Wales",
-  },
-  {
-    name: "Edinburgh Castle Hotel",
-    type: "hotel",
-    city: "Edinburgh",
-    country: "Scotland",
-  },
-  {
-    name: "Dublin City Stay",
-    type: "hotel",
-    city: "Dublin",
-    country: "Ireland",
-  },
-  {
-    name: "Hilton Dubai",
-    type: "hotel",
-    city: "Dubai",
-    country: "United Arab Emirates",
-  },
-  {
-    name: "Amsterdam Central Hotel",
-    type: "hotel",
-    city: "Amsterdam",
-    country: "Netherlands",
-  },
-  {
-    name: "Istanbul Grand Palace",
-    type: "hotel",
-    city: "Istanbul",
-    country: "Turkey",
-  },
-  {
-    name: "Bangkok Luxury Stay",
-    type: "hotel",
-    city: "Bangkok",
-    country: "Thailand",
-  },
-
-  // Airports
-  {
-    name: "Charles de Gaulle Airport",
-    type: "airport",
-    city: "Paris",
-    code: "CDG",
-    country: "France",
-  },
-  {
-    name: "Athens International Airport",
-    type: "airport",
-    city: "Athens",
-    code: "ATH",
-    country: "Greece",
-  },
-  {
-    name: "Sydney Kingsford Smith Airport",
-    type: "airport",
-    city: "Sydney",
-    code: "SYD",
-    country: "Australia",
-  },
-  {
-    name: "Antalya Airport",
-    type: "airport",
-    city: "Antalya",
-    code: "AYT",
-    country: "Turkey",
-  },
-  {
-    name: "Rome Fiumicino Airport",
-    type: "airport",
-    city: "Rome",
-    code: "FCO",
-    country: "Italy",
-  },
-  {
-    name: "Cardiff Airport",
-    type: "airport",
-    city: "Cardiff",
-    code: "CWL",
-    country: "Wales",
-  },
-  {
-    name: "Edinburgh Airport",
-    type: "airport",
-    city: "Edinburgh",
-    code: "EDI",
-    country: "Scotland",
-  },
-  {
-    name: "Dublin Airport",
-    type: "airport",
-    city: "Dublin",
-    code: "DUB",
-    country: "Ireland",
-  },
-  {
-    name: "Dubai International Airport",
-    type: "airport",
-    city: "Dubai",
-    code: "DXB",
-    country: "United Arab Emirates",
-  },
-  {
-    name: "Amsterdam Schiphol Airport",
-    type: "airport",
-    city: "Amsterdam",
-    code: "AMS",
-    country: "Netherlands",
-  },
-  {
-    name: "Istanbul Airport",
-    type: "airport",
-    city: "Istanbul",
-    code: "IST",
-    country: "Turkey",
-  },
-  {
-    name: "Bangkok Suvarnabhumi Airport",
-    type: "airport",
-    city: "Bangkok",
-    code: "BKK",
-    country: "Thailand",
-  },
-];
-
 const CityHotelsSearchBar = () => {
   const { locations } = useContext(GlobalContext);
   const departInputRef = useRef(null);
@@ -208,6 +42,7 @@ const CityHotelsSearchBar = () => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
 
+  const [hotels, setHotels] = useState([]);
   const { destination, otherOptions } = useSelector(
     (state) => state.hotelSearch
   );
@@ -247,14 +82,17 @@ const CityHotelsSearchBar = () => {
   }, [adults, children, rooms]);
 
   useEffect(() => {
-    const currentDate = new Date();
-    const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
-    dispatch(setDepartureDate(departure.getTime()));
+    console.log(inputValue);
+  }, [inputValue]);
+  // useEffect(() => {
+  //   const currentDate = new Date();
+  //   const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
+  //   dispatch(setDepartureDate(departure.getTime()));
 
-    const returnD = new Date(departure);
-    returnD.setDate(departure.getDate() + 7);
-    dispatch(setReturnDate(returnD.getTime()));
-  }, [dispatch]);
+  //   const returnD = new Date(departure);
+  //   returnD.setDate(departure.getDate() + 7);
+  //   dispatch(setReturnDate(returnD.getTime()));
+  // }, [dispatch]);
 
   const handleClickDepart = (e) => {
     dispatch(setActiveInput("depart"));
@@ -282,6 +120,14 @@ const CityHotelsSearchBar = () => {
     ? format(new Date(returnDate), "dd/MM/yyyy")
     : "";
 
+  const destinationOptions = [
+    ...locations.map((item) => {
+      return {
+        ...item,
+        type: "city",
+      };
+    }),
+  ];
   return (
     <>
       <Grid

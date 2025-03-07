@@ -8,7 +8,6 @@ const CityHotelsSearchBar = () => {
   const navigate = useNavigate();
   const { destination } = useSelector((state) => state.hotelSearch);
 
-  console.log(destination);
   if (!destination?.cityName) {
     navigate("/hotels");
   }
