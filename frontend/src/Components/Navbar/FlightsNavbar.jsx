@@ -28,6 +28,7 @@ import { jwtKey } from "../../data/websiteInfo";
 import LoginModal from "../Login/LoginModal";
 
 const NavFlights = () => {
+  const { visitorData } = useContext(GlobalContext);
   const { user: globalUser, setAuth } = useContext(GlobalContext);
 
   const theme = useTheme();
@@ -93,25 +94,33 @@ const NavFlights = () => {
                   Help
                 </Typography>
               )}
-              <Typography
-                variant='subtitle2'
-                sx={{
-                  padding: matchesSM ? 0 : "6px 16px",
-                  borderRadius: "8px",
-                  fontSize: "12px",
-                  backgroundColor: matchesSM
-                    ? "transparent"
-                    : "rgba(255, 255, 255, 0.11)",
-                  "&:hover": {
-                    backgroundColor: "#000",
-                  },
-                  cursor: "pointer",
-                }}
-              >
-                {matchesSM
-                  ? "EN - UK (GBP)"
-                  : "United Kingdom - English (UK) • £ GBP"}
-              </Typography>
+              {visitorData && (
+                <Typography
+                  variant='subtitle2'
+                  sx={{
+                    padding: matchesSM ? 0 : "6px 16px",
+                    borderRadius: "8px",
+                    fontSize: "12px",
+                    backgroundColor: matchesSM
+                      ? "transparent"
+                      : "rgba(255, 255, 255, 0.11)",
+                    "&:hover": {
+                      backgroundColor: "#000",
+                    },
+                    cursor: "pointer",
+                  }}
+                >
+                  {matchesSM
+                    ? `${visitorData?.languageCode?.toUpperCase()} - ${
+                        visitorData?.countryCode
+                      } (${visitorData?.currency?.code})`
+                    : `${visitorData?.country} - ${
+                        visitorData?.language
+                      } (${visitorData?.languageCode.toUpperCase()}) • ${
+                        visitorData?.currency?.code
+                      } (${visitorData?.currency?.symbol})`}
+                </Typography>
+              )}
 
               <IconButton>
                 <FavoriteIcon

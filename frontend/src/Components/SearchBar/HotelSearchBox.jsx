@@ -46,7 +46,6 @@ const CityHotelsSearchBar = () => {
   const { rooms, adults, children } = useSelector(
     (state) => state.hotelTravellers
   );
-
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -76,6 +75,13 @@ const CityHotelsSearchBar = () => {
     return parts.join(", ");
   }, [adults, children, rooms]);
 
+  useEffect(() => {
+    if (destination) {
+      setInputValue(
+        `${destination.cityName} (${destination.cityCode}) ${destination.countryName} (${destination.countryCode})`
+      );
+    }
+  }, [destination]);
   useEffect(() => {
     const searchHotels = async () => {
       const res = await getHotels({ name: inputValue });
@@ -128,7 +134,6 @@ const CityHotelsSearchBar = () => {
       };
     }),
   ];
-
   return (
     <>
       <Grid
@@ -639,7 +644,7 @@ const CityHotelsSearchBar = () => {
                 if (children > 0) {
                   path += `&children=${children}`;
                 }
-                if (children > 0) {
+                if (rooms > 0) {
                   path += `&rooms=${rooms}`;
                 }
 

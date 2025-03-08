@@ -60,9 +60,9 @@ const Navbar = () => {
   };
 
   const pages = [
-    { icon: <FlightIcon />, label: "Flights" },
-    { icon: <HotelIcon />, label: "Hotels" },
-    { icon: <FlagIcon />, label: "Regional settings" },
+    { icon: <FlightIcon />, label: "Flights", link: "/flights" },
+    { icon: <HotelIcon />, label: "Hotels", link: "/hotels" },
+    // { icon: <FlagIcon />, label: "Regional settings" },
     { icon: <LocalOfferIcon />, label: "Explore Everywhere" },
     { icon: <HelpOutlineIcon />, label: "Help" },
   ];
@@ -215,7 +215,12 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
             >
               {pages.map((page) => (
-                <MenuItem key={page.label} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={page.label}
+                  LinkComponent={page.link ? Link : <></>}
+                  href={page.link ? page.link : ""}
+                  onClick={handleCloseUserMenu}
+                >
                   <IconButton sx={{ color: "#0665e3", mr: 1 }}>
                     {page.icon}
                   </IconButton>

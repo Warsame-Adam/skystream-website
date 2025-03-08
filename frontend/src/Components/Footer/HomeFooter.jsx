@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Input,
   AppBar,
@@ -21,8 +21,10 @@ import {
   Grid,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { GlobalContext } from "../../context/GlobalContext";
 
 const HomeFooter = () => {
+  const { visitorData } = useContext(GlobalContext);
   return (
     <Box
       sx={{
@@ -43,12 +45,18 @@ const HomeFooter = () => {
           }}
         >
           <Grid md={4} item sx={{ flex: "1" }}>
-            <Typography
-              variant='subtitle1'
-              sx={{ fontSize: "12px", fontWeight: 700 }}
-            >
-              United Kingdom - English (UK) • £ GBP
-            </Typography>
+            {visitorData && (
+              <Typography
+                variant='subtitle1'
+                sx={{ fontSize: "12px", fontWeight: 700 }}
+              >
+                {`${visitorData?.country} - ${
+                  visitorData?.language
+                } (${visitorData?.languageCode.toUpperCase()}) • ${
+                  visitorData?.currency?.code
+                } (${visitorData?.currency?.symbol})`}
+              </Typography>
+            )}
           </Grid>
 
           <Box sx={{ flex: "1" }}>

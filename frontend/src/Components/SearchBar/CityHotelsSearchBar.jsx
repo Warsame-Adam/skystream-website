@@ -1,16 +1,22 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
 import { Typography, Box, Container } from "@mui/material";
 import { useSelector } from "react-redux";
 import HotelSearchBox from "./HotelSearchBox";
+import { useParams } from "react-router-dom";
+import { GlobalContext } from "../../context/GlobalContext";
 
 const CityHotelsSearchBar = () => {
-  const navigate = useNavigate();
-  const { destination } = useSelector((state) => state.hotelSearch);
+  const { locations } = useContext(GlobalContext);
+  //const { destination } = useSelector((state) => state.hotelSearch);
+  const params = useParams();
+  const countryParams = params?.country;
+  const cityParams = params.city;
 
-  if (!destination?.cityName) {
-    navigate("/hotels");
-  }
+  let foundCity = locations?.find(
+    (loc) =>
+      loc.countryCode.toLowerCase() === `${countryParams}`.toLowerCase() &&
+      loc.cityCode.toLowerCase() === `${cityParams}`.toLowerCase()
+  );
   return (
     <Box
       sx={{
@@ -29,7 +35,7 @@ const CityHotelsSearchBar = () => {
             color: "text.primary",
           }}
         >
-          Hotels in {destination?.cityName}
+          Hotels in {foundCity?.cityName || "City"}
         </Typography>
         <Box
           sx={{
