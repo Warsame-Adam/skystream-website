@@ -3,12 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 const hotelSearchSlice = createSlice({
   name: "hotelSearch",
   initialState: {
-    destination: {
-      cityName: "",
-      cityCode: "",
-      countryName: "",
-      countryCode: "",
-    },
+    destination: null,
+    // {
+    //   cityName: "",
+    //   cityCode: "",
+    //   countryName: "",
+    //   countryCode: "",
+    // },
     otherOptions: {
       freeCancellation: false,
       fourStar: false,

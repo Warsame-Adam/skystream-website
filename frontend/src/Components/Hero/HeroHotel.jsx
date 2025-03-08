@@ -19,11 +19,11 @@ const HeroHotel = () => {
   useEffect(() => {
     const currentDate = new Date();
     const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
-    dispatch(setDepartureDate(departure.toDateString()));
+    dispatch(setDepartureDate(departure.getTime()));
 
     const returnD = new Date(departure);
     returnD.setDate(departure.getDate() + 7);
-    dispatch(setReturnDate(returnD.toDateString()));
+    dispatch(setReturnDate(returnD.getTime()));
   }, [dispatch]);
 
   const content = (

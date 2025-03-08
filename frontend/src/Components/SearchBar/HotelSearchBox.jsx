@@ -1,28 +1,18 @@
 import React, { useEffect, useRef, useState, useMemo, useContext } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  AppBar,
-  Menu,
-  Toolbar,
   Input,
-  IconButton,
-  Avatar,
   Typography,
   Button,
   Box,
-  Container,
   TextField,
-  MenuItem,
   Checkbox,
   FormControlLabel,
   Autocomplete,
   Paper,
   Popper,
-  RadioGroup,
-  Radio,
   Grid,
 } from "@mui/material";
-import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
 import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import FlightIcon from "@mui/icons-material/Flight";
@@ -34,8 +24,9 @@ import { setActiveInput } from "../Slices/ReusableCalendar";
 import ReusableDatePicker from "../ReusableDatePicker";
 import HotelTravellersDropDown from "../HotelTravellersDropDown";
 import { GlobalContext } from "../../context/GlobalContext";
-
+import { getHotels } from "../../services/hotel";
 const CityHotelsSearchBar = () => {
+  const navigate = useNavigate();
   const { locations } = useContext(GlobalContext);
   const departInputRef = useRef(null);
   const returnInputRef = useRef(null);
@@ -43,9 +34,13 @@ const CityHotelsSearchBar = () => {
   const dispatch = useDispatch();
 
   const [hotels, setHotels] = useState([]);
+  const [selectedHotel, setSelectedHotel] = useState(null);
+
   const { destination, otherOptions } = useSelector(
     (state) => state.hotelSearch
   );
+  const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
+
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
   const { rooms, adults, children } = useSelector(
@@ -82,17 +77,16 @@ const CityHotelsSearchBar = () => {
   }, [adults, children, rooms]);
 
   useEffect(() => {
-    console.log(inputValue);
+    const searchHotels = async () => {
+      const res = await getHotels({ name: inputValue });
+      if (res.success) {
+        setHotels(res.data);
+      }
+    };
+    if (inputValue && inputValue.length > 0 && destination === null) {
+      searchHotels();
+    }
   }, [inputValue]);
-  // useEffect(() => {
-  //   const currentDate = new Date();
-  //   const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
-  //   dispatch(setDepartureDate(departure.getTime()));
-
-  //   const returnD = new Date(departure);
-  //   returnD.setDate(departure.getDate() + 7);
-  //   dispatch(setReturnDate(returnD.getTime()));
-  // }, [dispatch]);
 
   const handleClickDepart = (e) => {
     dispatch(setActiveInput("depart"));
@@ -127,7 +121,14 @@ const CityHotelsSearchBar = () => {
         type: "city",
       };
     }),
+    ...hotels.map((item) => {
+      return {
+        ...item,
+        type: "hotel",
+      };
+    }),
   ];
+
   return (
     <>
       <Grid
@@ -142,38 +143,57 @@ const CityHotelsSearchBar = () => {
               sx={{
                 ...inputLableStyle,
               }}
+              onClick={() => setIsOpenDestinationPopup(true)}
             >
               Where do you want to stay?
             </Typography>
           </label>
           <Autocomplete
+            open={isOpenDestinationPopup}
+            onOpen={() => {
+              setIsOpenDestinationPopup(true);
+            }}
+            onClose={() => setIsOpenDestinationPopup(false)}
             id='destination'
             disableUnderline
             freeSolo
-            options={locations}
+            options={destinationOptions}
             getOptionLabel={(option) =>
-              option && option.cityName && option.cityCode
-                ? `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
+              option
+                ? option.type === "city"
+                  ? option.cityName && option.cityCode
+                    ? `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
+                    : ""
+                  : `${option.name}`
                 : ""
             }
             inputValue={inputValue}
             onInputChange={(_, val) => setInputValue(val)}
             onChange={(event, value) => {
-              dispatch(setDestination(value));
+              if (value?.type === "hotel") {
+                setSelectedHotel(value);
+                dispatch(setDestination(null));
+              } else if (value?.type === "city") {
+                dispatch(setDestination(value));
+                setSelectedHotel(null);
+              } else {
+                dispatch(setDestination(null));
+                setSelectedHotel(null);
+              }
             }}
-            value={destination}
+            value={selectedHotel ? selectedHotel : destination}
             filterOptions={(options, state) => {
-              const val = state?.inputValue?.trim()?.toLowerCase();
+              // const inpVal = state?.inputValue?.trim()?.toLowerCase();
+              const val = inputValue;
               if (val === "") {
                 return options.slice(0, 5);
               }
-
-              return options.filter(
-                (option) =>
-                  option.cityName?.toLowerCase().includes(val) ||
-                  option.cityCode?.toLowerCase().includes(val) ||
-                  option.countryName?.toLowerCase().includes(val) ||
-                  option.countryCode?.toLowerCase().includes(val)
+              return options.filter((option) =>
+                option.type === "hotel"
+                  ? option.name?.toLowerCase().includes(val.toLowerCase())
+                  : `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
+                      ?.toLowerCase()
+                      .includes(val.toLowerCase())
               );
             }}
             renderOption={(props, option) => {
@@ -185,7 +205,13 @@ const CityHotelsSearchBar = () => {
 
               return (
                 <li
+                  id={option._id}
                   {...props}
+                  selected={
+                    selectedHotel
+                      ? selectedHotel._id === option._id
+                      : option?.cityCode === destination?.cityCode
+                  }
                   style={{
                     display: "flex",
                     justifyContent: isEmpty ? "flex-start" : "space-between",
@@ -206,18 +232,32 @@ const CityHotelsSearchBar = () => {
                       }}
                     />
                     <Box>
-                      <Typography
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: "13px",
-                          color: "black",
-                        }}
-                      >
-                        {option.cityName} ({option.cityCode})
-                      </Typography>
-                      <Typography sx={{ fontSize: "12px", color: "black" }}>
-                        {option.countryName} ({option.countryCode})
-                      </Typography>
+                      {option.type === "hotel" ? (
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            fontSize: "13px",
+                            color: "black",
+                          }}
+                        >
+                          {option.name}
+                        </Typography>
+                      ) : (
+                        <>
+                          <Typography
+                            sx={{
+                              fontWeight: 600,
+                              fontSize: "13px",
+                              color: "black",
+                            }}
+                          >
+                            {option.cityName} ({option.cityCode})
+                          </Typography>
+                          <Typography sx={{ fontSize: "12px", color: "black" }}>
+                            {option.countryName} ({option.countryCode})
+                          </Typography>
+                        </>
+                      )}
                     </Box>
                   </Box>
 
@@ -248,7 +288,8 @@ const CityHotelsSearchBar = () => {
                     border: 0,
                   },
                 }}
-                placeholder='Select destination or Type hotel name'
+                // onClick={() => setIsOpenDestinationPopup(true)}
+                placeholder='Select destination or hotel'
                 variant='standard'
                 sx={{
                   width: "100%",
@@ -266,13 +307,12 @@ const CityHotelsSearchBar = () => {
               return (
                 <Paper {...paperProps}>
                   {isEmpty && (
-                    <Box sx={{ p: 1, mb: 1 }}>
+                    <Box sx={{ p: 1 }}>
                       <Typography
                         sx={{
                           fontWeight: "bold",
                           color: "black",
                           fontSize: "14px",
-                          mb: 1,
                         }}
                       >
                         Popular destinations
@@ -569,24 +609,26 @@ const CityHotelsSearchBar = () => {
             onClick={() => {
               const isDate = (val) => !isNaN(new Date(val).getTime());
               if (
-                destination &&
-                destination.cityCode &&
+                ((destination && destination.cityCode) || selectedHotel) &&
                 isDate(departureDate) &&
                 isDate(returnDate)
               ) {
-                let path = `/flights`;
-                if (destination.cityCode || destination.countryCode) {
+                let path = `/hotels`;
+                if (
+                  destination &&
+                  (destination.cityCode || destination.countryCode)
+                ) {
                   if (destination.countryCode) {
                     path += `/${destination.countryCode}`;
                   }
                   if (destination.cityCode) {
                     path += `/${destination.cityCode}`;
                   }
-                } else if (inputValue && inputValue.trim().length > 4) {
-                  path += `name=${inputValue}`;
+                } else if (selectedHotel) {
+                  path += `/${selectedHotel.city?.countryCode}/${selectedHotel.city?.cityCode}/${selectedHotel.name}/${selectedHotel._id}`;
                 }
                 if (departureDate) {
-                  path += `&availableFrom=${departureDate}`;
+                  path += `?availableFrom=${departureDate}`;
                 }
                 if (returnDate) {
                   path += `&availableTo=${returnDate}`;
@@ -611,6 +653,8 @@ const CityHotelsSearchBar = () => {
                 } else if (otherOptions.fiveStar) {
                   path += `&rating=5`;
                 }
+
+                navigate(path);
               }
             }}
           >
