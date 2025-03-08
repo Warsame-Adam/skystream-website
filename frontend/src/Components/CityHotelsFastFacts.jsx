@@ -1,21 +1,70 @@
-import React from "react";
-import {
-  Tabs,
-  Tab,
-  Box,
-  Card,
-  CardMedia,
-  CardContent,
-  Typography,
-  IconButton,
-  Container,
-  Grid,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Typography, Container, Grid } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { getHotelsStats } from "../services/hotel";
 
+function getMonthName(monthIndex) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return months[monthIndex - 1] || "Invalid Month";
+}
 const CityHotelsFastFacts = () => {
+  const [funFacts, setFunFacts] = useState({
+    highestRatedHotel: null,
+    cheapestMonthToBook: {
+      cheapestMonth: 1,
+    },
+    average4StarPrice: 127,
+    average5StarPrice: 278,
+  });
+  const [loading, setLoading] = useState({
+    active: false,
+    action: "",
+  });
+  const [error, setError] = useState({
+    active: false,
+    message: "",
+    action: "",
+  });
+  const fetchHotelsFacts = async (filters, action) => {
+    setLoading({
+      active: true,
+      action: action,
+    });
+    const hotelsData = await getHotelsStats();
+    if (hotelsData.success) {
+      setFunFacts(hotelsData.data);
+    } else {
+      setError({
+        active: true,
+        message: hotelsData.error,
+        action: action,
+      });
+    }
+    setLoading({
+      active: false,
+      action: "",
+    });
+  };
+
+  useEffect(() => {
+    fetchHotelsFacts({}, "page");
+  }, []);
+
   return (
     <Container className='container' sx={{ mt: "96px" }}>
       <Typography sx={{ fontSize: "30px", fontWeight: "bold" }}>
@@ -55,7 +104,7 @@ const CityHotelsFastFacts = () => {
             Highest rated hotel
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            Met Hotel Amsterdam – 5
+            {funFacts.highestRatedHotel?.name || "None"}
           </Typography>
         </Grid>
 
@@ -79,7 +128,7 @@ const CityHotelsFastFacts = () => {
             Cheapest month to book
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            January
+            {getMonthName(funFacts.cheapestMonthToBook.cheapestMonth)}
           </Typography>
         </Grid>
 
@@ -103,7 +152,7 @@ const CityHotelsFastFacts = () => {
             Average 4 star hotel price
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            £127 per night
+            £{funFacts.average4StarPrice} per night
           </Typography>
         </Grid>
 
@@ -127,7 +176,7 @@ const CityHotelsFastFacts = () => {
             Average 5 star hotel price
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            £278 per night
+            £{funFacts.average5StarPrice} per night
           </Typography>
         </Grid>
       </Grid>

@@ -224,7 +224,7 @@ const LocalHotelSelection = () => {
                             paddingLeft: "15px",
                           }}
                         >
-                          x miles from city centre
+                          {hotel.description}
                         </Typography>
                         <hr
                           style={{

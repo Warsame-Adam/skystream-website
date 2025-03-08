@@ -181,7 +181,7 @@ const CityHotelsPage = () => {
       <CityHotelsSearchBar />
       <CityHotelsInfoSection />
       <CityHotelsMap />
-      <CityHotelsList />
+      <CityHotelsList loading={loading} error={error} hotels={hotels} />
       <CityHotelStarRatings />
       <CityHotelsFastFacts />
       <CityHotelsFAQs />
