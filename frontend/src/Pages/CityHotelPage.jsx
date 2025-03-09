@@ -109,11 +109,11 @@ const CityHotelsPage = () => {
 
     if (departureDateParams && isDate(departureDateParams * 1)) {
       dispatch(setDepartureDate(departureDateParams * 1));
-      query.availableFrom = departureDateParams;
+      query.availableFrom = new Date(departureDateParams * 1).toString();
     }
     if (returnDateParams && isDate(returnDateParams * 1)) {
       dispatch(setReturnDate(returnDateParams * 1));
-      query.availableTo = returnDateParams;
+      query.availableTo = new Date(returnDateParams * 1).toString();
     }
     if (freeCancellationParams === "true") {
       query.freeCancellation = true;

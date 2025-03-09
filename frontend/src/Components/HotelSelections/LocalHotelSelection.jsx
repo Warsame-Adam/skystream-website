@@ -61,7 +61,7 @@ const LocalHotelSelection = () => {
     });
     const res = await getHotels({
       originCountry: visitorData?.countryCode,
-      availableFrom: new Date().getTime(),
+      availableFrom: new Date().toString(),
     });
     if (res.success) {
       if (res.data && res.data?.length > 0) setHotels(res.data);

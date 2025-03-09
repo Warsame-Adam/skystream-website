@@ -115,11 +115,11 @@ const FlightSearchResultsPage = () => {
     }
     if (departureDateParams && isDate(departureDateParams * 1)) {
       dispatch(setDepartureDate(departureDateParams * 1));
-      query.departureTime = departureDateParams;
+      query.departureTime = new Date(departureDateParams * 1).toString();
     }
     if (returnDateParams && isDate(returnDateParams * 1)) {
       dispatch(setReturnDate(returnDateParams * 1));
-      query.arrivalTime = returnDateParams;
+      query.arrivalTime = new Date(returnDateParams * 1).toString();
     }
     if (directParams === "true") {
       query.direct = true;
