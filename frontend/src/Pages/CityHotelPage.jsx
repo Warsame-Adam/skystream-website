@@ -123,9 +123,9 @@ const CityHotelsPage = () => {
     }
 
     if (minReviewParams) {
-      query.minReview = minReviewParams;
+      query.minReview = minReviewParams * 1;
 
-      if (minReviewParams == 4) {
+      if (minReviewParams * 1 == 4) {
         setOtherOptions({
           fourStar: true,
           fiveStar: true,
@@ -134,30 +134,31 @@ const CityHotelsPage = () => {
     }
 
     if (ratingParams) {
-      query.rating = ratingParams;
+      query.rating = ratingParams * 1;
 
-      if (ratingParams == 4 || ratingParams == 5) {
+      if (ratingParams * 1 == 4 || ratingParams * 1 == 5) {
         setOtherOptions({
-          fourStar: ratingParams == 4 ? true : false,
-          fiveStar: ratingParams == 5 ? true : false,
+          fourStar: ratingParams * 1 == 4 ? true : false,
+          fiveStar: ratingParams * 1 == 5 ? true : false,
         });
       }
     }
 
     if (
       adultsParams &&
-      adultsParams > 0 &&
+      adultsParams * 1 > 0 &&
       childrenParams &&
-      childrenParams > 0 &&
-      roomsParams
+      childrenParams * 1 > 0 &&
+      roomsParams &&
+      roomsParams * 1 > 0
     ) {
-      const noOfPersons = adultsParams + childrenParams;
+      const noOfPersons = adultsParams * 1 + childrenParams * 1;
       query.noOfPersons = noOfPersons;
-      query.noOfRooms = roomsParams;
+      query.noOfRooms = roomsParams * 1;
 
-      dispatch(setAdults(adultsParams));
-      dispatch(setChildren(childrenParams));
-      dispatch(setRooms(roomsParams));
+      dispatch(setAdults(adultsParams * 1));
+      dispatch(setChildren(childrenParams * 1));
+      dispatch(setRooms(roomsParams * 1));
     }
 
     fetchHotelsWithSearch(query, "page");

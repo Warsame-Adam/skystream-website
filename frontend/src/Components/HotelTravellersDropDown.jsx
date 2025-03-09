@@ -28,7 +28,6 @@ const HotelTravellersDropDown = ({ anchorEl, handleClose }) => {
   const { rooms, adults, children, childAges } = useSelector(
     (state) => state.hotelTravellers
   );
-
   const disabledStyle = {
     color: "#999",
     cursor: "not-allowed",
@@ -67,7 +66,7 @@ const HotelTravellersDropDown = ({ anchorEl, handleClose }) => {
 
   const handlePlusChild = () => {
     if (children < maxChildren) {
-      handleChangeTravellers({ children: children + 1 });
+      dispatch(handleChangeTravellers({ children: children + 1 }));
     }
   };
 
