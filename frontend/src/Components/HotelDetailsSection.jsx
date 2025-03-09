@@ -1,21 +1,22 @@
 import React from "react";
 import { Box, Typography, Rating, Paper, Grid, Container } from "@mui/material";
-
-const HotelDetailsSection = () => {
+import { Star } from "@mui/icons-material";
+const HotelDetailsSection = ({ hotel }) => {
   // Placeholder data
-  const hotelName = "Kimpton – Fitzroy London, an IHG Hotel";
-  const address =
-    "1-8 Russell Square, Camden, London, WC1B 5BE, United Kingdom";
-  const rating = 4.2;
-  const reviews = 1885;
-  const reviewBoxes = [
-    // { text: "This hotel's location is rated 5/5", icon: "🌍" },
-    // { text: "This hotel's service is rated 5/5", icon: "🛎️" },
-    {
-      text: 'Customer review: "We have just stayed at this magnificent hotel..."',
-      icon: "📝",
-    },
-  ];
+  const hotelName = hotel?.name;
+  const address = hotel?.address;
+  const rating =
+    hotel.reviews.reduce((acc, review) => acc + review.rating, 0) /
+    hotel.reviews?.length;
+  const reviews = hotel.reviews?.length;
+  const reviewBoxes = hotel.reviews
+    .map((x) => {
+      return {
+        ...x,
+      };
+    })
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 1);
 
   return (
     <Container
@@ -77,7 +78,7 @@ const HotelDetailsSection = () => {
               lineHeight: "24px",
             }}
           >
-            {rating}
+            {rating.toFixed(2)}
             <span
               style={{
                 color: "#626971",
@@ -93,7 +94,8 @@ const HotelDetailsSection = () => {
             variant='subtitle1'
             sx={{ fontWeight: 700, pr: "8px", lineHeight: "24px" }}
           >
-            Very good <br />
+            {rating > 5 ? "Excellent" : rating > 4 ? "Very Good" : "Good"}{" "}
+            <br />
             <span style={{ color: "#626971", fontWeight: 400 }}>
               {" "}
               {reviews} reviews
@@ -109,6 +111,7 @@ const HotelDetailsSection = () => {
                 padding: "16px",
                 display: "flex",
                 alignItems: "center",
+                gap: "6px",
                 borderRadius: "12px",
                 boxShadow: "0 1px 3px 0 #25201f4d",
                 color: "#161616",
@@ -117,12 +120,25 @@ const HotelDetailsSection = () => {
                 },
               }}
             >
-              <Box sx={{ marginRight: "5px" }}>{box.icon}</Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "2px",
+                  marginRight: "5px",
+                  fontWeight: "bold",
+                }}
+              >
+                {Number.isInteger(box.rating)
+                  ? box.rating
+                  : box.rating.toFixed(2)}{" "}
+                <Star sx={{ fill: "#F55D42" }} />
+              </Box>
               <Typography
                 variant='body2'
                 sx={{ color: "#161616", fontSize: "12px" }}
               >
-                {box.text}
+                {box.comment}
               </Typography>
             </Paper>
           ))}

@@ -174,7 +174,7 @@ const LocalHotelSelection = () => {
               {visibleHotels.map((hotel, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Link
-                    to={`/hotel/${hotel?.city?.countryCode}/${hotel?.city.cityCode}/${hotel.name}/${hotel._id}`}
+                    to={`/hotels/${hotel?.city?.countryCode}/${hotel?.city.cityCode}/${hotel.name}/${hotel._id}`}
                     style={{ textDecoration: "none" }}
                   >
                     <Card

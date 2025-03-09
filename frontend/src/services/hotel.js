@@ -17,6 +17,15 @@ const handleApiError = (error) => {
   };
 };
 
+export const getHotelById = async (id) => {
+  try {
+    const res = await axiosInstance.get(`/hotels/${id}`);
+    return handleApiResponse(res);
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+
 // Fetch flights with filters
 export const getHotels = async (filters) => {
   try {

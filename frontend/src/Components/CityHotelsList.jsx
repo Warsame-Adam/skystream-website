@@ -195,7 +195,7 @@ const CityHotelsList = ({ loading, error, hotels }) => {
               </Box>
 
               <Link
-                to={`/hotel/${hotel?.city?.countryCode}/${hotel?.city.cityCode}/${hotel.name}/${hotel._id}`}
+                to={`/hotels/${hotel?.city?.countryCode}/${hotel?.city.cityCode}/${hotel.name}/${hotel._id}`}
                 style={{ textDecoration: "none" }}
               >
                 <Button
