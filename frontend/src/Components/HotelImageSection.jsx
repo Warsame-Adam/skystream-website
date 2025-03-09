@@ -1,89 +1,90 @@
-import React, { useState } from 'react';
-import { Box, Modal, Grid } from '@mui/material';
-import styled from '@mui/material/styles/styled';
-import image1 from "../Components/Assets/image1.png";
-import image2 from "../Components/Assets/image2.png";
-import image3 from "../Components/Assets/image3.png";
-import image4 from "../Components/Assets/image4.png";
-import image5 from "../Components/Assets/image5.png";
-import image6 from "../Components/Assets/image6.png";
-
+import React, { useState } from "react";
+import { Box, Modal, Grid, IconButton, Typography } from "@mui/material";
+import styled from "@mui/material/styles/styled";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 const ImageGridItem = styled(Box)(({ theme }) => ({
-  cursor: 'pointer',
-  '& img': {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
+  cursor: "pointer",
+  "& img": {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
     borderRadius: theme.shape.borderRadius,
   },
 }));
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: '90%',
-  maxHeight: '90%',
-  bgcolor: 'background.paper',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxWidth: "90%",
+  maxHeight: "90%",
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
-  overflow: 'hidden',
+  overflow: "hidden",
 };
 
-const images = [
-  { src: image1, alt: 'Hotel Image 1', height: '300px' },
-  { src: image2, alt: 'Hotel Image 2', height: '400px' },
-  { src: image3, alt: 'Hotel Image 3', height: '250px' },
-  { src: image4, alt: 'Hotel Image 4', height: '500px' },
-  { src: image5, alt: 'Hotel Image 5', height: '350px' },
-
-];
-
-const HotelImageSection = () => {
+const HotelImageSection = ({ hotel }) => {
   const [open, setOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-  const handleOpen = (image) => {
-    setSelectedImage(image);
+  const handleOpen = (index) => {
+    setSelectedImageIndex(index);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedImage(null);
+    setSelectedImageIndex(null);
   };
 
   return (
-    <Box sx={{ width: '100%', height: '400px', overflow: 'hidden', mt: 2 }}>
-      <Grid container spacing={1} sx={{ height: '100%',  }}>
-        
-        <Grid item xs={6} sx={{ height: '100%' }}>
-          <ImageGridItem
-            onClick={() => handleOpen(images[0].src)}
-            sx={{ height: '100%' }}
-          >
+    <Box sx={{ width: "100%", height: "400px", overflow: "hidden", mt: 2 }}>
+      <Grid container spacing={1} sx={{ height: "100%" }}>
+        <Grid item xs={6} sx={{ height: "100%" }}>
+          <ImageGridItem onClick={() => handleOpen(0)} sx={{ height: "100%" }}>
             <img
-              src={images[0].src}
-              alt={images[0].alt}
-              style={{ height: '100%', width: '100%', objectFit: 'cover' }}
+              src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+              alt={hotel.name}
+              style={{ height: "100%", width: "100%", objectFit: "cover" }}
             />
           </ImageGridItem>
         </Grid>
 
-        
-        <Grid item xs={6} sx={{ height: '100%' }}>
-          <Grid container spacing={1} sx={{ height: '100%', }}>
-            {images.slice(1).map((image, index) => (
-              <Grid key={index} item xs={6} sx={{ height: '50%' }}>
+        <Grid item xs={6} sx={{ height: "100%" }}>
+          <Grid container spacing={1} sx={{ height: "100%" }}>
+            {hotel.images.slice(0, 4).map((image, index) => (
+              <Grid key={index} item xs={6} sx={{ height: "50%" }}>
                 <ImageGridItem
-                  onClick={() => handleOpen(image.src)}
-                  sx={{ height: '100%' }}
+                  onClick={() => handleOpen(index + 1)}
+                  sx={{ height: "100%", position: "relative" }}
                 >
+                  {hotel.images.length > 4 && index === 3 && (
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: "10px",
+                        bottom: "10px",
+                        backgroundColor: "#fff",
+                        borderRadius: "8px",
+                        padding: "4px 12px",
+                      }}
+                    >
+                      <Typography variant='subtitle1' align='center'>
+                        +{hotel.images.length - 4}
+                      </Typography>
+                    </div>
+                  )}
                   <img
-                    src={image.src}
+                    src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${image}`}
                     alt={image.alt}
-                    style={{ height: '100%', width: '100%', objectFit: 'cover' }}
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "cover",
+                    }}
                   />
                 </ImageGridItem>
               </Grid>
@@ -92,21 +93,46 @@ const HotelImageSection = () => {
         </Grid>
       </Grid>
 
-      
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
-          <img
-            src={selectedImage}
-            alt="Selected"
-            style={{ width: '100%', height: 'auto' }}
-          />
+          <Grid container alignItems='center' wrap='nowrap'>
+            <Grid item>
+              <IconButton
+                disabled={selectedImageIndex === 0}
+                onClick={() => {
+                  if (selectedImageIndex > 0) {
+                    setSelectedImageIndex((s) => s - 1);
+                  }
+                }}
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+            </Grid>
+            <Grid item sx={{ flex: 1 }}>
+              <img
+                src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${
+                  [hotel.cover, ...hotel.images][selectedImageIndex]
+                }`}
+                alt='Selected'
+                style={{ width: "100%", height: "auto" }}
+              />
+            </Grid>
+            <Grid item>
+              <IconButton
+                disabled={selectedImageIndex === hotel.images.length}
+                onClick={() => {
+                  if (selectedImageIndex < hotel.images.length) {
+                    setSelectedImageIndex((s) => s + 1);
+                  }
+                }}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         </Box>
       </Modal>
     </Box>
-
-
-    
-    
   );
 };
 

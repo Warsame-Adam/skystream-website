@@ -82,24 +82,24 @@ const IndividualHotelPage = () => {
   return (
     <>
       <IndividualHotelNavbar />
-      {loading.active && loading.action === "page" ? (
-        loadingUI
-      ) : error.active && error.action === "page" ? (
-        errorUI
-      ) : (
-        <>
-          <BreadCrumbs hotel={hotel} />
-          <HotelDetailsSection hotel={hotel} />
-          <HotelImageSection hotel={hotel} />
-          <IndividualHotelTabs hotel={hotel} />
-          <RoomsAndPrices hotel={hotel} />
-          <FastfactsandAmenties hotel={hotel} />
-          <TravellerReviews hotel={hotel} />
-          <HotelMap hotel={hotel} />
-          <IndividualHotelFAQ hotel={hotel} />
-          <RecommendedHotels hotel={hotel} />
-        </>
-      )}
+      {loading.active && loading.action === "page"
+        ? loadingUI
+        : error.active && error.action === "page"
+        ? errorUI
+        : hotel && (
+            <>
+              <BreadCrumbs hotel={hotel} />
+              <HotelDetailsSection hotel={hotel} />
+              <HotelImageSection hotel={hotel} />
+              <IndividualHotelTabs hotel={hotel} />
+              <RoomsAndPrices hotel={hotel} />
+              <FastfactsandAmenties hotel={hotel} />
+              <TravellerReviews hotel={hotel} />
+              <HotelMap hotel={hotel} />
+              <IndividualHotelFAQ hotel={hotel} />
+              <RecommendedHotels hotel={hotel} />
+            </>
+          )}
       <CentredFooter />
     </>
   );

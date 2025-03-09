@@ -33,7 +33,7 @@ const inputStyle = {
   },
 };
 
-const IndividualHotelTabs = () => {
+const IndividualHotelTabs = ({ hotel }) => {
   const [sticky, setSticky] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -263,8 +263,8 @@ const IndividualHotelTabs = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  Find the best hotel in London for your dates, by price or
-                  preference
+                  Find the best hotel in {hotel.city.cityName} for your dates,
+                  by price or preference
                 </Typography>
               </Grid>
               <Grid item md={4} xs={12} sx={{ display: "flex", gap: "12px" }}>
@@ -278,8 +278,8 @@ const IndividualHotelTabs = () => {
                     fontWeight: "bold",
                   }}
                 >
-                  Compare deals for Kimpton - Fitzroy London, an IHG Hotel
-                  across hundreds of sites, all in one place
+                  Compare deals for {hotel.name} across hundreds of sites, all
+                  in one place
                 </Typography>
               </Grid>
               <Grid item md={4} xs={12} sx={{ display: "flex", gap: "16px" }}>
