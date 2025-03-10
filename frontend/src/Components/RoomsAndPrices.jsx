@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   AppBar,
   Menu,
@@ -12,7 +12,6 @@ import {
   Box,
   Container,
   Card,
-  CardContent,
   CardMedia,
   useMediaQuery,
   useTheme,
@@ -20,17 +19,9 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { format } from "date-fns";
 
-import {
-  setDepartureDate,
-  setReturnDate,
-  clearDepartureDate,
-  clearReturnDate,
-  setIsSelectingDepartDate,
-} from "./Slices/dateStore";
+import { useSelector } from "react-redux";
 
-import { useDispatch, useSelector } from "react-redux";
-
-import HomeTravellersDropDown from "./HomeTravellersDropDown";
+import HotelTravellersDropDown from "./HotelTravellersDropDown";
 import CalandarMenu from "./CalandarMenu";
 import roomsandpricesimg from "../Components/Assets/roomsandpricesimg.svg";
 
@@ -52,122 +43,147 @@ const inputStyle = {
   },
 };
 
-const hotelBookingData = [
-  {
-    site: "Booking.com",
-    logo: "/path/to/booking-logo.png",
-    rooms: [
-      {
-        type: "Double Room",
-        pricePerNight: 150,
-        breakfastIncluded: true,
-        freeCancellation: false,
-        availableFrom: "2024-10-20",
-        availableTo: "2024-10-22",
-      },
-      {
-        type: "Suite",
-        pricePerNight: 250,
-        breakfastIncluded: false,
-        freeCancellation: true,
-        availableFrom: "2024-10-20",
-        availableTo: "2024-10-22",
-      },
-    ],
-  },
-  {
-    site: "Expedia",
-    logo: "/path/to/expedia-logo.png",
-    rooms: [
-      {
-        type: "Single Room",
-        pricePerNight: 120,
-        breakfastIncluded: false,
-        freeCancellation: true,
-        availableFrom: "2024-10-21",
-        availableTo: "2024-10-23",
-      },
-      {
-        type: "Double Room",
-        pricePerNight: 140,
-        breakfastIncluded: true,
-        freeCancellation: false,
-        availableFrom: "2024-10-21",
-        availableTo: "2024-10-23",
-      },
-    ],
-  },
-  {
-    site: "Agoda",
-    logo: "/path/to/agoda-logo.png",
-    rooms: [
-      {
-        type: "Single Room",
-        pricePerNight: 110,
-        breakfastIncluded: true,
-        freeCancellation: true,
-        availableFrom: "2024-10-22",
-        availableTo: "2024-10-24",
-      },
-      {
-        type: "Double Room",
-        pricePerNight: 160,
-        breakfastIncluded: false,
-        freeCancellation: true,
-        availableFrom: "2024-10-22",
-        availableTo: "2024-10-24",
-      },
-    ],
-  },
-];
+// const hotelBookingData = [
+//   {
+//     site: "Booking.com",
+//     logo: "/path/to/booking-logo.png",
+//     rooms: [
+//       {
+//         type: "Double Room",
+//         pricePerNight: 150,
+//         breakfastIncluded: true,
+//         freeCancellation: false,
+//         availableFrom: "2024-10-20",
+//         availableTo: "2024-10-22",
+//       },
+//       {
+//         type: "Suite",
+//         pricePerNight: 250,
+//         breakfastIncluded: false,
+//         freeCancellation: true,
+//         availableFrom: "2024-10-20",
+//         availableTo: "2024-10-22",
+//       },
+//     ],
+//   },
+//   {
+//     site: "Expedia",
+//     logo: "/path/to/expedia-logo.png",
+//     rooms: [
+//       {
+//         type: "Single Room",
+//         pricePerNight: 120,
+//         breakfastIncluded: false,
+//         freeCancellation: true,
+//         availableFrom: "2024-10-21",
+//         availableTo: "2024-10-23",
+//       },
+//       {
+//         type: "Double Room",
+//         pricePerNight: 140,
+//         breakfastIncluded: true,
+//         freeCancellation: false,
+//         availableFrom: "2024-10-21",
+//         availableTo: "2024-10-23",
+//       },
+//     ],
+//   },
+//   {
+//     site: "Agoda",
+//     logo: "/path/to/agoda-logo.png",
+//     rooms: [
+//       {
+//         type: "Single Room",
+//         pricePerNight: 110,
+//         breakfastIncluded: true,
+//         freeCancellation: true,
+//         availableFrom: "2024-10-22",
+//         availableTo: "2024-10-24",
+//       },
+//       {
+//         type: "Double Room",
+//         pricePerNight: 160,
+//         breakfastIncluded: false,
+//         freeCancellation: true,
+//         availableFrom: "2024-10-22",
+//         availableTo: "2024-10-24",
+//       },
+//     ],
+//   },
+// ];
 
-const RoomsAndPrices = () => {
+const RoomsAndPrices = ({ hotel }) => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
 
-  const [breakfastFilter, setBreakfastFilter] = useState(false);
-  const [freeCancellationFilter, setFreeCancellationFilter] = useState(false);
+  const [breakfastFilter, setBreakfastFilter] = useState();
+  const [freeCancellationFilter, setFreeCancellationFilter] = useState();
   const departureDate = useSelector((state) => state.dates.departureDate);
   const returnDate = useSelector((state) => state.dates.returnDate);
-  const [cabinClass] = useState("Economy");
-
-  const { adults, children, childAges, travellersOpen } = useSelector(
-    (state) => state.travellers
+  const { adults, children, rooms } = useSelector(
+    (state) => state.hotelTravellers
   );
 
-  const travellersLabel = React.useMemo(() => {
-    const total = adults + children;
-    if (total === 1 && adults === 1) {
-      return "1 Adult, " + cabinClass;
-    } else {
-      return `${total} Travellers, ${cabinClass}`;
+  const travellersLabel = useMemo(() => {
+    const parts = [];
+    if (adults > 0) {
+      if (adults === 1) {
+        parts.push("1 Adult");
+      } else {
+        parts.push(`${adults} Adults`);
+      }
     }
-  }, [adults, children, cabinClass]);
 
-  const filteredHotels = hotelBookingData.map((hotel) => {
-    const availableRooms = hotel.rooms.filter((room) => {
-      // Apply filter conditions
-      const matchesFilters =
-        (!breakfastFilter || room.breakfastIncluded) &&
-        (!freeCancellationFilter || room.freeCancellation);
+    if (children > 0) {
+      if (children === 1) {
+        parts.push("1 Child");
+      } else {
+        parts.push(`${children} Children`);
+      }
+    }
 
-      return matchesFilters;
-    });
+    if (rooms > 0) {
+      if (rooms === 1) {
+        parts.push("1 Room");
+      } else {
+        parts.push(`${rooms} Rooms`);
+      }
+    }
 
-    return {
-      ...hotel,
-      rooms: availableRooms,
-    };
-  });
+    return parts.join(", ");
+  }, [adults, children, rooms]);
+
+  const filteredDeals = hotel.deals
+    .flatMap((deal) =>
+      deal.rooms.map((room) => ({
+        providerId: deal._id,
+        site: deal.site,
+        siteLogo: deal.siteLogo,
+        ...room,
+      }))
+    )
+    .filter(
+      (deal) =>
+        (breakfastFilter === undefined ||
+          deal.breakfastIncluded === breakfastFilter) &&
+        (freeCancellationFilter === undefined ||
+          deal.freeCancellation === freeCancellationFilter) &&
+        (!departureDate ||
+          new Date(deal.availableFrom) >= new Date(departureDate)) &&
+        (!returnDate || new Date(deal.availableTo) <= new Date(returnDate))
+    )
+    .sort((a, b) => a.pricePerNight - b.pricePerNight);
 
   const handleFilterChange = (filterType) => {
     if (filterType === "breakfast") {
-      setBreakfastFilter(!breakfastFilter);
+      setBreakfastFilter(breakfastFilter ? !breakfastFilter : true);
     } else if (filterType === "freeCancellation") {
-      setFreeCancellationFilter(!freeCancellationFilter);
+      setFreeCancellationFilter(
+        freeCancellationFilter ? !freeCancellationFilter : true
+      );
     }
   };
 
@@ -252,6 +268,7 @@ const RoomsAndPrices = () => {
             <Input
               placeholder='Adults, Rooms'
               disableUnderline
+              readOnly
               sx={{
                 ...inputStyle,
                 borderRadius: "0px 10px 10px 0px",
@@ -259,13 +276,12 @@ const RoomsAndPrices = () => {
               onClick={handleTravellersInputClick}
               value={travellersLabel}
             />
-            <HomeTravellersDropDown
+            <HotelTravellersDropDown
               anchorEl={travellersAnchorEl}
               handleClose={() => setTravellersAnchorEl(null)}
-              cabinClass={cabinClass}
             />
           </Box>
-          {matchesSM ? (
+          {/* {matchesSM ? (
             <IconButton
               sx={{
                 p: "8px",
@@ -289,7 +305,7 @@ const RoomsAndPrices = () => {
             >
               Search rooms and rates
             </Button>
-          )}
+          )} */}
         </Box>
         <Box
           sx={{
@@ -356,79 +372,79 @@ const RoomsAndPrices = () => {
           Price per night including taxes and fees
         </Typography>
         <Box sx={{ py: "16px" }}>
-          {filteredHotels.map((hotel, hotelIndex) =>
-            hotel.rooms.map((room, roomIndex) => (
-              <Card
-                elevation={0}
-                key={`${hotelIndex}-${roomIndex}`}
+          {filteredDeals.map((deal) => (
+            <Card
+              elevation={0}
+              key={deal._id}
+              sx={{
+                borderRadius: "12px",
+                display: "flex",
+                gap: { sm: 0, xs: "10px" },
+                flexDirection: { sm: "row", xs: "column" },
+                justifyContent: "space-between",
+                alignItems: { sm: "center", xs: "flex-start" },
+                mb: 2,
+                p: "16px",
+              }}
+            >
+              {/* Left Side - Logo and Details */}
+              <Box
                 sx={{
-                  borderRadius: "12px",
                   display: "flex",
-                  gap: { sm: 0, xs: "10px" },
-                  flexDirection: { sm: "row", xs: "column" },
-                  justifyContent: "space-between",
-                  alignItems: { sm: "center", xs: "flex-start" },
-                  mb: 2,
-                  p: "16px",
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                  flex: 1,
                 }}
               >
-                {/* Left Side - Logo and Details */}
-                <Box
+                <CardMedia
+                  component='img'
+                  image={deal.siteLogo}
+                  sx={{ width: 50, height: "auto", mb: 3, color: "black" }}
+                />
+                <Typography
                   sx={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    flexDirection: "column",
-                    flex: 1,
+                    color: "black",
+                    mb: 1,
+                    fontWeight: "bold",
+                    fontSize: "14px",
                   }}
                 >
-                  <CardMedia
-                    component='img'
-                    image={hotel.logo}
-                    sx={{ width: 50, height: "auto", mb: 3, color: "black" }}
-                  />
-                  <Typography
-                    sx={{
-                      color: "black",
-                      mb: 1,
-                      fontWeight: "bold",
-                      fontSize: "14px",
-                    }}
-                  >
-                    {room.type}
-                  </Typography>
-                  <Typography
-                    sx={{ color: "black" }}
-                    variant='body2'
-                    color='textSecondary'
-                  >
-                    {freeCancellationFilter && room.freeCancellation
-                      ? "✓ Free cancellation"
-                      : "• Free cancellation"}
-                  </Typography>
-                  <Typography
-                    sx={{ color: "black" }}
-                    variant='body2'
-                    color='textSecondary'
-                  >
-                    {breakfastFilter && room.breakfastIncluded
-                      ? "✓ Breakfast included"
-                      : "• Breakfast included"}
-                  </Typography>
-                </Box>
-                {/* Right Side - Price and Button */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: { sm: "flex-end", xs: "flex-start" },
-                  }}
+                  {deal.type}
+                </Typography>
+                <Typography
+                  sx={{ color: "black" }}
+                  variant='body2'
+                  color='textSecondary'
                 >
-                  <Typography
-                    variant='h6'
-                    sx={{ mb: 1, fontWeight: "bold", color: "#161616" }}
-                  >
-                    £{room.pricePerNight}
-                  </Typography>
+                  {deal.freeCancellation
+                    ? "✓ Free cancellation"
+                    : "× Free cancellation"}
+                </Typography>
+                <Typography
+                  sx={{ color: "black" }}
+                  variant='body2'
+                  color='textSecondary'
+                >
+                  {deal.breakfastIncluded
+                    ? "✓ Breakfast included"
+                    : "× Breakfast included"}
+                </Typography>
+              </Box>
+              {/* Right Side - Price and Button */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: { sm: "flex-end", xs: "flex-start" },
+                }}
+              >
+                <Typography
+                  variant='h6'
+                  sx={{ mb: 1, fontWeight: "bold", color: "#161616" }}
+                >
+                  £{deal.pricePerNight}
+                </Typography>
+                <a href={deal.bookingUrl} style={{ textDecoration: "none" }}>
                   <Button
                     variant='contained'
                     sx={{
@@ -437,15 +453,16 @@ const RoomsAndPrices = () => {
                       backgroundColor: "#05203c",
                       color: "#fff",
                       fontWeight: 700,
+
                       "&:hover": { backgroundColor: "#154679" },
                     }}
                   >
                     Go to site
                   </Button>
-                </Box>
-              </Card>
-            ))
-          )}
+                </a>
+              </Box>
+            </Card>
+          ))}
         </Box>
       </Box>
     </Container>

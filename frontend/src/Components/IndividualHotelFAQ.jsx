@@ -19,42 +19,42 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleFAQ } from "./Slices/FAQVisible";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const IndividualHotelFaqData = [
-  {
-    hotelName: "Kimpton - Fitzroy London, an IHG Hotel",
-    faq: [
-      {
-        question:
-          "Does Kimpton - Fitzroy London, an IHG Hotel have a restaurant?",
-        answer:
-          "Yes, Kimpton - Fitzroy London, an IHG Hotel does have a restaurant.",
-      },
-
-      {
-        question:
-          "What time is check-in and check-out at Kimpton - Fitzroy London, an IHG Hotel?",
-        answer:
-          "At Kimpton - Fitzroy London, an IHG Hotel you can check in from 15:00, and you'll need to check out before 12:00.",
-      },
-
-      {
-        question: "Does Kimpton - Fitzroy London, an IHG Hotel have parking?",
-        answer: `No, there isn't any parking available at Kimpton - Fitzroy London, an IHG Hotel. If you're looking for a hotel with space to park, simply filter by properties which have 'Parking' under 'Amenities' in the search results.`,
-      },
-
-      {
-        question:
-          "How far away from London city centre is Kimpton - Fitzroy London, an IHG Hotel?",
-        answer:
-          "Kimpton - Fitzroy London, an IHG Hotel is 1.0 miles away from London city centre.",
-      },
-    ],
-  },
-];
-
-const IndividualHotelFAQ = () => {
+const IndividualHotelFAQ = ({ hotel }) => {
   const dispatch = useDispatch();
+  const IndividualHotelFaqData = [
+    {
+      hotelName: hotel.name,
+      faq: [
+        {
+          question: `Does ${hotel.name} have a restaurant?`,
+          answer: `${hotel.amenities?.restaurant ? "Yes" : "No"}, ${
+            hotel.name
+          } does ${
+            hotel.amenities?.restaurant ? "" : "not"
+          } have a restaurant.`,
+        },
 
+        {
+          question: `What time is check-in and check-out at ${hotel.name}?`,
+          answer: `At ${hotel.name} you can check in from ${hotel.policies.checkIn}, and you'll need to check out before ${hotel.policies.checkOut}.`,
+        },
+
+        {
+          question: `Does ${hotel.name} have parking?`,
+          answer: `${hotel.amenities?.parking ? "Yes" : "No"}, there ${
+            hotel.amenities?.parking ? "is" : "isn't any"
+          } parking available at ${
+            hotel.name
+          }. If you're looking for a hotel with space to park, simply filter by properties which have 'Parking' under 'Amenities' in the search results.`,
+        },
+
+        // {
+        //   question: `How far away from London city centre is ${hotel.name}?`,
+        //   answer: `${hotel.name} is 1.0 miles away from London city centre.`,
+        // },
+      ],
+    },
+  ];
   const visibleFAQs = useSelector((state) => state.faqVisible.visibleFAQs);
 
   const handleToggleFAQ = (index) => {

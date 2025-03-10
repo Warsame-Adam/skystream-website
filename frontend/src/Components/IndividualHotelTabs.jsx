@@ -32,6 +32,11 @@ const inputStyle = {
     borderColor: "primary.main",
   },
 };
+const getMinPrice = (hotel) => {
+  return hotel.deals
+    .flatMap((deal) => deal.rooms) // Flatten rooms from all deals
+    .reduce((min, room) => Math.min(min, room.pricePerNight), Infinity);
+};
 
 const IndividualHotelTabs = ({ hotel }) => {
   const [sticky, setSticky] = useState(false);
@@ -49,7 +54,7 @@ const IndividualHotelTabs = ({ hotel }) => {
 
   const stickyHeight = 220;
 
-  const price = 767;
+  const price = getMinPrice(hotel);
 
   const renderTabs = (
     <Tabs
@@ -130,11 +135,20 @@ const IndividualHotelTabs = ({ hotel }) => {
         sx={{
           p: "6px 16px",
           backgroundColor: "#05203c",
-
           textTransform: "none",
           fontSize: "14px",
           fontWeight: 700,
           "&:hover": { backgroundColor: "#154679" },
+        }}
+        onClick={() => {
+          let ele = document.getElementById("rooms");
+          if (ele) {
+            ele.scrollIntoView({
+              block: "start",
+              inline: "start",
+              behavior: "smooth",
+            });
+          }
         }}
       >
         View deals

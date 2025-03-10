@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { Alert, Box, CircularProgress, Container } from "@mui/material";
 import IndividualHotelNavbar from "../Components/Navbar/IndividualHotelNavbar";
 import BreadCrumbs from "../Components/BreadCrumbs";
 import HotelDetailsSection from "../Components/HotelDetailsSection";
@@ -14,9 +15,17 @@ import RecommendedHotels from "../Components/RecommendedHotels";
 // import CentredFooter from "../Components/Footer/CentredFooter";
 import CentredFooter from "../Components/Footer/HomeFooter";
 import { getHotelById } from "../services/hotel";
-import { Alert, Box, CircularProgress, Container } from "@mui/material";
+import { useDispatch } from "react-redux";
+import {
+  setAdults,
+  setChildren,
+  setRooms,
+} from "../Components/Slices/HotelTravellersddSlice";
+
 const IndividualHotelPage = () => {
+  const dispatch = useDispatch();
   const params = useParams();
+
   const idParams = params?.hotelId;
 
   const [hotel, setHotel] = useState();
@@ -53,6 +62,9 @@ const IndividualHotelPage = () => {
 
   useEffect(() => {
     fetchHotelWithId(idParams, "page");
+    dispatch(setAdults(0));
+    dispatch(setChildren(0));
+    dispatch(setRooms(0));
   }, [idParams]);
 
   const loadingUI = (

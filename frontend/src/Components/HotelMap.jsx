@@ -13,13 +13,16 @@ import MuseumIcon from "../Components/Assets/museum_Icon.jpg";
 import TrainIcon from "../Components/Assets/train_Icon.jpg";
 import PlaneIcon from "../Components/Assets/plane_Icon.jpg";
 
-const HotelMap = () => {
+const HotelMap = ({ hotel }) => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
   });
 
-  const hotelLocation = { lat: 51.5227, lng: -0.125 };
+  const hotelLocation = {
+    lat: hotel?.location?.coordinates[1],
+    lng: hotel?.location?.coordinates[0],
+  };
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const mapRef = useRef(null);

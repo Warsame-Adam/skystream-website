@@ -1,22 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  AppBar,
-  Menu,
-  Link,
-  Input,
-  Toolbar,
-  IconButton,
-  Avatar,
-  Typography,
-  Button,
-  Box,
-  Container,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  Divider,
-} from "@mui/material";
+import React from "react";
+import { Typography, Box, Container, Divider } from "@mui/material";
 import {
   AccessTime,
   FreeBreakfast,
@@ -28,30 +11,67 @@ import {
   SupportAgent,
   Restaurant,
   SmokeFree,
+  Bathtub,
 } from "@mui/icons-material";
+import CommuteIcon from "@mui/icons-material/Commute";
+const FastfactsandAmenties = ({ hotel }) => {
+  const fastFacts = [
+    {
+      icon: AccessTime,
+      text1: "Check-in from",
+      text2: hotel?.policies?.checkIn,
+    },
+    {
+      icon: AccessTime,
+      text1: "Check out by",
+      text2: hotel?.policies?.checkOut,
+    },
+  ];
 
-const fastFacts = [
-  { icon: AccessTime, text1: "Check-in from", text2: "15:00" },
-  { icon: AccessTime, text1: "Check out by", text2: "12:00" },
-  { icon: FreeBreakfast, text1: "Breakfast", text2: "Breakfast available" },
-  { icon: Pets, text1: "Pets", text2: "Pets are allowed." },
-  {
-    icon: ChildFriendly,
-    text1: "Children",
-    text2: "Children are welcome at this hotel.",
-  },
-];
+  if (hotel?.policies?.breakfastAvailable) {
+    fastFacts.push({
+      icon: FreeBreakfast,
+      text1: "Breakfast",
+      text2: "Breakfast available",
+    });
+  }
+  if (hotel?.policies?.petsAllowed) {
+    fastFacts.push({ icon: Pets, text1: "Pets", text2: "Pets are allowed." });
+  }
+  if (hotel?.policies?.kidsAllowed) {
+    fastFacts.push({
+      icon: ChildFriendly,
+      text1: "Children",
+      text2: "Children are welcome at this hotel.",
+    });
+  }
 
-const amenities = [
-  { icon: Wifi, text: "Wi-Fi" },
-  { icon: AcUnit, text: "Air conditioning" },
-  { icon: FitnessCenter, text: "Fitness centre" },
-  { icon: SupportAgent, text: "Front desk 24 hour" },
-  { icon: Restaurant, text: "Restaurant" },
-  { icon: SmokeFree, text: "Non-smoking" },
-];
+  const amenities = [];
+  if (hotel?.amenities?.wifi) {
+    amenities.push({ icon: Wifi, text: "Wi-Fi" });
+  }
+  if (hotel?.amenities?.airCondition) {
+    amenities.push({ icon: AcUnit, text: "Air conditioning" });
+  }
+  if (hotel?.amenities?.fitnessCenter) {
+    amenities.push({ icon: FitnessCenter, text: "Fitness centre" });
+  }
+  if (hotel?.amenities?.deskSupport) {
+    amenities.push({ icon: SupportAgent, text: "Front desk 24 hour" });
+  }
+  if (hotel?.amenities?.restaurant) {
+    amenities.push({ icon: Restaurant, text: "Restaurant" });
+  }
+  if (hotel?.amenities?.nonSmooking) {
+    amenities.push({ icon: SmokeFree, text: "Non-smoking" });
+  }
+  if (hotel?.amenities?.swimmingPool) {
+    amenities.push({ icon: Bathtub, text: "Swimming Pool" });
+  }
+  if (hotel?.amenities?.parking) {
+    amenities.push({ icon: CommuteIcon, text: "Parking" });
+  }
 
-const FastfactsandAmenties = () => {
   return (
     <Container className='container' sx={{ pt: { md: "96px", xs: "24px" } }}>
       <Typography

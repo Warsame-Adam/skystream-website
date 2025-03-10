@@ -21,51 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import { styled } from "@mui/material/styles";
-
-const TravellerData = [
-  {
-    type: "Group Traveller",
-    rating: 5,
-    review: `Wonderful experience again at Kimpton & Fitzroy hotel London. 
-             It was my second stay and I will go back again soon. Highly recommended`,
-
-    reviewDate: "Comment 15 Oct 2024",
-  },
-
-  {
-    type: "Family traveller",
-    rating: 3.5,
-    review: `Most of the staff at this hotel are top notch and it's a gorgeous property. 
-               But my mornings were miserable.There is supposed to be a coffee shop along with the main breakfast served in the restaurant. 
-               On two of the days the cafe was closed and was directed to coffee being served in the bar. 
-               On both those days when I entered the room and found the coffee pitcher empty, 
-               when I asked for it to be refilled the staff treated my request like I was asking for them for a great important favor that I didn't deserve.
-               Final morning, I decided to try the main restaurant and all the hot items on the buffet were cold,
-               and the service was terrible. Recommend the hotel but just go off property for coffee and breakfast.`,
-
-    reviewDate: "Comment 10 0ct 2024",
-  },
-
-  {
-    type: "Solo traveller",
-    rating: 3,
-    review: `Clean, renovated, good traditional appearance.
-            Too crowded and not well organized. Difficult to fit into dining areas. Loud music till late hours. 
-            Very tight space in the room which is common for the UK establishments.`,
-
-    reviewDate: "Comment 4 Oct 2024",
-  },
-
-  {
-    type: "Couple",
-    rating: 1,
-    review: `Nice hotel but my room was very noisy all night from some pipe outside the window. It was like sleeping in a noisy factory with that sound.
-             - so it was absolutely not worth the money spend on a good room on 7th floor. 
-             And the reception staff did not bother when I told them about the noisy room.`,
-
-    reviewDate: "Comment 30 Sep 2024",
-  },
-];
+import * as moment from "moment";
 
 const CustomInput = styled(InputBase)(({ theme }) => ({
   // border: "1px solid #ccc",
@@ -102,9 +58,9 @@ const CustomInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const TravellerReviews = () => {
+const TravellerReviews = ({ hotel }) => {
   const [selectedValue, setSelectedValue] = useState("all");
-  const [selectedRating, setSelectedRating] = useState("all");
+  const [selectedRating, setSelectedRating] = useState("");
   const [selectedSortOption, setSelectedSortOption] = useState("recommended");
 
   const handleChange = (event, type) => {
@@ -147,7 +103,7 @@ const TravellerReviews = () => {
           >
             Filter by
           </Typography>
-          <FormControl sx={{ minWidth: "125px" }}>
+          {/* <FormControl sx={{ minWidth: "125px" }}>
             <Select
               value={selectedValue}
               onChange={(e) => handleChange(e, "Traveller")}
@@ -224,7 +180,7 @@ const TravellerReviews = () => {
                 <Typography sx={{ color: "black" }}>Group traveller</Typography>
               </MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
 
           <FormControl sx={{ minWidth: "125px" }}>
             <Select
@@ -234,37 +190,38 @@ const TravellerReviews = () => {
               input={<CustomInput />}
               renderValue={(selected) => {
                 switch (selected) {
-                  case "all":
-                    return "Traveller rating";
-                  case "excellent":
+                  case "":
+                    return "All";
+                  case 5:
                     return "Excellent";
-                  case "good":
+                  case 4:
                     return "Good";
-                  case "average":
+                  case 3:
                     return "Average";
-                  case "below":
+                  case 2:
                     return "Below average";
+                  case 1:
+                    return "Poor";
+
                   default:
                     return "Select an option";
                 }
               }}
               IconComponent={ExpandMoreIcon}
             >
-              <MenuItem value='all'>
+              <MenuItem value=''>
                 <ListItemIcon>
-                  {selectedRating === "all" ? (
+                  {selectedRating === "" ? (
                     <RadioButtonCheckedIcon />
                   ) : (
                     <RadioButtonUncheckedIcon />
                   )}
                 </ListItemIcon>
-                <Typography sx={{ color: "black" }}>
-                  Traveller rating
-                </Typography>
+                <Typography sx={{ color: "black" }}>All</Typography>
               </MenuItem>
-              <MenuItem value='excellent'>
+              <MenuItem value={5}>
                 <ListItemIcon>
-                  {selectedRating === "Excellent" ? (
+                  {selectedRating === 5 ? (
                     <RadioButtonCheckedIcon />
                   ) : (
                     <RadioButtonUncheckedIcon />
@@ -272,9 +229,9 @@ const TravellerReviews = () => {
                 </ListItemIcon>
                 <Typography sx={{ color: "black" }}>Excellent</Typography>
               </MenuItem>
-              <MenuItem value='good'>
+              <MenuItem value={4}>
                 <ListItemIcon>
-                  {selectedRating === "Good" ? (
+                  {selectedRating === 4 ? (
                     <RadioButtonCheckedIcon />
                   ) : (
                     <RadioButtonUncheckedIcon />
@@ -282,9 +239,9 @@ const TravellerReviews = () => {
                 </ListItemIcon>
                 <Typography sx={{ color: "black" }}>Good</Typography>
               </MenuItem>
-              <MenuItem value='average'>
+              <MenuItem value={3}>
                 <ListItemIcon>
-                  {selectedRating === "Average" ? (
+                  {selectedRating === 3 ? (
                     <RadioButtonCheckedIcon />
                   ) : (
                     <RadioButtonUncheckedIcon />
@@ -292,15 +249,25 @@ const TravellerReviews = () => {
                 </ListItemIcon>
                 <Typography sx={{ color: "black" }}>Average</Typography>
               </MenuItem>
-              <MenuItem value='below'>
+              <MenuItem value={2}>
                 <ListItemIcon>
-                  {selectedRating === "below" ? (
+                  {selectedRating === 2 ? (
                     <RadioButtonCheckedIcon />
                   ) : (
                     <RadioButtonUncheckedIcon />
                   )}
                 </ListItemIcon>
                 <Typography sx={{ color: "black" }}>Below average</Typography>
+              </MenuItem>
+              <MenuItem value={1}>
+                <ListItemIcon>
+                  {selectedRating === 1 ? (
+                    <RadioButtonCheckedIcon />
+                  ) : (
+                    <RadioButtonUncheckedIcon />
+                  )}
+                </ListItemIcon>
+                <Typography sx={{ color: "black" }}>Poor</Typography>
               </MenuItem>
             </Select>
           </FormControl>
@@ -387,63 +354,84 @@ const TravellerReviews = () => {
       <Divider sx={{ my: 5, borderColor: "grey.300", borderWidth: "1.5px" }} />
 
       <Box>
-        {TravellerData.map((Traveller, index) => (
-          <React.Fragment key={index}>
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: { xs: "1fr", sm: "0.5fr 2fr" }, // Column layout on mobile (xs), grid on larger screens (sm)
-                // gridTemplateColumns: "0.5fr 2fr",
-                gridTemplateRows: "auto auto",
-                gap: { md: 2, xs: 1 },
-                width: "100%",
-              }}
-            >
+        {hotel.reviews
+          .filter(
+            (review) =>
+              selectedRating === "" ||
+              (review.rating >= selectedRating &&
+                review.rating < selectedRating + 1)
+          )
+          .sort((a, b) => {
+            if (selectedSortOption === "rating h-l") {
+              return b.rating - a.rating; // High to Low
+            }
+            if (selectedSortOption === "rating l-h") {
+              return a.rating - b.rating; // Low to High
+            }
+            if (selectedSortOption === "recent") {
+              return new Date(b.createdOn) - new Date(a.createdOn); // Most Recent
+            }
+            return 0; // No sorting for "recommended"
+          })
+          .map((review, index) => (
+            <React.Fragment key={review._id}>
               <Box
                 sx={{
-                  //gridColumn: "1",
-                  // gridRow: "1 / span 2",
-                  gridColumn: { xs: "1", sm: "1" }, // Full width on mobile, same grid placement on larger screens
-                  gridRow: { xs: "auto", sm: "1 / span 2" },
-                  justifySelf: "start",
+                  display: "grid",
+                  gridTemplateColumns: { xs: "1fr", sm: "0.5fr 2fr" }, // Column layout on mobile (xs), grid on larger screens (sm)
+                  // gridTemplateColumns: "0.5fr 2fr",
+                  gridTemplateRows: "auto auto",
+                  gap: { md: 2, xs: 1 },
+                  width: "100%",
                 }}
               >
-                <Typography sx={{ fontWeight: "bold", fontSize: "18px" }}>
-                  {Traveller.type}
-                </Typography>
-                <Typography sx={{ fontSize: "11px", color: "grey" }}>
-                  {Traveller.reviewDate}
-                </Typography>
+                <Box
+                  sx={{
+                    //gridColumn: "1",
+                    // gridRow: "1 / span 2",
+                    gridColumn: { xs: "1", sm: "1" }, // Full width on mobile, same grid placement on larger screens
+                    gridRow: { xs: "auto", sm: "1 / span 2" },
+                    justifySelf: "start",
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold", fontSize: "18px" }}>
+                    {review.submittedBy}
+                  </Typography>
+                  <Typography sx={{ fontSize: "11px", color: "grey" }}>
+                    Comment {moment(review.createdOn).format("DD MMM yyyy")}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    //gridColumn: "2",
+                    //gridRow: "1 / span 2",
+                    gridColumn: { xs: "1", sm: "2" }, // Full width on mobile, second column on larger screens
+                    gridRow: { xs: "auto", sm: "1 / span 2" },
+                    justifySelf: "start",
+                  }}
+                >
+                  <Typography sx={{ fontSize: "12.5px", mb: { md: 2, xs: 1 } }}>
+                    <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+                      {Number.isInteger(review.rating)
+                        ? review.rating
+                        : review.rating.toFixed(2)}
+                    </span>
+                    /5
+                  </Typography>
+                  <Typography sx={{ fontSize: "15px" }}>
+                    {review.comment}
+                  </Typography>
+                </Box>
               </Box>
 
-              <Box
-                sx={{
-                  //gridColumn: "2",
-                  //gridRow: "1 / span 2",
-                  gridColumn: { xs: "1", sm: "2" }, // Full width on mobile, second column on larger screens
-                  gridRow: { xs: "auto", sm: "1 / span 2" },
-                  justifySelf: "start",
-                }}
-              >
-                <Typography sx={{ fontSize: "12.5px", mb: { md: 2, xs: 1 } }}>
-                  <span style={{ fontSize: "20px", fontWeight: "bold" }}>
-                    {Traveller.rating}
-                  </span>
-                  /5
-                </Typography>
-                <Typography sx={{ fontSize: "15px" }}>
-                  {Traveller.review}
-                </Typography>
-              </Box>
-            </Box>
-
-            {index < TravellerData.length - 1 && (
-              <Divider
-                sx={{ my: 5, borderColor: "grey.300", borderWidth: "0.2px" }}
-              />
-            )}
-          </React.Fragment>
-        ))}
+              {index < hotel.reviews.length - 1 && (
+                <Divider
+                  sx={{ my: 5, borderColor: "grey.300", borderWidth: "0.2px" }}
+                />
+              )}
+            </React.Fragment>
+          ))}
       </Box>
     </Container>
   );

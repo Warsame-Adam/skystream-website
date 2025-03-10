@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
+import { setRooms, setAdults } from "../Slices/HotelTravellersddSlice";
 
 import Hotelimg from "../../Components/Assets/HotelHeroimg.jpg";
 import HotelSearchBox from "../SearchBar/HotelSearchBox";
@@ -24,6 +25,9 @@ const HeroHotel = () => {
     const returnD = new Date(departure);
     returnD.setDate(departure.getDate() + 7);
     dispatch(setReturnDate(returnD.getTime()));
+
+    dispatch(setAdults(1));
+    dispatch(setRooms(1));
   }, [dispatch]);
 
   const content = (
