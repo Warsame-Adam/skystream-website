@@ -190,7 +190,7 @@ const LocalHotelSelection = () => {
                       <CardMedia
                         component='img'
                         height='140'
-                        image={hotel.cover}
+                        src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
                         alt={hotel.name}
                       />
                       <CardContent sx={{ padding: 0 }}>
@@ -261,68 +261,74 @@ const LocalHotelSelection = () => {
             </Grid>
           </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              my: 2,
-              width: "100%",
-            }}
-          >
+          {visibleHotels.length > nCards && (
             <Box
               sx={{
-                flexGrow: 1,
                 display: "flex",
-                justifyContent: "flex-start",
+                alignItems: "center",
+                gap: 1,
+                my: 2,
+                width: "100%",
               }}
             >
-              <IconButton
-                disabled={currentIndex === 0}
-                onClick={handlePrev}
-                disableRipple
+              <Box
                 sx={{
-                  color: currentIndex === 0 ? "#cccccc" : "#0062e3",
+                  flexGrow: 1,
+                  display: "flex",
+                  justifyContent: "flex-start",
                 }}
               >
-                <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
-              </IconButton>
-            </Box>
-
-            <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
-              {Array.from({ length: cityHotels.length }).map((_, index) => (
-                <Box
-                  key={index}
+                <IconButton
+                  disabled={currentIndex === 0}
+                  onClick={handlePrev}
+                  disableRipple
                   sx={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    backgroundColor:
-                      currentIndex === index * nCards
-                        ? "darkgrey"
-                        : "lightgrey",
+                    color: currentIndex === 0 ? "#cccccc" : "#0062e3",
                   }}
-                />
-              ))}
-            </Box>
-            <Box
-              sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}
-            >
-              <IconButton
-                disabled={currentIndex + nCards >= cityHotels.length}
-                onClick={handleNext}
-                disableRipple
+                >
+                  <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
+                </IconButton>
+              </Box>
+
+              <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+                {Array.from({ length: cityHotels.length }).map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      backgroundColor:
+                        currentIndex === index * nCards
+                          ? "darkgrey"
+                          : "lightgrey",
+                    }}
+                  />
+                ))}
+              </Box>
+              <Box
                 sx={{
-                  color:
-                    currentIndex + nCards >= cityHotels.length
-                      ? "#cccccc"
-                      : "#0062e3",
+                  flexGrow: 1,
+                  display: "flex",
+                  justifyContent: "flex-end",
                 }}
               >
-                <KeyboardArrowRightIcon sx={{ fontSize: "35px" }} />
-              </IconButton>
+                <IconButton
+                  disabled={currentIndex + nCards >= cityHotels.length}
+                  onClick={handleNext}
+                  disableRipple
+                  sx={{
+                    color:
+                      currentIndex + nCards >= cityHotels.length
+                        ? "#cccccc"
+                        : "#0062e3",
+                  }}
+                >
+                  <KeyboardArrowRightIcon sx={{ fontSize: "35px" }} />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
+          )}
         </>
       )}
     </Container>

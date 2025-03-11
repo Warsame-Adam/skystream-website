@@ -246,7 +246,7 @@ const FlightInfoSection = () => {
                   underline='hover'
                   sx={{ color: "#1868e5" }}
                 >
-                  Flights to {locations.countryName}
+                  Flights to {loc.countryName}
                 </Link>
               </Grid>
             ))}

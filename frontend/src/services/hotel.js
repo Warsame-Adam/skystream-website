@@ -35,7 +35,14 @@ export const getHotels = async (filters) => {
     return handleApiError(error);
   }
 };
-
+export const getFabCityHotels = async () => {
+  try {
+    const res = await axiosInstance.get("/hotels/getFabCityHotels");
+    return handleApiResponse(res);
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
 export const getHotelsStats = async (filters) => {
   try {
     const res = await axiosInstance.get("/hotels/getHotelsStats");

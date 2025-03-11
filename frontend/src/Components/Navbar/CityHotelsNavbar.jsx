@@ -25,6 +25,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import { jwtKey } from "../../data/websiteInfo";
 
 const CityHotelNavbar = () => {
+  const navigate = useNavigate();
   const { user: globalUser, setAuth } = useContext(GlobalContext);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
 
@@ -130,7 +131,15 @@ const CityHotelNavbar = () => {
             United Kingdom - English (UK) • £ GBP
           </Typography>
 
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              if (globalUser) {
+                navigate("/favorite-flights");
+              } else {
+                setShowLoginDialog(true);
+              }
+            }}
+          >
             <FavoriteIcon
               sx={{
                 color: "white",

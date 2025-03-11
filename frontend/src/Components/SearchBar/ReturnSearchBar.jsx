@@ -22,7 +22,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import { useSelector, useDispatch } from "react-redux";
 import { setDepartureDate, setReturnDate } from "../Slices/dateStore";
 import { setActiveInput } from "../Slices/ReusableCalendar";
-import { setTo, setOtherOptions } from "../Slices/flightSearchSlice";
+import { setFrom, setTo, setOtherOptions } from "../Slices/flightSearchSlice";
 import { format } from "date-fns";
 import ReusableDatePicker from "../ReusableDatePicker";
 import HomeTravellersDropDown from "../HomeTravellersDropDown";
@@ -35,6 +35,8 @@ const ReturnSearchBar = () => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [isOpenOriginPopup, setIsOpenOriginPopup] = useState(false);
+  const originRef = useRef();
   const [isOpenDestinationPopup, setIsOpenDestinationPopup] = useState(false);
   const destinationRef = useRef();
   const [travellersAnchorEl, setTravellersAnchorEl] = React.useState(null);
@@ -226,11 +228,129 @@ const ReturnSearchBar = () => {
             variant='subtitle2'
             sx={{
               ...inputLableStyle,
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              setIsOpenOriginPopup(true);
+              originRef.current.click();
             }}
           >
             From
           </Typography>
-          <Input
+          <Autocomplete
+            fullWidth
+            open={isOpenOriginPopup}
+            onOpen={() => setIsOpenOriginPopup(true)}
+            onClose={() => setIsOpenOriginPopup(false)}
+            ref={originRef}
+            freeSolo
+            options={locations}
+            getOptionLabel={(option) =>
+              option && option.cityName && option.cityCode
+                ? `${option.cityName} (${option.cityCode}) ${option.countryName} (${option.countryCode})`
+                : ""
+            }
+            filterOptions={(options, state) => {
+              const inputValue = state.inputValue.trim().toLowerCase();
+
+              if (inputValue === "") {
+                return options.slice(0, 5);
+              }
+
+              return options.filter(
+                (option) =>
+                  option.cityName.toLowerCase().includes(inputValue) ||
+                  option.cityCode.toLowerCase().includes(inputValue) ||
+                  option.countryName.toLowerCase().includes(inputValue) ||
+                  option.countryCode.toLowerCase().includes(inputValue)
+              );
+            }}
+            onChange={(event, value) => {
+              dispatch(setFrom(value));
+            }}
+            value={from}
+            renderOption={(props, option) => (
+              <li
+                {...props}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px",
+                }}
+              >
+                <FlightIcon
+                  style={{ color: "#5a5a5a", transform: "rotate(45deg)" }}
+                />
+                <div style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      color: "black",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {option.cityName} ({option.cityCode})
+                  </div>
+                  <div style={{ fontSize: "12px", color: "#5a5a5a" }}>
+                    {option.countryName} ({option.countryCode})
+                  </div>
+                </div>
+              </li>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  disableUnderline: true,
+                  style: {},
+                  sx: {
+                    ...inputStyle,
+                    border: 0,
+                  },
+                }}
+                placeholder='Country, city'
+                variant='standard'
+                sx={{
+                  boxSizing: "border-box",
+                  width: "100%",
+                  pb: "10.9px",
+                  border: "1px solid #ccc",
+                  backgroundColor: "background.paper",
+                  borderRadius: { md: "10px 0px 0px 10px", xs: "0" },
+                  "& .MuiInput-root": {
+                    borderRadius: { md: "10px 0px 0px 10px", xs: "0" },
+                  },
+                  "& .MuiAutocomplete-input": {
+                    mt: "-4px",
+                    // padding: "0 !important",
+                  },
+                }}
+              />
+            )}
+            PopperComponent={({ style, ...props }) => (
+              <Popper
+                {...props}
+                style={{
+                  ...style,
+                  width: "400px",
+                  maxHeight: "400px",
+                  overflowY: "auto",
+                  zIndex: 10,
+                }}
+              />
+            )}
+            sx={{
+              width: "100%",
+
+              "& .MuiAutocomplete-endAdornment": {
+                right: "10px",
+                bottom: "30%",
+              },
+            }}
+          />
+          {/* <Input
             value={`${from.cityName} (${from.cityCode}), ${from.countryName} (${from.countryCode}) `}
             placeholder='From'
             disableUnderline
@@ -240,7 +360,7 @@ const ReturnSearchBar = () => {
 
               width: "100%",
             }}
-          />
+          /> */}
         </Grid>
         {/* To */}
         <Grid

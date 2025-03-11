@@ -19,6 +19,8 @@ import {
   Container,
   useTheme,
   useMediaQuery,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import {
   FavoriteBorder,
@@ -30,6 +32,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { GlobalContext } from "../context/GlobalContext";
 import * as moment from "moment";
+import { showInterest } from "../services/flight";
+import LoginModal from "./Login/LoginModal";
 function formatFlightDuration(departureTime, arrivalTime) {
   const dep = moment(departureTime);
   const arr = moment(arrivalTime);
@@ -57,6 +61,9 @@ const getDurationInHours = (departureTime, arrivalTime) => {
 const getHour = (dateTime) => (dateTime ? new Date(dateTime).getHours() : null);
 
 const FlightSearchResults = ({ loading, error, flights }) => {
+  const { user: globalUser, setAuth } = useContext(GlobalContext);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+
   // Extract durations from flights
   const allDurations = flights
     .flatMap((flight) => [
@@ -407,11 +414,37 @@ const FlightSearchResults = ({ loading, error, flights }) => {
     }
   });
 
-  const favoriteClickHandler = (flightId) => {
-    console.log(flightId);
+  const favoriteClickHandler = async (flightId) => {
+    if (!globalUser) {
+      setShowLoginDialog(true);
+    }
+    const res = await showInterest(flightId);
+    if (res.success) {
+      setAuth({
+        ...globalUser,
+        favouritedFlights: res.data.favouritedFlights,
+      });
+    }
   };
+
+  const loadingUI = (
+    <Box
+      minHeight='80px'
+      display='flex'
+      justifyContent='center'
+      alignItems='center'
+    >
+      <CircularProgress size='30px' />
+    </Box>
+  );
   return (
     <Box sx={{ width: "100%", backgroundColor: "#EFF3F8", pt: "30px" }}>
+      {!globalUser && (
+        <LoginModal
+          open={showLoginDialog}
+          handleClose={() => setShowLoginDialog(false)}
+        />
+      )}
       <Container className='container'>
         <Grid container spacing={2}>
           <Grid item xs={12} md={3}>
@@ -838,7 +871,13 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                 </Select>
               </FormControl>
             </Box>
-            {sortedFlights.length > 0 ? (
+            {loading.active && loading.action === "page" ? (
+              loadingUI
+            ) : error.active && error.action === "page" ? (
+              <Alert severity='error' sx={{ mt: "20px" }}>
+                {error.message}
+              </Alert>
+            ) : sortedFlights.length > 0 ? (
               sortedFlights.map((flight) => (
                 <Card
                   key={flight.id}
@@ -858,7 +897,15 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                       sx={{ position: "absolute", top: 0, right: 0 }}
                       onClick={() => favoriteClickHandler(flight._id)}
                     >
-                      <FavoriteBorder />
+                      <FavoriteBorder
+                        sx={{
+                          color: globalUser?.favouritedFlights?.includes(
+                            flight._id
+                          )
+                            ? "red"
+                            : "unset",
+                        }}
+                      />
                     </IconButton>
 
                     <Grid

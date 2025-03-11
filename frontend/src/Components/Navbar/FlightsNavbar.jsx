@@ -22,12 +22,14 @@ import companyLogo from "../../Components/Assets/company-logo.png";
 import FlightIcon from "@mui/icons-material/Flight";
 import HotelIcon from "@mui/icons-material/Hotel";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
 import { jwtKey } from "../../data/websiteInfo";
 import LoginModal from "../Login/LoginModal";
 
 const NavFlights = () => {
+  const navigate = useNavigate();
+
   const { visitorData } = useContext(GlobalContext);
   const { user: globalUser, setAuth } = useContext(GlobalContext);
 
@@ -122,7 +124,15 @@ const NavFlights = () => {
                 </Typography>
               )}
 
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  if (globalUser) {
+                    navigate("/favorite-flights");
+                  } else {
+                    setShowLoginDialog(true);
+                  }
+                }}
+              >
                 <FavoriteIcon
                   sx={{
                     color: "text.primary",

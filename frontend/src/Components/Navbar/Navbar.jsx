@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AppBar,
   Menu,
@@ -34,6 +34,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import LoginModal from "../Login/LoginModal";
 import { jwtKey } from "../../data/websiteInfo";
 const Navbar = () => {
+  const navigate = useNavigate();
   const { user: globalUser, setAuth } = useContext(GlobalContext);
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -67,8 +68,22 @@ const Navbar = () => {
     { icon: <HelpOutlineIcon />, label: "Help" },
   ];
   const links = [
-    { key: "language", icon: <LanguageIcon /> },
-    { key: "favorite", icon: <FavoriteIcon /> },
+    {
+      key: "language",
+      icon: <LanguageIcon />,
+      onClick: handleOpenLanguageMenu,
+    },
+    {
+      key: "favorite",
+      icon: <FavoriteIcon />,
+      onClick: () => {
+        if (globalUser) {
+          navigate("/favorite-flights");
+        } else {
+          setShowLoginDialog(true);
+        }
+      },
+    },
     { key: "person", icon: <PersonIcon /> },
     { key: "menu", icon: <MenuIcon /> },
   ];
@@ -141,9 +156,7 @@ const Navbar = () => {
               <IconButton
                 key={item.key}
                 sx={iconButtonStyles}
-                onClick={
-                  item.key === "language" ? handleOpenLanguageMenu : null
-                }
+                onClick={item.onClick ? item.onClick : null}
               >
                 {item.icon}
               </IconButton>

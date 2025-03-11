@@ -29,12 +29,14 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import companyLogo from "../../Components/Assets/company-logo.png";
 import RSMenu from "../RSMenu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { jwtKey } from "../../data/websiteInfo";
 import { GlobalContext } from "../../context/GlobalContext";
 import LoginModal from "../Login/LoginModal";
 
 const IndividualHotelNavbar = () => {
+  const navigate = useNavigate();
+
   const { user: globalUser, setAuth } = useContext(GlobalContext);
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -68,8 +70,22 @@ const IndividualHotelNavbar = () => {
     { icon: <HelpOutlineIcon />, label: "Help" },
   ];
   const links = [
-    { key: "language", icon: <LanguageIcon /> },
-    { key: "favorite", icon: <FavoriteIcon /> },
+    {
+      key: "language",
+      icon: <LanguageIcon />,
+      onClick: handleOpenLanguageMenu,
+    },
+    {
+      key: "favorite",
+      icon: <FavoriteIcon />,
+      onClick: () => {
+        if (globalUser) {
+          navigate("/favorite-flights");
+        } else {
+          setShowLoginDialog(true);
+        }
+      },
+    },
     { key: "person", icon: <PersonIcon /> },
     { key: "menu", icon: <MenuIcon /> },
   ];
@@ -142,9 +158,7 @@ const IndividualHotelNavbar = () => {
               <IconButton
                 key={item.key}
                 sx={iconButtonStyles}
-                onClick={
-                  item.key === "language" ? handleOpenLanguageMenu : null
-                }
+                onClick={item.onClick ? item.onClick : null}
               >
                 {item.icon}
               </IconButton>

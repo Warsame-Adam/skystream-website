@@ -12,6 +12,7 @@ import HotelPage from "./Pages/HotelPage.jsx";
 import IndividualHotelPage from "./Pages/IndividualHotelPage.jsx";
 import CityHotelPage from "./Pages/CityHotelPage.jsx";
 import FlightSearchResultsPage from "./Pages/FlightSearchResultsPage.jsx";
+import FavoriteFlightsPage from "./Pages/favoriteFlights.jsx";
 import { GlobalContext, GlobalProvider } from "./context/GlobalContext.js";
 import { jwtKey, visitorDataKey } from "./data/websiteInfo.js";
 import axiosInstance, { setupAxiosInterceptors } from "./utils/axios.js";
@@ -224,6 +225,7 @@ function AppRoutes() {
     <Routes>
       <Route path='/' element={<HomePage />} />
       <Route path='/flights' element={<FlightPage />} />
+      <Route path='/favorite-flights' element={<FavoriteFlightsPage />} />
       <Route path='/flights/search' element={<FlightSearchResultsPage />} />
       <Route path='/hotels' element={<HotelPage />} />
       <Route path='/hotels/:country/:city' element={<CityHotelPage />} />

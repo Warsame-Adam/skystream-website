@@ -22,18 +22,6 @@ import FlightIcon from "@mui/icons-material/Flight";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import Paris from "../../Components/Assets/Paris.png";
-import Athens from "../../Components/Assets/athens.png";
-import Sydney from "../../Components/Assets/Sydney.png";
-import Antalya from "../../Components/Assets/antalya-turkey.png";
-import Rome from "../../Components/Assets/rome.png";
-import Cardiff from "../../Components/Assets/cardiff.png";
-import Edinburgh from "../../Components/Assets/Edinburgh.png";
-import Dublin from "../../Components/Assets/Dublin.png";
-import Dubai from "../../Components/Assets/dubai.png";
-import Amsterdam from "../../Components/Assets/Amsterdam-Netherlands.png";
-import Istanbul from "../../Components/Assets/Istanbul-Turkey.png";
-import Bangkok from "../../Components/Assets/Bangkok-Thailand.png";
 
 import { getFlights } from "../../services/flight";
 import { GlobalContext } from "../../context/GlobalContext";
@@ -171,128 +159,85 @@ const FlightLocations = () => {
         </Alert>
       ) : (
         <Box sx={{ padding: 0, marginTop: "20px" }}>
-          <Grid container spacing={2}>
-            {displayedDeals.map((deal, index) => {
-              let path = `/flights/search?`;
+          {displayedDeals.length === 0 ? (
+            <Alert severity='error' sx={{ mt: "20px" }}>
+              No Records Exist
+            </Alert>
+          ) : (
+            <Grid container spacing={2}>
+              {displayedDeals.map((deal, index) => {
+                let path = `/flights/search?`;
 
-              if (deal.location?.departureCity?.countryCode) {
-                path += `&originCountry=${deal.location?.departureCity?.countryCode}`;
-              }
-              if (deal.location?.departureCity?.cityCode) {
-                path += `&originCity=${deal.location?.departureCity?.cityCode}`;
-              }
-              if (deal.location?.arrivalCity?.countryCode) {
-                path += `&destinationCountry=${deal.location?.arrivalCity?.countryCode}`;
-              }
-              if (deal.location?.arrivalCity?.cityCode) {
-                path += `&destinationCity=${deal.location?.arrivalCity?.cityCode}`;
-              }
-              if (deal?.schedule?.departureTime) {
-                path += `&departureDate=${new Date(
-                  deal.schedule.departureTime
-                ).getTime()}`;
-              }
-              if (deal.twoWay && deal?.schedule?.arrivalTime) {
-                path += `&returnDate=${new Date(
-                  deal.schedule.arrivalTime
-                ).getTime()}`;
-              }
+                if (deal.location?.departureCity?.countryCode) {
+                  path += `&originCountry=${deal.location?.departureCity?.countryCode}`;
+                }
+                if (deal.location?.departureCity?.cityCode) {
+                  path += `&originCity=${deal.location?.departureCity?.cityCode}`;
+                }
+                if (deal.location?.arrivalCity?.countryCode) {
+                  path += `&destinationCountry=${deal.location?.arrivalCity?.countryCode}`;
+                }
+                if (deal.location?.arrivalCity?.cityCode) {
+                  path += `&destinationCity=${deal.location?.arrivalCity?.cityCode}`;
+                }
+                if (deal?.schedule?.departureTime) {
+                  path += `&departureDate=${new Date(
+                    deal.schedule.departureTime
+                  ).getTime()}`;
+                }
+                if (deal.twoWay && deal?.schedule?.arrivalTime) {
+                  path += `&returnDate=${new Date(
+                    deal.schedule.arrivalTime
+                  ).getTime()}`;
+                }
 
-              return (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Link to={`${path}`} style={{ textDecoration: "none" }}>
-                    <Card
-                      sx={{
-                        borderRadius: "12px",
-                        boxShadow: "0 1px 3px 0 #25201f4d",
-                        "&:hover": {
-                          boxShadow: "0 4px 14px 0 #25201f40",
-                        },
-                        transition: "all .2s ease-in-out",
-                      }}
-                    >
-                      {/* Image Section */}
-                      <CardMedia
-                        sx={{ height: "160px" }}
-                        component='img'
-                        height='140'
-                        image={`${process.env.REACT_APP_BACKEND_URL}/flights/${deal.image}`}
-                        alt={`${deal.image} Image`}
-                      />
-
-                      <CardContent>
-                        {/* City/Town and Country */}
-                        <Typography
-                          variant='h6'
-                          sx={{
-                            fontWeight: "bold",
-                            color: "#000",
-                            lineHeight: "24px",
-                          }}
-                        >
-                          {deal.location?.arrivalCity?.cityName}
-                        </Typography>
-                        <Typography variant='body2' sx={{ color: "#626971" }}>
-                          {deal.location?.arrivalCity?.countryName}
-                        </Typography>
-
-                        {/* Departure Ticket Information */}
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: "12px",
-                            alignItems: "center",
-                            marginTop: "18px",
-                          }}
-                        >
-                          <img
-                            src={`${process.env.REACT_APP_BACKEND_URL}/airlines/${deal.outboundAirline.logo}`}
-                            alt='Airline Logo'
-                            style={{ width: 20, height: 20 }}
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Link to={`${path}`} style={{ textDecoration: "none" }}>
+                      <Card
+                        sx={{
+                          borderRadius: "12px",
+                          boxShadow: "0 1px 3px 0 #25201f4d",
+                          "&:hover": {
+                            boxShadow: "0 4px 14px 0 #25201f40",
+                          },
+                          transition: "all .2s ease-in-out",
+                        }}
+                      >
+                        {/* Image Section */}
+                        {deal.image && (
+                          <CardMedia
+                            sx={{ height: "160px" }}
+                            component='img'
+                            height='140'
+                            image={`${process.env.REACT_APP_BACKEND_URL}/flights/${deal.image}`}
+                            alt={`${deal.image} Image`}
                           />
-                          <Box>
-                            <Typography
-                              variant='body2'
-                              sx={{ fontWeight: "bold", color: "black" }}
-                            >
-                              {new Date(
-                                deal.schedule.departureTime
-                              ).toDateString()}
-                            </Typography>
-                            <Typography
-                              sx={{ color: "grey", fontSize: "12px" }}
-                            >
-                              {deal.location?.departureCity?.cityCode} -{" "}
-                              {deal.location?.arrivalCity?.cityCode} with{" "}
-                              {deal.outboundAirline.name}
-                            </Typography>
-                          </Box>
+                        )}
+
+                        <CardContent>
+                          {/* City/Town and Country */}
                           <Typography
-                            variant='body2'
+                            variant='h6'
                             sx={{
-                              marginLeft: "auto",
-                              color: "black",
                               fontWeight: "bold",
+                              color: "#000",
+                              lineHeight: "24px",
                             }}
                           >
-                            {deal.location?.outboundDirect
-                              ? "Direct"
-                              : `${deal.location.outboundStops.length} Stop${
-                                  deal.location.outboundStops.length > 1
-                                    ? "s"
-                                    : ""
-                                }`}
+                            {deal.location?.arrivalCity?.cityName}
                           </Typography>
-                        </Box>
+                          <Typography variant='body2' sx={{ color: "#626971" }}>
+                            {deal.location?.arrivalCity?.countryName}
+                          </Typography>
 
-                        {/* Return Ticket Information */}
-                        {deal.twoWay && (
+                          {/* Departure Ticket Information */}
                           <Box
                             sx={{
                               display: "flex",
                               gap: "12px",
                               alignItems: "center",
-                              marginTop: 1,
+                              marginTop: "18px",
                             }}
                           >
                             <img
@@ -306,15 +251,15 @@ const FlightLocations = () => {
                                 sx={{ fontWeight: "bold", color: "black" }}
                               >
                                 {new Date(
-                                  deal.schedule.returnDepartureTime
+                                  deal.schedule.departureTime
                                 ).toDateString()}
                               </Typography>
                               <Typography
                                 sx={{ color: "grey", fontSize: "12px" }}
                               >
-                                {deal.location?.arrivalCity?.cityCode} -{" "}
-                                {deal.location?.departureCity?.cityCode} with{" "}
-                                {deal.returnAirline.name}
+                                {deal.location?.departureCity?.cityCode} -{" "}
+                                {deal.location?.arrivalCity?.cityCode} with{" "}
+                                {deal.outboundAirline.name}
                               </Typography>
                             </Box>
                             <Typography
@@ -325,43 +270,94 @@ const FlightLocations = () => {
                                 fontWeight: "bold",
                               }}
                             >
-                              {deal.location?.returnDirect
+                              {deal.location?.outboundDirect
                                 ? "Direct"
-                                : `${deal.location.returnStops.length} Stop${
-                                    deal.location.returnStops.length > 1
+                                : `${deal.location.outboundStops.length} Stop${
+                                    deal.location.outboundStops.length > 1
                                       ? "s"
                                       : ""
                                   }`}
                             </Typography>
                           </Box>
-                        )}
 
-                        {/* Price Tag */}
-                        <Typography
-                          sx={{
-                            textAlign: "right",
-                            marginTop: 2,
-                            color: "#0062e3",
-                            fontWeight: "bold",
-                            fontSize: "14.5px",
-                          }}
-                        >
-                          from{" "}
-                          {deal.classes.reduce(
-                            (minClass, currentClass) =>
-                              currentClass.price < minClass.price
-                                ? currentClass
-                                : minClass,
-                            deal.classes[0]
+                          {/* Return Ticket Information */}
+                          {deal.twoWay && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: "12px",
+                                alignItems: "center",
+                                marginTop: 1,
+                              }}
+                            >
+                              <img
+                                src={`${process.env.REACT_APP_BACKEND_URL}/airlines/${deal.outboundAirline.logo}`}
+                                alt='Airline Logo'
+                                style={{ width: 20, height: 20 }}
+                              />
+                              <Box>
+                                <Typography
+                                  variant='body2'
+                                  sx={{ fontWeight: "bold", color: "black" }}
+                                >
+                                  {new Date(
+                                    deal.schedule.returnDepartureTime
+                                  ).toDateString()}
+                                </Typography>
+                                <Typography
+                                  sx={{ color: "grey", fontSize: "12px" }}
+                                >
+                                  {deal.location?.arrivalCity?.cityCode} -{" "}
+                                  {deal.location?.departureCity?.cityCode} with{" "}
+                                  {deal.returnAirline.name}
+                                </Typography>
+                              </Box>
+                              <Typography
+                                variant='body2'
+                                sx={{
+                                  marginLeft: "auto",
+                                  color: "black",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {deal.location?.returnDirect
+                                  ? "Direct"
+                                  : `${deal.location.returnStops.length} Stop${
+                                      deal.location.returnStops.length > 1
+                                        ? "s"
+                                        : ""
+                                    }`}
+                              </Typography>
+                            </Box>
                           )}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </Grid>
-              );
-            })}
-          </Grid>
+
+                          {/* Price Tag */}
+                          <Typography
+                            sx={{
+                              textAlign: "right",
+                              marginTop: 2,
+                              color: "#0062e3",
+                              fontWeight: "bold",
+                              fontSize: "14.5px",
+                            }}
+                          >
+                            from{" "}
+                            {deal.classes.reduce(
+                              (minClass, currentClass) =>
+                                currentClass.price < minClass.price
+                                  ? currentClass
+                                  : minClass,
+                              deal.classes[0]
+                            )}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
 
           {/* "See Fewer Details" or "See More Details" Button */}
           {flights.length > 6 && (

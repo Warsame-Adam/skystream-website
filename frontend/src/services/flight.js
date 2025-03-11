@@ -66,3 +66,20 @@ export const getFlights = async (filters) => {
     return handleApiError(error);
   }
 };
+
+export const getMyFavFlights = async () => {
+  try {
+    const res = await axiosInstance.get("/flights/favoriteFlights");
+    return handleApiResponse(res);
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
+export const showInterest = async (flightId) => {
+  try {
+    const res = await axiosInstance.post(`/flights/showInterest/${flightId}`);
+    return handleApiResponse(res);
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
