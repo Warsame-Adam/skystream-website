@@ -75,6 +75,9 @@ const FlightSearchResultsPage = () => {
     });
   };
   useEffect(() => {
+    if (locations.length === 0) {
+      return;
+    }
     let query = {};
     if (originCountryParams && originCityParams) {
       let foundCity = locations.find(
@@ -83,6 +86,7 @@ const FlightSearchResultsPage = () => {
             `${originCountryParams}`.toLowerCase() &&
           loc.cityCode.toLowerCase() === `${originCityParams}`.toLowerCase()
       );
+      console.log(foundCity, originCountryParams, originCityParams);
       if (foundCity) {
         dispatch(setFrom(foundCity));
         query.originCountry = originCountryParams;
@@ -155,6 +159,7 @@ const FlightSearchResultsPage = () => {
 
     fetchFlightsWithSearch(query, "page");
   }, [
+    locations,
     originCountryParams,
     originCityParams,
     destinationCountryParams,

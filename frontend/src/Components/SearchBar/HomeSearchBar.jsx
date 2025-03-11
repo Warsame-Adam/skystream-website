@@ -82,12 +82,16 @@ const HomeSearchbar = () => {
 
   useEffect(() => {
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
     const departure = new Date(currentDate.setDate(currentDate.getDate() + 7));
-    dispatch(setDepartureDate(departure.toDateString()));
+    dispatch(setDepartureDate(departure.getTime()));
 
     const returnD = new Date(departure);
+    returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
     returnD.setDate(departure.getDate() + 7);
-    dispatch(setReturnDate(returnD.toDateString()));
+
+    dispatch(setReturnDate(returnD.getTime()));
 
     setShowCrossIcons(false);
   }, [dispatch]);

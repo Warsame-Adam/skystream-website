@@ -23,7 +23,6 @@ import {
   getAirports,
 } from "./services/flight.js";
 import { useDispatch } from "react-redux";
-import { setFrom } from "./Components/Slices/flightSearchSlice";
 
 function AuthCheck({ children }) {
   const {
@@ -205,19 +204,6 @@ function AuthCheck({ children }) {
     fetchInitialData();
   }, []);
 
-  //seting up from location automatically based on visitor location
-  useEffect(() => {
-    if (visitorData) {
-      dispatch(
-        setFrom({
-          cityName: visitorData.city,
-          cityCode: visitorData.cityCode,
-          countryName: visitorData.country,
-          countryCode: visitorData.countryCode,
-        })
-      );
-    }
-  }, [visitorData]);
   return children;
 }
 function AppRoutes() {
