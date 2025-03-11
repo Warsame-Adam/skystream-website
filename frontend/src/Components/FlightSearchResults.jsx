@@ -45,11 +45,12 @@ function formatFlightDuration(departureTime, arrivalTime) {
   const minutes = duration.minutes();
 
   let formattedDuration = "";
-  if (days > 0) formattedDuration += `${days}d `;
-  if (hours > 0 || days > 0) formattedDuration += `${hours}h `;
-  formattedDuration += `${minutes.toString().padStart(2, "0")}`;
 
-  return formattedDuration.trim();
+  if (days > 0) formattedDuration += `${days}d`;
+  if (hours > 0) formattedDuration += ` ${hours}h`;
+  if (minutes > 0) formattedDuration += ` ${minutes}m`;
+
+  return formattedDuration.trim(); // Remove extra spaces
 }
 
 const getDurationInHours = (departureTime, arrivalTime) => {
@@ -120,129 +121,6 @@ const FlightSearchResults = ({ loading, error, flights }) => {
     airlines: true,
   });
   const showInputs = useSelector((state) => state.flightSearch.showInputs);
-
-  // const flights = [
-  //   {
-  //     id: 1,
-  //     outboundAirline: "WizzAir",
-  //     returnAirline: "WizzAir",
-  //     departureTime: "06:10",
-  //     arrivalTime: "10:15",
-  //     returnDepartureTime: "18:00",
-  //     returnArrivalTime: "22:05",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 21,
-  //     outboundDuration: "4h 05",
-  //     returnDuration: "4h 05",
-  //     direct: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     outboundAirline: "EasyJet",
-  //     returnAirline: "EasyJet",
-  //     departureTime: "15:00",
-  //     arrivalTime: "19:10",
-  //     returnDepartureTime: "23:00",
-  //     returnArrivalTime: "03:10",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 25,
-  //     outboundDuration: "4h 10",
-  //     returnDuration: "4h 10",
-  //     direct: true,
-  //   },
-  //   {
-  //     id: 3,
-  //     outboundAirline: "British Airways",
-  //     returnAirline: "British Airways",
-  //     departureTime: "09:30",
-  //     arrivalTime: "12:50",
-  //     returnDepartureTime: "20:00",
-  //     returnArrivalTime: "23:20",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 35,
-  //     outboundDuration: "3h 20",
-  //     returnDuration: "3h 20",
-  //     direct: true,
-  //   },
-  //   {
-  //     id: 4,
-  //     outboundAirline: "WizzAir",
-  //     returnAirline: "Ryanair",
-  //     departureTime: "08:25",
-  //     arrivalTime: "17:15",
-  //     returnDepartureTime: "19:45",
-  //     returnArrivalTime: "08:00",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 47,
-  //     outboundDuration: "7h 50",
-  //     returnDuration: "11h 15",
-  //     direct: false,
-  //     oneStop: {
-  //       outbound: true,
-  //       outboundStop: "BUD",
-  //     },
-  //     selfTransfer: true,
-  //   },
-  //   {
-  //     id: 5,
-  //     outboundAirline: "EasyJet",
-  //     returnAirline: "Ryanair",
-  //     departureTime: "10:30",
-  //     arrivalTime: "14:50",
-  //     returnDepartureTime: "18:15",
-  //     returnArrivalTime: "22:40",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 53,
-  //     outboundDuration: "4h 20",
-  //     returnDuration: "4h 25",
-  //     direct: false,
-  //     oneStop: {
-  //       return: true,
-  //       returnStop: "FRA",
-  //     },
-  //     selfTransfer: true,
-  //   },
-  //   {
-  //     id: 6,
-  //     outboundAirline: "British Airways",
-  //     returnAirline: "British Airways",
-  //     departureTime: "07:00",
-  //     arrivalTime: "11:00",
-  //     returnDepartureTime: "20:00",
-  //     returnArrivalTime: "00:15",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 40,
-  //     outboundDuration: "4h 00",
-  //     returnDuration: "4h 15",
-  //     direct: false,
-  //     oneStop: {
-  //       outbound: true,
-  //       outboundStop: "CDG",
-  //     },
-  //     selfTransfer: false,
-  //   },
-  //   {
-  //     id: 7,
-  //     outboundAirline: "WizzAir",
-  //     returnAirline: "WizzAir",
-  //     departureTime: "06:45",
-  //     arrivalTime: "10:55",
-  //     returnDepartureTime: "19:15",
-  //     returnArrivalTime: "22:45",
-  //     departureAirport: "LHR",
-  //     arrivalAirport: "TIA",
-  //     price: 50,
-  //     outboundDuration: "4h 10",
-  //     returnDuration: "3h 30",
-  //     direct: true,
-  //   },
-  // ];
 
   useEffect(() => {
     if (matchesSM) {
@@ -910,13 +788,13 @@ const FlightSearchResults = ({ loading, error, flights }) => {
 
                     <Grid
                       container
-                      spacing={2}
+                      spacing={1}
                       alignItems='center'
                       sx={{ mt: { md: 0, xs: "10px" } }}
                     >
                       <Grid item md={9} xs={12}>
                         <Grid container alignItems='center'>
-                          <Grid item md={4} xs={3}>
+                          <Grid item md={3} xs={12}>
                             <Typography
                               variant='subtitle1'
                               color='black'
@@ -944,12 +822,23 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                   flexDirection: "column",
                                 }}
                               >
-                                <Typography variant='h6'>
+                                <Typography
+                                  variant='subtitle2'
+                                  sx={{ color: "#626971", fontWeight: "700" }}
+                                >
                                   {moment(
                                     flight?.schedule?.departureTime
-                                  ).format("yyyy-MM-dd HH:mm")}
+                                  ).format("yy-MM-DD HH:mm")}
                                 </Typography>
-                                <Typography>
+                                <Typography
+                                  variant='subtitle2'
+                                  sx={{
+                                    fontSize: "12px",
+                                    fontWeight: 400,
+                                    color: "#626971",
+                                    maxWidth: "120px",
+                                  }}
+                                >
                                   {flight?.location?.departureAirport?.name}
                                 </Typography>
                               </Box>
@@ -996,12 +885,23 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                   flexDirection: "column",
                                 }}
                               >
-                                <Typography variant='h6'>
+                                <Typography
+                                  variant='subtitle2'
+                                  sx={{ color: "#626971", fontWeight: "700" }}
+                                >
                                   {moment(flight?.schedule?.arrivalTime).format(
-                                    "yyyy-MM-dd HH:mm"
+                                    "yy-MM-DD HH:mm"
                                   )}
                                 </Typography>
-                                <Typography>
+                                <Typography
+                                  variant='subtitle2'
+                                  sx={{
+                                    fontSize: "12px",
+                                    fontWeight: 400,
+                                    color: "#626971",
+                                    maxWidth: "120px",
+                                  }}
+                                >
                                   {flight?.location?.arrivalAirport?.name}
                                 </Typography>
                               </Box>
@@ -1045,7 +945,7 @@ const FlightSearchResults = ({ loading, error, flights }) => {
 
                         {flight.twoWay && (
                           <Grid container alignItems='center'>
-                            <Grid item md={4} xs={3}>
+                            <Grid item md={3} xs={12}>
                               <Typography
                                 variant='subtitle1'
                                 color='black'
@@ -1073,14 +973,22 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                   }}
                                 >
                                   <Typography
-                                    variant='h6'
-                                    sx={{ color: "#697279" }}
+                                    variant='subtitle2'
+                                    sx={{ color: "#626971", fontWeight: "700" }}
                                   >
                                     {moment(
                                       flight?.schedule?.returnDepartureTime
-                                    ).format("yyyy-MM-dd HH:mm")}
+                                    ).format("yyyy-MM-DD HH:mm")}
                                   </Typography>
-                                  <Typography sx={{ color: "#697279" }}>
+                                  <Typography
+                                    variant='subtitle2'
+                                    sx={{
+                                      fontSize: "12px",
+                                      fontWeight: 400,
+                                      color: "#626971",
+                                      maxWidth: "120px",
+                                    }}
+                                  >
                                     {flight?.location?.arrivalAirport?.name}
                                   </Typography>
                                 </Box>
@@ -1123,14 +1031,22 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                 />
                                 <Box sx={{ ml: "-3px" }}>
                                   <Typography
-                                    variant='h6'
-                                    sx={{ color: "#697279" }}
+                                    variant='subtitle2'
+                                    sx={{ color: "#626971", fontWeight: "700" }}
                                   >
                                     {moment(
                                       flight?.schedule?.returnArrivalTime
-                                    ).format("yyyy-MM-dd HH:mm")}
+                                    ).format("yyyy-MM-DD HH:mm")}
                                   </Typography>
-                                  <Typography sx={{ color: "#697279" }}>
+                                  <Typography
+                                    variant='subtitle2'
+                                    sx={{
+                                      fontSize: "12px",
+                                      fontWeight: 400,
+                                      color: "#626971",
+                                      maxWidth: "120px",
+                                    }}
+                                  >
                                     {flight?.location?.departureAirport?.name}
                                   </Typography>
                                 </Box>
@@ -1144,10 +1060,6 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                   fontSize: "12px",
                                 }}
                               >
-                                {flight.oneStop?.return
-                                  ? `1 stop at ${flight.oneStop.returnStop}`
-                                  : "Direct"}
-
                                 {!flight.location?.returnDirect
                                   ? `${
                                       flight.location.returnStops.length
