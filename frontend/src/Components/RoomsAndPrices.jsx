@@ -1,12 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
-  AppBar,
-  Menu,
-  Link,
   Input,
-  Toolbar,
-  IconButton,
-  Avatar,
   Typography,
   Button,
   Box,
@@ -15,11 +9,16 @@ import {
   CardMedia,
   useMediaQuery,
   useTheme,
+  Alert,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { format } from "date-fns";
-
 import { useSelector } from "react-redux";
+
+import {
+  setDepartureDate,
+  setReturnDate,
+} from "../Components/Slices/dateStore.js";
 
 import HotelTravellersDropDown from "./HotelTravellersDropDown";
 import CalandarMenu from "./CalandarMenu";
@@ -43,75 +42,6 @@ const inputStyle = {
   },
 };
 
-// const hotelBookingData = [
-//   {
-//     site: "Booking.com",
-//     logo: "/path/to/booking-logo.png",
-//     rooms: [
-//       {
-//         type: "Double Room",
-//         pricePerNight: 150,
-//         breakfastIncluded: true,
-//         freeCancellation: false,
-//         availableFrom: "2024-10-20",
-//         availableTo: "2024-10-22",
-//       },
-//       {
-//         type: "Suite",
-//         pricePerNight: 250,
-//         breakfastIncluded: false,
-//         freeCancellation: true,
-//         availableFrom: "2024-10-20",
-//         availableTo: "2024-10-22",
-//       },
-//     ],
-//   },
-//   {
-//     site: "Expedia",
-//     logo: "/path/to/expedia-logo.png",
-//     rooms: [
-//       {
-//         type: "Single Room",
-//         pricePerNight: 120,
-//         breakfastIncluded: false,
-//         freeCancellation: true,
-//         availableFrom: "2024-10-21",
-//         availableTo: "2024-10-23",
-//       },
-//       {
-//         type: "Double Room",
-//         pricePerNight: 140,
-//         breakfastIncluded: true,
-//         freeCancellation: false,
-//         availableFrom: "2024-10-21",
-//         availableTo: "2024-10-23",
-//       },
-//     ],
-//   },
-//   {
-//     site: "Agoda",
-//     logo: "/path/to/agoda-logo.png",
-//     rooms: [
-//       {
-//         type: "Single Room",
-//         pricePerNight: 110,
-//         breakfastIncluded: true,
-//         freeCancellation: true,
-//         availableFrom: "2024-10-22",
-//         availableTo: "2024-10-24",
-//       },
-//       {
-//         type: "Double Room",
-//         pricePerNight: 160,
-//         breakfastIncluded: false,
-//         freeCancellation: true,
-//         availableFrom: "2024-10-22",
-//         availableTo: "2024-10-24",
-//       },
-//     ],
-//   },
-// ];
-
 const RoomsAndPrices = ({ hotel }) => {
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
@@ -127,6 +57,10 @@ const RoomsAndPrices = ({ hotel }) => {
     (state) => state.hotelTravellers
   );
 
+  useEffect(() => {
+    setDepartureDate(null);
+    setReturnDate(null);
+  }, []);
   const travellersLabel = useMemo(() => {
     const parts = [];
     if (adults > 0) {
@@ -372,97 +306,103 @@ const RoomsAndPrices = ({ hotel }) => {
           Price per night including taxes and fees
         </Typography>
         <Box sx={{ py: "16px" }}>
-          {filteredDeals.map((deal) => (
-            <Card
-              elevation={0}
-              key={deal._id}
-              sx={{
-                borderRadius: "12px",
-                display: "flex",
-                gap: { sm: 0, xs: "10px" },
-                flexDirection: { sm: "row", xs: "column" },
-                justifyContent: "space-between",
-                alignItems: { sm: "center", xs: "flex-start" },
-                mb: 2,
-                p: "16px",
-              }}
-            >
-              {/* Left Side - Logo and Details */}
-              <Box
+          {filteredDeals.length > 0 ? (
+            filteredDeals.map((deal) => (
+              <Card
+                elevation={0}
+                key={deal._id}
                 sx={{
+                  borderRadius: "12px",
                   display: "flex",
-                  alignItems: "flex-start",
-                  flexDirection: "column",
-                  flex: 1,
+                  gap: { sm: 0, xs: "10px" },
+                  flexDirection: { sm: "row", xs: "column" },
+                  justifyContent: "space-between",
+                  alignItems: { sm: "center", xs: "flex-start" },
+                  mb: 2,
+                  p: "16px",
                 }}
               >
-                <CardMedia
-                  component='img'
-                  image={deal.siteLogo}
-                  sx={{ width: 50, height: "auto", mb: 3, color: "black" }}
-                />
-                <Typography
+                {/* Left Side - Logo and Details */}
+                <Box
                   sx={{
-                    color: "black",
-                    mb: 1,
-                    fontWeight: "bold",
-                    fontSize: "14px",
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                    flex: 1,
                   }}
                 >
-                  {deal.type}
-                </Typography>
-                <Typography
-                  sx={{ color: "black" }}
-                  variant='body2'
-                  color='textSecondary'
-                >
-                  {deal.freeCancellation
-                    ? "✓ Free cancellation"
-                    : "× Free cancellation"}
-                </Typography>
-                <Typography
-                  sx={{ color: "black" }}
-                  variant='body2'
-                  color='textSecondary'
-                >
-                  {deal.breakfastIncluded
-                    ? "✓ Breakfast included"
-                    : "× Breakfast included"}
-                </Typography>
-              </Box>
-              {/* Right Side - Price and Button */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: { sm: "flex-end", xs: "flex-start" },
-                }}
-              >
-                <Typography
-                  variant='h6'
-                  sx={{ mb: 1, fontWeight: "bold", color: "#161616" }}
-                >
-                  £{deal.pricePerNight}
-                </Typography>
-                <a href={deal.bookingUrl} style={{ textDecoration: "none" }}>
-                  <Button
-                    variant='contained'
+                  <CardMedia
+                    component='img'
+                    image={deal.siteLogo}
+                    sx={{ width: 50, height: "auto", mb: 3, color: "black" }}
+                  />
+                  <Typography
                     sx={{
-                      fontSize: "16px",
-                      textTransform: "none",
-                      backgroundColor: "#05203c",
-                      color: "#fff",
-                      fontWeight: 700,
-
-                      "&:hover": { backgroundColor: "#154679" },
+                      color: "black",
+                      mb: 1,
+                      fontWeight: "bold",
+                      fontSize: "14px",
                     }}
                   >
-                    Go to site
-                  </Button>
-                </a>
-              </Box>
-            </Card>
-          ))}
+                    {deal.type}
+                  </Typography>
+                  <Typography
+                    sx={{ color: "black" }}
+                    variant='body2'
+                    color='textSecondary'
+                  >
+                    {deal.freeCancellation
+                      ? "✓ Free cancellation"
+                      : "× Free cancellation"}
+                  </Typography>
+                  <Typography
+                    sx={{ color: "black" }}
+                    variant='body2'
+                    color='textSecondary'
+                  >
+                    {deal.breakfastIncluded
+                      ? "✓ Breakfast included"
+                      : "× Breakfast included"}
+                  </Typography>
+                </Box>
+                {/* Right Side - Price and Button */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: { sm: "flex-end", xs: "flex-start" },
+                  }}
+                >
+                  <Typography
+                    variant='h6'
+                    sx={{ mb: 1, fontWeight: "bold", color: "#161616" }}
+                  >
+                    £{deal.pricePerNight}
+                  </Typography>
+                  <a href={deal.bookingUrl} style={{ textDecoration: "none" }}>
+                    <Button
+                      variant='contained'
+                      sx={{
+                        fontSize: "16px",
+                        textTransform: "none",
+                        backgroundColor: "#05203c",
+                        color: "#fff",
+                        fontWeight: 700,
+
+                        "&:hover": { backgroundColor: "#154679" },
+                      }}
+                    >
+                      Go to site
+                    </Button>
+                  </a>
+                </Box>
+              </Card>
+            ))
+          ) : (
+            <Alert severity='error' sx={{ width: "100%" }}>
+              No Deal Available in your applied Filters
+            </Alert>
+          )}
         </Box>
       </Box>
     </Container>

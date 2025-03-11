@@ -115,7 +115,7 @@ const CityHotelSelection = () => {
           <Alert severity='error' sx={{ mt: "20px" }}>
             {error.message}
           </Alert>
-        ) : (
+        ) : hotels.length > 0 ? (
           <Grid container spacing={2}>
             {hotels.map((hotel, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
@@ -155,6 +155,7 @@ const CityHotelSelection = () => {
                         }}
                       >
                         <Typography
+                          variant='subtitle1'
                           sx={{
                             color: "black",
                             fontSize: "19px",
@@ -206,6 +207,10 @@ const CityHotelSelection = () => {
               </Grid>
             ))}
           </Grid>
+        ) : (
+          <Alert severity='error' sx={{ width: "100%" }}>
+            No Records Exist
+          </Alert>
         )}
       </Box>
 

@@ -128,7 +128,7 @@ const LocalHotelSelection = () => {
         <Alert severity='error' sx={{ mt: "20px" }}>
           {error.message}
         </Alert>
-      ) : (
+      ) : cityHotels.length > 0 ? (
         <>
           <Tabs
             value={selectedCity}
@@ -261,7 +261,7 @@ const LocalHotelSelection = () => {
             </Grid>
           </Box>
 
-          {visibleHotels.length > nCards && (
+          {cityHotels.length > nCards && (
             <Box
               sx={{
                 display: "flex",
@@ -330,6 +330,8 @@ const LocalHotelSelection = () => {
             </Box>
           )}
         </>
+      ) : (
+        <Alert severity='error'>No Records Exist</Alert>
       )}
     </Container>
   );

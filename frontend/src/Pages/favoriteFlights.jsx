@@ -125,20 +125,22 @@ export default function FavoriteFlights() {
                 >
                   <FavoriteBorder
                     sx={{
-                      color: "red",
+                      color: globalUser?.favouritedFlights?.includes(flight._id)
+                        ? "red"
+                        : "unset",
                     }}
                   />
                 </IconButton>
 
                 <Grid
                   container
-                  spacing={2}
+                  spacing={1}
                   alignItems='center'
                   sx={{ mt: { md: 0, xs: "10px" } }}
                 >
                   <Grid item md={9} xs={12}>
                     <Grid container alignItems='center'>
-                      <Grid item md={4} xs={3}>
+                      <Grid item md={3} xs={12}>
                         <Typography
                           variant='subtitle1'
                           color='black'
@@ -166,12 +168,23 @@ export default function FavoriteFlights() {
                               flexDirection: "column",
                             }}
                           >
-                            <Typography variant='h6'>
+                            <Typography
+                              variant='subtitle2'
+                              sx={{ color: "#626971", fontWeight: "700" }}
+                            >
                               {moment(flight?.schedule?.departureTime).format(
-                                "yyyy-MM-dd HH:mm"
+                                "yy-MM-DD HH:mm"
                               )}
                             </Typography>
-                            <Typography>
+                            <Typography
+                              variant='subtitle2'
+                              sx={{
+                                fontSize: "12px",
+                                fontWeight: 400,
+                                color: "#626971",
+                                maxWidth: "120px",
+                              }}
+                            >
                               {flight?.location?.departureAirport?.name}
                             </Typography>
                           </Box>
@@ -216,12 +229,23 @@ export default function FavoriteFlights() {
                               flexDirection: "column",
                             }}
                           >
-                            <Typography variant='h6'>
+                            <Typography
+                              variant='subtitle2'
+                              sx={{ color: "#626971", fontWeight: "700" }}
+                            >
                               {moment(flight?.schedule?.arrivalTime).format(
-                                "yyyy-MM-dd HH:mm"
+                                "yy-MM-DD HH:mm"
                               )}
                             </Typography>
-                            <Typography>
+                            <Typography
+                              variant='subtitle2'
+                              sx={{
+                                fontSize: "12px",
+                                fontWeight: 400,
+                                color: "#626971",
+                                maxWidth: "120px",
+                              }}
+                            >
                               {flight?.location?.arrivalAirport?.name}
                             </Typography>
                           </Box>
@@ -265,7 +289,7 @@ export default function FavoriteFlights() {
 
                     {flight.twoWay && (
                       <Grid container alignItems='center'>
-                        <Grid item md={4} xs={3}>
+                        <Grid item md={3} xs={12}>
                           <Typography
                             variant='subtitle1'
                             color='black'
@@ -293,14 +317,22 @@ export default function FavoriteFlights() {
                               }}
                             >
                               <Typography
-                                variant='h6'
-                                sx={{ color: "#697279" }}
+                                variant='subtitle2'
+                                sx={{ color: "#626971", fontWeight: "700" }}
                               >
                                 {moment(
                                   flight?.schedule?.returnDepartureTime
-                                ).format("yyyy-MM-dd HH:mm")}
+                                ).format("yyyy-MM-DD HH:mm")}
                               </Typography>
-                              <Typography sx={{ color: "#697279" }}>
+                              <Typography
+                                variant='subtitle2'
+                                sx={{
+                                  fontSize: "12px",
+                                  fontWeight: 400,
+                                  color: "#626971",
+                                  maxWidth: "120px",
+                                }}
+                              >
                                 {flight?.location?.arrivalAirport?.name}
                               </Typography>
                             </Box>
@@ -341,14 +373,22 @@ export default function FavoriteFlights() {
                             />
                             <Box sx={{ ml: "-3px" }}>
                               <Typography
-                                variant='h6'
-                                sx={{ color: "#697279" }}
+                                variant='subtitle2'
+                                sx={{ color: "#626971", fontWeight: "700" }}
                               >
                                 {moment(
                                   flight?.schedule?.returnArrivalTime
-                                ).format("yyyy-MM-dd HH:mm")}
+                                ).format("yyyy-MM-DD HH:mm")}
                               </Typography>
-                              <Typography sx={{ color: "#697279" }}>
+                              <Typography
+                                variant='subtitle2'
+                                sx={{
+                                  fontSize: "12px",
+                                  fontWeight: 400,
+                                  color: "#626971",
+                                  maxWidth: "120px",
+                                }}
+                              >
                                 {flight?.location?.departureAirport?.name}
                               </Typography>
                             </Box>
@@ -362,10 +402,6 @@ export default function FavoriteFlights() {
                               fontSize: "12px",
                             }}
                           >
-                            {flight.oneStop?.return
-                              ? `1 stop at ${flight.oneStop.returnStop}`
-                              : "Direct"}
-
                             {!flight.location?.returnDirect
                               ? `${
                                   flight.location.returnStops.length
