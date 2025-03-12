@@ -51,3 +51,12 @@ export const getHotelsStats = async (filters) => {
     return handleApiError(error);
   }
 };
+
+export const getRecommendedHotels = async (id) => {
+  try {
+    const res = await axiosInstance.get(`/hotels/recommendedHotels/${id}`);
+    return handleApiResponse(res);
+  } catch (error) {
+    return handleApiError(error);
+  }
+};

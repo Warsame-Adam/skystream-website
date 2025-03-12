@@ -187,72 +187,107 @@ const LocalHotelSelection = () => {
                         transition: "all .2s ease-in-out",
                       }}
                     >
-                      <CardMedia
-                        component='img'
-                        height='140'
-                        src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
-                        alt={hotel.name}
-                      />
-                      <CardContent sx={{ padding: 0 }}>
-                        <Typography
-                          variant='h6'
-                          style={{
-                            fontWeight: "bold",
-                            color: "black",
-                            fontSize: "20px",
-                            paddingLeft: "15px",
-                          }}
-                        >
-                          {hotel.name}
-                          <span style={{ marginLeft: "80px" }}>
-                            <Rating
-                              readOnly
-                              value={
-                                hotel.reduce(
-                                  (acc, review) => acc + review.rating,
-                                  0
-                                ) / hotel.reviews.length
-                              }
-                            />
-                          </span>
-                        </Typography>
-                        <Typography
-                          variant='body2'
-                          style={{
-                            color: "black",
-                            fontSize: "13.5px",
-                            paddingLeft: "15px",
-                          }}
-                        >
-                          {hotel.description}
-                        </Typography>
-                        <hr
-                          style={{
-                            border: "1px solid lightgrey",
-                            margin: "10px 0",
-                          }}
+                      <Box sx={{ position: "relative" }}>
+                        <CardMedia
+                          component='img'
+                          height='140'
+                          src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+                          alt={hotel.name}
                         />
-                        <Typography
-                          variant='body1'
-                          style={{
-                            color: "black",
-                            textAlign: "right",
-                            paddingRight: "15px",
-                            fontWeight: "bold",
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 10,
+                            left: 10,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-start",
                           }}
                         >
-                          £{getMinPrice(hotel)}
-                        </Typography>
-                        <Typography
-                          style={{
-                            color: "grey",
-                            textAlign: "right",
-                            paddingRight: "15px",
-                            fontSize: "12px",
+                          <Typography
+                            variant='h6'
+                            style={{
+                              fontWeight: "bold",
+                              color: "black",
+                              fontSize: "20px",
+                              paddingLeft: "15px",
+                            }}
+                          >
+                            {hotel.name}
+                          </Typography>
+
+                          <Rating
+                            readOnly
+                            value={
+                              hotel.reviews.reduce(
+                                (acc, review) => acc + review.rating,
+                                0
+                              ) / hotel.reviews.length
+                            }
+                          />
+                        </Box>
+                      </Box>
+                      <CardContent
+                        sx={{
+                          px: "8px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            flex: 1,
                           }}
                         >
-                          per night
-                        </Typography>
+                          <Typography
+                            variant='subtitle1'
+                            sx={{
+                              color: "black",
+                              fontSize: "19px",
+                              fontWeight: "bold",
+                              marginBottom: "4px",
+                            }}
+                          >
+                            {hotel?.city?.cityName}
+                          </Typography>
+
+                          <Typography
+                            sx={{
+                              color: "black",
+                              fontSize: "11px",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            {hotel?.city?.countryName}
+                          </Typography>
+                        </Box>
+
+                        <Box
+                          sx={{
+                            marginTop: "10px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "flex-end",
+                          }}
+                        >
+                          <Typography sx={{ color: "grey", fontSize: "11px" }}>
+                            From
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "black",
+                              fontSize: "15px",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            £{getMinPrice(hotel)}
+                          </Typography>
+                          <Typography sx={{ color: "grey", fontSize: "11px" }}>
+                            per night
+                          </Typography>
+                        </Box>
                       </CardContent>
                     </Card>
                   </Link>
