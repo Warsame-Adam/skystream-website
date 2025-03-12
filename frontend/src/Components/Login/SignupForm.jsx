@@ -235,9 +235,9 @@ export default function SignupForm({ onLoginClick }) {
         </Button>
       </Grid>
       {/* google login */}
-      {/* <Grid sx={{ width: "100%", mt: "16px" }}>
+      <Grid sx={{ width: "100%", mt: "16px" }}>
         <GoogleLoginButton />
-      </Grid> */}
+      </Grid>
 
       {/* login  */}
       <Grid item sx={{ mt: "20px", width: "100%" }}>
