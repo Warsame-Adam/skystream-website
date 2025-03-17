@@ -73,110 +73,133 @@ function AuthCheck({ children }) {
 
   //Fetching Visitor Data
   useEffect(() => {
-    if (locations.length === 0 && visitorData !== null) {
-      return;
-    }
-    let visitorObject = null;
-    try {
-      let visitorObjectData = localStorage.getItem(visitorDataKey);
-      if (
-        visitorObjectData &&
-        typeof visitorObjectData === "object" &&
-        Object.keys(visitorObjectData).length > 0
-      ) {
-        visitorObject = JSON.parse(visitorObjectData);
-      }
-    } catch (e) {
-      visitorObject = null;
-    }
-    if (visitorObject) {
-      let visitorInfo = {
-        currency:
-          visitorObject?.currency && visitorObject?.currency?.code
-            ? visitorObject?.currency
-            : {
-                code: "GBP",
-                name: "Pound",
-                symbol: "£",
-              },
-        country: visitorObject.country
-          ? visitorObject.country
-          : "United Kingdom",
-        countryCode: visitorObject.countryCode
-          ? visitorObject.countryCode
-          : "UK",
-        phoneCode: visitorObject.phoneCode ? visitorObject.phoneCode : "+44",
-        capital: visitorObject.capital ? visitorObject.capital : "LHR",
-        city: visitorObject.city ? visitorObject.city : "London",
-        cityCode: visitorObject.cityCode ? visitorObject.cityCode : "LHR",
-        postal: visitorObject.postal ? visitorObject.postal : "",
-        state: visitorObject.state ? visitorObject.state : "",
-        language: visitorObject.language ? visitorObject.language : "English",
-        languageCode: visitorObject.languageCode
-          ? visitorObject.languageCode
-          : "eng",
-        timeZone: visitorObject.timeZone ? visitorObject.timeZone : "GMT",
-        timeZoneOffset: visitorObject.timeZoneOffset
-          ? visitorObject.timeZoneOffset
-          : "UTC +0",
-      };
-      setVisitorData(visitorInfo);
-    } else {
-      fetch(
-        `https://api.ipregistry.co/?key=${process.env.REACT_APP_GEOLOCATION_API_KEY}`
-      )
-        .then(function (response) {
-          return response.json();
-        }) //make sure to update data like if  if (visitorObject) { requirement
-        .then(function (payload) {
-          const cityCodeObj = locations.find(
-            (x) => x.cityName === payload?.location?.city
-          );
+    let visitorInfo = {
+      currency: {
+        code: "GBP",
+        name: "Pound",
+        symbol: "£",
+      },
+      country: "United Kingdom",
+      countryCode: "UK",
+      phoneCode: "+44",
+      capital: "LDN",
+      city: "London",
+      cityCode: "LDN",
+      postal: "",
+      state: "",
+      language: "English",
+      languageCode: "eng",
+      timeZone: "GMT",
+      timeZoneOffset: "UTC +0",
+    };
+    setVisitorData(visitorInfo);
+  }, []);
+  // useEffect(() => {
+  //   if (locations.length === 0 && visitorData !== null) {
+  //     return;
+  //   }
+  //   let visitorObject = null;
+  //   try {
+  //     let visitorObjectData = localStorage.getItem(visitorDataKey);
+  //     if (
+  //       visitorObjectData &&
+  //       typeof visitorObjectData === "object" &&
+  //       Object.keys(visitorObjectData).length > 0
+  //     ) {
+  //       visitorObject = JSON.parse(visitorObjectData);
+  //     }
+  //   } catch (e) {
+  //     visitorObject = null;
+  //   }
+  //   if (visitorObject) {
+  //     let visitorInfo = {
+  //       currency:
+  //         visitorObject?.currency && visitorObject?.currency?.code
+  //           ? visitorObject?.currency
+  //           : {
+  //               code: "GBP",
+  //               name: "Pound",
+  //               symbol: "£",
+  //             },
+  //       country: visitorObject.country
+  //         ? visitorObject.country
+  //         : "United Kingdom",
+  //       countryCode: visitorObject.countryCode
+  //         ? visitorObject.countryCode
+  //         : "UK",
+  //       phoneCode: visitorObject.phoneCode ? visitorObject.phoneCode : "+44",
+  //       capital: visitorObject.capital ? visitorObject.capital : "LDN",
+  //       city: visitorObject.city ? visitorObject.city : "London",
+  //       cityCode: visitorObject.cityCode ? visitorObject.cityCode : "LDN",
+  //       postal: visitorObject.postal ? visitorObject.postal : "",
+  //       state: visitorObject.state ? visitorObject.state : "",
+  //       language: visitorObject.language ? visitorObject.language : "English",
+  //       languageCode: visitorObject.languageCode
+  //         ? visitorObject.languageCode
+  //         : "eng",
+  //       timeZone: visitorObject.timeZone ? visitorObject.timeZone : "GMT",
+  //       timeZoneOffset: visitorObject.timeZoneOffset
+  //         ? visitorObject.timeZoneOffset
+  //         : "UTC +0",
+  //     };
+  //     setVisitorData(visitorInfo);
+  //   } else {
+  //     fetch(
+  //       `https://api.ipregistry.co/?key=${process.env.REACT_APP_GEOLOCATION_API_KEY}`
+  //     )
+  //       .then(function (response) {
+  //         return response.json();
+  //       }) //make sure to update data like if  if (visitorObject) { requirement
+  //       .then(function (payload) {
+  //         console.log(payload);
+  //         const cityCodeObj = locations.find(
+  //           (x) => x.cityName === payload?.location?.city
+  //         );
 
-          let visitorInfo = {
-            currency: payload?.currency,
-            country: payload?.location?.country?.name,
-            countryCode: payload?.location?.country?.code,
-            phoneCode: payload?.location?.country?.calling_code,
-            capital: payload?.location?.country.capital,
-            city: payload?.location?.city,
-            cityCode: cityCodeObj ? cityCodeObj.cityCode : "LHR",
-            postal: payload?.location?.postal,
-            state: payload?.location?.region?.name,
-            language: payload?.location?.language?.name,
-            languageCode: payload?.location?.language?.code,
-            timeZone: payload?.time_zone?.id,
-            timeZoneOffset: payload?.time_zone?.offset,
-          };
-          setVisitorData(visitorInfo);
-          localStorage.setItem(visitorDataKey, JSON.stringify(visitorInfo));
-        })
-        .catch((err) => {
-          console.log(err);
+  //         let visitorInfo = {
+  //           currency: payload?.currency,
+  //           country: payload?.location?.country?.name,
+  //           countryCode: payload?.location?.country?.code,
+  //           phoneCode: payload?.location?.country?.calling_code,
+  //           capital: payload?.location?.country.capital,
+  //           city: payload?.location?.city,
+  //           cityCode: cityCodeObj ? cityCodeObj.cityCode : "LHR",
+  //           postal: payload?.location?.postal,
+  //           state: payload?.location?.region?.name,
+  //           language: payload?.location?.language?.name,
+  //           languageCode: payload?.location?.language?.code,
+  //           timeZone: payload?.time_zone?.id,
+  //           timeZoneOffset: payload?.time_zone?.offset,
+  //         };
+  //         setVisitorData(visitorInfo);
+  //         localStorage.setItem(visitorDataKey, JSON.stringify(visitorInfo));
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
 
-          let visitorInfo = {
-            currency: {
-              code: "GBP",
-              name: "Pound",
-              symbol: "£",
-            },
-            country: "United Kingdom",
-            countryCode: "UK",
-            phoneCode: "+44",
-            capital: "LHR",
-            city: "London",
-            cityCode: "LHR",
-            postal: "",
-            state: "",
-            language: "English",
-            languageCode: "eng",
-            timeZone: "GMT",
-            timeZoneOffset: "UTC +0",
-          };
-          setVisitorData(visitorInfo);
-        });
-    }
-  }, [locations]);
+  //         let visitorInfo = {
+  //           currency: {
+  //             code: "GBP",
+  //             name: "Pound",
+  //             symbol: "£",
+  //           },
+  //           country: "United Kingdom",
+  //           countryCode: "UK",
+  //           phoneCode: "+44",
+  //           capital: "LHR",
+  //           city: "London",
+  //           cityCode: "LHR",
+  //           postal: "",
+  //           state: "",
+  //           language: "English",
+  //           languageCode: "eng",
+  //           timeZone: "GMT",
+  //           timeZoneOffset: "UTC +0",
+  //         };
+  //         setVisitorData(visitorInfo);
+  //       });
+  //   }
+  // }, [locations]);
 
   //initial Data
   useEffect(() => {

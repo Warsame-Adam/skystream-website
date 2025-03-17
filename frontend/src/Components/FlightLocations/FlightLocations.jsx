@@ -48,7 +48,7 @@ const FlightLocations = () => {
     const res = await getFlights({
       originCity: visitorData?.cityCode,
       originCountry: visitorData?.countryCode,
-      departureTime: new Date().getTime(),
+      departureTime: new Date().toString(),
     });
     if (res.success) {
       if (res.data && res.data?.length > 0) setFlights(res.data);
@@ -66,9 +66,11 @@ const FlightLocations = () => {
     });
   };
   useEffect(() => {
-    fetchFlights();
+    if (visitorData) {
+      fetchFlights();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visitorData]);
 
   const displayedDeals = showAll ? flights : flights.slice(0, 6);
 
@@ -210,7 +212,7 @@ const FlightLocations = () => {
                             sx={{ height: "160px" }}
                             component='img'
                             height='140'
-                            image={`${process.env.REACT_APP_BACKEND_URL}/flights/${deal.image}`}
+                            image={`${process.env.REACT_APP_BACKEND_URL}/files/flights/${deal.image}`}
                             alt={`${deal.image} Image`}
                           />
                         )}
@@ -241,7 +243,7 @@ const FlightLocations = () => {
                             }}
                           >
                             <img
-                              src={`${process.env.REACT_APP_BACKEND_URL}/airlines/${deal.outboundAirline.logo}`}
+                              src={`${process.env.REACT_APP_BACKEND_URL}/files/airlines/${deal.outboundAirline.logo}`}
                               alt='Airline Logo'
                               style={{ width: 20, height: 20 }}
                             />
@@ -291,7 +293,7 @@ const FlightLocations = () => {
                               }}
                             >
                               <img
-                                src={`${process.env.REACT_APP_BACKEND_URL}/airlines/${deal.outboundAirline.logo}`}
+                                src={`${process.env.REACT_APP_BACKEND_URL}/files/airlines/${deal.outboundAirline.logo}`}
                                 alt='Airline Logo'
                                 style={{ width: 20, height: 20 }}
                               />
@@ -347,7 +349,7 @@ const FlightLocations = () => {
                                 currentClass.price < minClass.price
                                   ? currentClass
                                   : minClass,
-                              deal.classes[0]
+                              deal.classes[0].price
                             )}
                           </Typography>
                         </CardContent>
