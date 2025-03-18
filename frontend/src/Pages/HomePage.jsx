@@ -17,15 +17,16 @@ const HomePage = () => {
     if (visitorData && locations.length > 0) {
       const cityCodeObj = locations.find(
         (x) =>
-          x.cityCode === visitorData.cityCode &&
-          x.countryCode === visitorData.countryCode
+          x.cityCode.toLowerCase() === visitorData.cityCode?.toLowerCase() &&
+          x.countryCode.toLowerCase() === visitorData.countryCode?.toLowerCase()
       );
+
       if (cityCodeObj) {
         dispatch(
           setFrom({
-            cityName: cityCodeObj.city,
+            cityName: cityCodeObj.cityName,
             cityCode: cityCodeObj.cityCode,
-            countryName: cityCodeObj.country,
+            countryName: cityCodeObj.countryName,
             countryCode: cityCodeObj.countryCode,
           })
         );

@@ -240,6 +240,7 @@ const HomeSearchbar = () => {
               From
             </Typography>
             <Autocomplete
+              readOnly
               fullWidth
               open={isOpenOriginPopup}
               onOpen={() => setIsOpenOriginPopup(true)}
@@ -304,6 +305,7 @@ const HomeSearchbar = () => {
                 <TextField
                   {...params}
                   InputProps={{
+                    readOnly: true,
                     ...params.InputProps,
                     disableUnderline: true,
                     style: {},
