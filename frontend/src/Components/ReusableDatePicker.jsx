@@ -12,7 +12,6 @@ import ArrowRightRoundedIcon from "@mui/icons-material/ArrowRightRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import { useSelector, useDispatch } from "react-redux";
-import { calendarHide } from "./Slices/ReusableCalendar";
 import { setDepartureDate, setReturnDate } from "./Slices/dateStore";
 import { setCurrentMonth, updateMonth } from "./Slices/singleMonthSlice";
 import { styled } from "@mui/material/styles";
@@ -112,8 +111,8 @@ const ReusableDatePicker = ({
     if (activeInput === "depart") {
       dispatch(setDepartureDate(selectedTimestamp));
       if (selectedTimestamp >= returnDate) {
-        const daysDiff = new Date(Date.now() + 9 * 24 * 60 * 60 * 1000);
-        dispatch(setReturnDate(selectedTimestamp + daysDiff.getTime()));
+        const daysDiff = new Date(selectedTimestamp + 9 * 24 * 60 * 60 * 1000);
+        dispatch(setReturnDate(daysDiff.getTime()));
       }
       if (departInputRef?.current)
         departInputRef.current.value = date?.toLocaleDateString();

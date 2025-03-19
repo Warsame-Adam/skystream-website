@@ -54,7 +54,7 @@ export default function FavoriteFlights() {
       active: true,
       action: action,
     });
-    const flightsData = await getMyFavFlights();
+    const flightsData = await getMyFavFlights(globalUser?.token);
     if (flightsData.success) {
       setFlights(flightsData.data);
     } else {
@@ -70,8 +70,10 @@ export default function FavoriteFlights() {
     });
   };
   useEffect(() => {
-    fetchFavFlights();
-  }, []);
+    if (globalUser) {
+      fetchFavFlights();
+    }
+  }, [globalUser]);
 
   const favoriteClickHandler = async (flightId) => {
     const res = await showInterest(flightId);

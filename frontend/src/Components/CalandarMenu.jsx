@@ -109,7 +109,7 @@ const CalandarMenu = ({ anchorEl, handleClose }) => {
 
   const handleDateChange = (date) => {
     const selectedTimestamp = date.getTime();
-
+    console.log(departureDate, returnDate);
     if (departureDate && returnDate) {
       dispatch(setDepartureDate(selectedTimestamp));
       dispatch(setReturnDate(null));
@@ -261,6 +261,7 @@ const CalandarMenu = ({ anchorEl, handleClose }) => {
             displayStaticWrapperAs='desktop'
             value={secondMonth}
             onChange={(date) => {
+              console.log(date);
               handleDateChange(date);
             }}
             minDate={new Date()}

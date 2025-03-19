@@ -117,6 +117,7 @@ const HomeSearchbar = () => {
 
   const handleClearDeparture = () => {
     dispatch(clearDepartureDate());
+    dispatch(clearReturnDate());
   };
 
   const handleClearReturn = () => {

@@ -343,7 +343,7 @@ const FlightLocations = () => {
                               fontSize: "14.5px",
                             }}
                           >
-                            from{" "}
+                            from £
                             {deal.classes.reduce(
                               (minClass, currentClass) =>
                                 currentClass.price < minClass.price

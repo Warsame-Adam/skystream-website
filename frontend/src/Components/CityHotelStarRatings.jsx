@@ -237,7 +237,7 @@ const CityHotelStarRatings = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    {rating.PPN}
+                    £{rating.PPN}
                   </Typography>
                   <Typography sx={{ color: "grey", fontSize: "11px" }}>
                     per night

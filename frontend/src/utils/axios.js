@@ -12,7 +12,6 @@ export const setupAxiosInterceptors = (getToken) => {
     (config) => {
       try {
         const token = getToken(); // Get the latest token dynamically
-
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }

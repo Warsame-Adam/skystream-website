@@ -120,7 +120,8 @@ const CityHotelSelection = () => {
             {hotels.map((hotel, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Link
-                  to={`/hotels/${hotel?.city?.countryCode}/${hotel?.city.cityCode}/${hotel.name}/${hotel._id}`}
+                  // /${hotel.name}/${hotel._id}
+                  to={`/hotels/${hotel?.city?.countryCode}/${hotel?.city.cityCode}`}
                   style={{ textDecoration: "none" }}
                 >
                   <Card

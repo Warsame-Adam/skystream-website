@@ -67,9 +67,13 @@ export const getFlights = async (filters) => {
   }
 };
 
-export const getMyFavFlights = async () => {
+export const getMyFavFlights = async (userToken) => {
   try {
-    const res = await axiosInstance.get("/flights/favoriteFlights");
+    const res = await axiosInstance.get("/flights/favoriteFlights", {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
     return handleApiResponse(res);
   } catch (error) {
     return handleApiError(error);

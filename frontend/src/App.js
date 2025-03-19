@@ -40,8 +40,10 @@ function AuthCheck({ children }) {
 
   //Setting up Axios Interceptors
   useEffect(() => {
-    const getToken = () => (globalUser ? globalUser.token : "");
-    setupAxiosInterceptors(getToken);
+    if (globalUser) {
+      const getToken = () => (globalUser ? globalUser.token : "");
+      setupAxiosInterceptors(getToken);
+    }
   }, [globalUser]);
 
   //Checking for JWT Token in Local Storage
