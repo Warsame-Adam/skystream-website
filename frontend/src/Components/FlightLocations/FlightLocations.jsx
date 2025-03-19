@@ -45,10 +45,13 @@ const FlightLocations = () => {
       active: true,
       action: "page",
     });
+    const currentD = new Date();
+    currentD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
     const res = await getFlights({
       originCity: visitorData?.cityCode,
       originCountry: visitorData?.countryCode,
-      departureTime: new Date().toString(),
+      departureTime: currentD.toString(),
     });
     if (res.success) {
       if (res.data && res.data?.length > 0) setFlights(res.data);
@@ -183,14 +186,16 @@ const FlightLocations = () => {
                   path += `&destinationCity=${deal.location?.arrivalCity?.cityCode}`;
                 }
                 if (deal?.schedule?.departureTime) {
-                  path += `&departureDate=${new Date(
-                    deal.schedule.departureTime
-                  ).getTime()}`;
+                  const departureD = new Date(deal?.schedule?.departureTime);
+                  departureD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
+                  path += `&departureDate=${departureD.getTime()}`;
                 }
                 if (deal.twoWay && deal?.schedule?.arrivalTime) {
-                  path += `&returnDate=${new Date(
-                    deal.schedule.arrivalTime
-                  ).getTime()}`;
+                  const returnD = new Date(deal.schedule.arrivalTime);
+                  returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+
+                  path += `&returnDate=${returnD.getTime()}`;
                 }
 
                 return (

@@ -118,12 +118,18 @@ const FlightSearchResultsPage = () => {
       }
     }
     if (departureDateParams && isDate(departureDateParams * 1)) {
-      dispatch(setDepartureDate(departureDateParams * 1));
-      query.departureTime = new Date(departureDateParams * 1).toString();
+      const departureD = new Date(departureDateParams * 1);
+      departureD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
+      dispatch(setDepartureDate(departureD.getTime()));
+      query.departureTime = departureD.toString();
     }
     if (returnDateParams && isDate(returnDateParams * 1)) {
-      dispatch(setReturnDate(returnDateParams * 1));
-      query.arrivalTime = new Date(returnDateParams * 1).toString();
+      const returnD = new Date(returnDateParams * 1);
+      returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+
+      dispatch(setReturnDate(returnD.getTime()));
+      query.arrivalTime = returnD.toString();
     }
     if (directParams === "true") {
       query.direct = true;

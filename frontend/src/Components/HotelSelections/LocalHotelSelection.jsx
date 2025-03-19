@@ -23,6 +23,12 @@ import { Link } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext.js";
 import { getHotels } from "../../services/hotel.js";
 const getMinPrice = (hotel) => {
+  if (
+    !hotel.deals ||
+    hotel.deals.length === 0 ||
+    hotel.deals.flatMap((deal) => deal.rooms).length === 0
+  )
+    return 0;
   return hotel.deals
     .flatMap((deal) => deal.rooms) // Flatten rooms from all deals
     .reduce((min, room) => Math.min(min, room.pricePerNight), Infinity);
@@ -59,9 +65,12 @@ const LocalHotelSelection = () => {
       active: true,
       action: "page",
     });
+    const currentD = new Date();
+    currentD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
     const res = await getHotels({
       originCountry: visitorData?.countryCode,
-      availableFrom: new Date().toString(),
+      availableFrom: currentD.toString(),
     });
     if (res.success) {
       if (res.data && res.data?.length > 0) setHotels(res.data);

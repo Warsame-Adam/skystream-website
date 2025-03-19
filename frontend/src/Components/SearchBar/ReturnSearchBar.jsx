@@ -634,10 +634,16 @@ const ReturnSearchBar = () => {
                   path += `&destinationCity=${to.cityCode}`;
                 }
                 if (departureDate) {
-                  path += `&departureDate=${departureDate}`;
+                  const departureD = new Date(departureDate);
+                  departureD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
+                  path += `&departureDate=${departureD.getTime()}`;
                 }
                 if (searchType !== "oneway" && returnDate) {
-                  path += `&returnDate=${returnDate}`;
+                  const returnD = new Date(returnDate);
+                  returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+
+                  path += `&returnDate=${returnD.getTime()}`;
                 }
                 if (cabinClass) {
                   path += `&cabinClass=${cabinClass}`;

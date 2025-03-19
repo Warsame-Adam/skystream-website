@@ -64,7 +64,19 @@ const HomeSearchbar = () => {
       isDate(departureDate) &&
       isDate(returnDate)
     ) {
-      const path = `/flights/search?originCountry=${origin.countryCode}&originCity=${origin.cityCode}&destinationCountry=${destination.countryCode}&destinationCity=${destination.cityCode}&departureDate=${departureDate}&returnDate=${returnDate}&adults=${adults}&children=${children}&cabinClass=${cabinClass}`;
+      const departureD = new Date(departureDate);
+      departureD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
+      const returnD = new Date(returnDate);
+      returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+
+      const path = `/flights/search?originCountry=${
+        origin.countryCode
+      }&originCity=${origin.cityCode}&destinationCountry=${
+        destination.countryCode
+      }&destinationCity=${
+        destination.cityCode
+      }&departureDate=${departureD.getTime()}&returnDate=${returnD.getTime()}&adults=${adults}&children=${children}&cabinClass=${cabinClass}`;
       navigate(path);
     }
   };

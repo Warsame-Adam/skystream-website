@@ -108,12 +108,18 @@ const CityHotelsPage = () => {
     }
 
     if (departureDateParams && isDate(departureDateParams * 1)) {
-      dispatch(setDepartureDate(departureDateParams * 1));
-      query.availableFrom = new Date(departureDateParams * 1).toString();
+      const departureD = new Date(departureDateParams * 1);
+      departureD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+
+      dispatch(setDepartureDate(departureD.getTime()));
+      query.availableFrom = departureD.toString();
     }
     if (returnDateParams && isDate(returnDateParams * 1)) {
-      dispatch(setReturnDate(returnDateParams * 1));
-      query.availableTo = new Date(returnDateParams * 1).toString();
+      const returnD = new Date(returnDateParams * 1);
+      returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+
+      dispatch(setReturnDate(returnD.getTime()));
+      query.availableTo = returnD.toString();
     }
     if (freeCancellationParams === "true") {
       query.freeCancellation = true;

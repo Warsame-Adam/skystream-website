@@ -33,6 +33,12 @@ const inputStyle = {
   },
 };
 const getMinPrice = (hotel) => {
+  if (
+    !hotel.deals ||
+    hotel.deals.length === 0 ||
+    hotel.deals.flatMap((deal) => deal.rooms).length === 0
+  )
+    return 0;
   return hotel.deals
     .flatMap((deal) => deal.rooms) // Flatten rooms from all deals
     .reduce((min, room) => Math.min(min, room.pricePerNight), Infinity);
