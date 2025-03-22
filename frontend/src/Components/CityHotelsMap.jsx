@@ -8,7 +8,12 @@ import {
 } from "@mui/material";
 
 import { useParams } from "react-router-dom";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  InfoWindow,
+} from "@react-google-maps/api";
 import { getHotels } from "../services/hotel";
 import { GlobalContext } from "../context/GlobalContext";
 
@@ -25,6 +30,8 @@ const CityHotelsMap = () => {
   const countryParams = params?.country;
   const cityParams = params.city;
   const [hotels, setHotels] = useState([]);
+  const [selectedHotel, setSelectedHotel] = useState(null);
+
   const [loading, setLoading] = useState({
     active: false,
     action: "",
@@ -113,7 +120,12 @@ const CityHotelsMap = () => {
         };
 
   return (
-    <Container className='container' sx={{ mt: "40px" }}>
+    <Container
+      className='container'
+      sx={{
+        mt: "40px",
+      }}
+    >
       <Typography
         sx={{
           color: "black",
@@ -134,24 +146,59 @@ const CityHotelsMap = () => {
         </Alert>
       ) : (
         hotels.length > 0 && (
-          <LoadScript googleMapsApiKey={apiKey}>
-            <GoogleMap
-              mapContainerStyle={containerStyle}
-              center={center}
-              zoom={5}
-            >
-              {hotels.map((hotel) => (
-                <Marker
-                  key={hotel.id}
-                  position={{
-                    lat: hotel.location.coordinates[1],
-                    lng: hotel.location.coordinates[0],
-                  }}
-                  title={hotel.name}
-                />
-              ))}
-            </GoogleMap>
-          </LoadScript>
+          <Box
+            sx={{
+              width: "100%",
+              "& .gm-ui-hover-effect": {
+                display: "none !important",
+              },
+            }}
+          >
+            <LoadScript googleMapsApiKey={apiKey}>
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={5}
+                onClick={() => setSelectedHotel(null)} // Close InfoWindow when clicking anywhere on the map
+              >
+                {hotels.map((hotel) => (
+                  <Marker
+                    key={hotel.id}
+                    position={{
+                      lat: hotel.location.coordinates[1],
+                      lng: hotel.location.coordinates[0],
+                    }}
+                    title={hotel.name}
+                    onClick={() => setSelectedHotel(hotel)} // Set selected hotel on click
+                  />
+                ))}
+
+                {/* Show InfoWindow when a marker is clicked */}
+                {selectedHotel && (
+                  <InfoWindow
+                    position={{
+                      lat: selectedHotel.location.coordinates[1],
+                      lng: selectedHotel.location.coordinates[0],
+                    }}
+
+                    // onCloseClick={() => setSelectedHotel(null)} // Close window on click
+                  >
+                    <div>
+                      <h3>{selectedHotel.name}</h3>
+                      <img
+                        src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${selectedHotel.cover}`}
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          maxWidth: "150px",
+                        }}
+                      />
+                    </div>
+                  </InfoWindow>
+                )}
+              </GoogleMap>
+            </LoadScript>
+          </Box>
         )
       )}
     </Container>

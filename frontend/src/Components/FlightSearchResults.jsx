@@ -109,18 +109,17 @@ const FlightSearchResults = ({ loading, error, flights }) => {
     maxDepartureTime,
   ]);
   const [returnTime, setReturnTime] = useState([minReturnTime, maxReturnTime]);
+
   const [journeyDuration, setJourneyDuration] = useState([
     minDuration,
     maxDuration,
   ]);
-
   const [expandedSections, setExpandedSections] = useState({
     stops: true,
     departureTimes: true,
     journeyDuration: true,
     airlines: true,
   });
-  const showInputs = useSelector((state) => state.flightSearch.showInputs);
 
   useEffect(() => {
     if (matchesSM) {
