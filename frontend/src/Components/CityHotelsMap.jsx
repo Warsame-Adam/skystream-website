@@ -133,24 +133,26 @@ const CityHotelsMap = () => {
           {error.message}
         </Alert>
       ) : (
-        <LoadScript googleMapsApiKey={apiKey}>
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={5}
-          >
-            {hotels.map((hotel) => (
-              <Marker
-                key={hotel.id}
-                position={{
-                  lat: hotel.location.coordinates[1],
-                  lng: hotel.location.coordinates[0],
-                }}
-                title={hotel.name}
-              />
-            ))}
-          </GoogleMap>
-        </LoadScript>
+        hotels.length > 0 && (
+          <LoadScript googleMapsApiKey={apiKey}>
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={5}
+            >
+              {hotels.map((hotel) => (
+                <Marker
+                  key={hotel.id}
+                  position={{
+                    lat: hotel.location.coordinates[1],
+                    lng: hotel.location.coordinates[0],
+                  }}
+                  title={hotel.name}
+                />
+              ))}
+            </GoogleMap>
+          </LoadScript>
+        )
       )}
     </Container>
   );

@@ -67,6 +67,17 @@ export const getFlights = async (filters) => {
   }
 };
 
+export const getCheapestFlightFromDestination = async (filters) => {
+  try {
+    const res = await axiosInstance.get(
+      "/flights/getCheapestFlightFromDestination",
+      { params: filters }
+    );
+    return handleApiResponse(res);
+  } catch (error) {
+    return handleApiError(error);
+  }
+};
 export const getMyFavFlights = async (userToken) => {
   try {
     const res = await axiosInstance.get("/flights/favoriteFlights", {

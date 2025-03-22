@@ -23,7 +23,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
-import { getFlights } from "../../services/flight";
+import { getCheapestFlightFromDestination } from "../../services/flight";
 import { GlobalContext } from "../../context/GlobalContext";
 
 const FlightLocations = () => {
@@ -48,7 +48,7 @@ const FlightLocations = () => {
     const currentD = new Date();
     currentD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
 
-    const res = await getFlights({
+    const res = await getCheapestFlightFromDestination({
       originCity: visitorData?.cityCode,
       originCountry: visitorData?.countryCode,
       departureTime: currentD.toString(),
@@ -212,15 +212,13 @@ const FlightLocations = () => {
                         }}
                       >
                         {/* Image Section */}
-                        {deal.image && (
-                          <CardMedia
-                            sx={{ height: "160px" }}
-                            component='img'
-                            height='140'
-                            image={`${process.env.REACT_APP_BACKEND_URL}/files/flights/${deal.image}`}
-                            alt={`${deal.image} Image`}
-                          />
-                        )}
+                        <CardMedia
+                          sx={{ height: "160px" }}
+                          component='img'
+                          height='140'
+                          image={`${process.env.REACT_APP_BACKEND_URL}/files/locations/${deal.location?.arrivalCity?.cover}`}
+                          alt={`${deal.location?.arrivalCity?.cityName}`}
+                        />
 
                         <CardContent>
                           {/* City/Town and Country */}

@@ -144,7 +144,7 @@ const CityHotelSelection = () => {
                     <CardMedia
                       component='img'
                       height='190px'
-                      src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+                      src={`${process.env.REACT_APP_BACKEND_URL}/files/locations/${hotel?.city?.cover}`}
                       alt={hotel.name}
                     />
                     <CardContent
