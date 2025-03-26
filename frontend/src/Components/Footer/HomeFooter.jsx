@@ -31,7 +31,7 @@ const HomeFooter = () => {
         backgroundColor: "common.blue",
         color: "text.primary",
         py: "50px",
-        mt: "2rem",
+        // mt: "2rem",
       }}
     >
       <Container className='container'>

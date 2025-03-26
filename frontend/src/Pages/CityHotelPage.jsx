@@ -29,6 +29,7 @@ import {
 } from "../Components/Slices/HotelTravellersddSlice.js";
 import { getHotels } from "../services/hotel.js";
 import { GlobalContext } from "../context/GlobalContext.js";
+import { Box } from "@mui/material";
 
 const isDate = (val) => !isNaN(new Date(val).getTime());
 
@@ -192,6 +193,8 @@ const CityHotelsPage = () => {
       <CityHotelStarRatings />
       <CityHotelsFastFacts />
       <CityHotelsFAQs />
+      <Box sx={{ mt: "2rem" }} />
+
       <HomeFooter />
     </>
   );

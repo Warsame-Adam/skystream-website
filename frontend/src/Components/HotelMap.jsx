@@ -6,16 +6,18 @@ import {
   InfoWindow,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 import HotelIcon from "../Components/Assets/hotel_Icon.jpg";
 import MuseumIcon from "../Components/Assets/museum_Icon.jpg";
 import TrainIcon from "../Components/Assets/train_Icon.jpg";
 import PlaneIcon from "../Components/Assets/plane_Icon.jpg";
 
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
 const HotelMap = ({ hotel }) => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: apiKey,
     libraries: ["places"],
   });
 
@@ -26,7 +28,6 @@ const HotelMap = ({ hotel }) => {
   const [nearbyPlaces, setNearbyPlaces] = useState([]);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const mapRef = useRef(null);
-
   const mapOptions = {
     mapTypeControl: false,
     zoomControl: true,
@@ -83,58 +84,81 @@ const HotelMap = ({ hotel }) => {
     fetchNearbyPlaces();
   };
 
-  useEffect(() => {
-    if (isLoaded) {
-      fetchNearbyPlaces();
-    }
-  }, [isLoaded]);
+  // useEffect(() => {
+  //   if (isLoaded) {
+  //    // fetchNearbyPlaces();
+  //   }
+  // }, [isLoaded]);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
   }
-
+  if (!apiKey) {
+    console.error(
+      "Google Maps API key is missing. Please set REACT_APP_GOOGLE_MAPS_API_KEY."
+    );
+    return <p>Google Maps API key is missing.</p>;
+  }
   return (
     <Container className='container' sx={{ mt: "96px" }} id='explore'>
-      <GoogleMap
-        mapContainerStyle={{ width: "100%", height: "400px" }}
-        center={hotelLocation}
-        zoom={14}
-        options={mapOptions}
-        onLoad={handleMapLoad}
+      <Box
+        sx={{
+          width: "100%",
+          // "& .gm-ui-hover-effect": {
+          //   display: "none !important",
+          // },
+        }}
       >
-        <Marker
-          position={hotelLocation}
-          icon={{
-            url: HotelIcon,
-            scaledSize: { width: 35, height: 35 },
-          }}
-          title='Kimpton - Fitzroy London'
-        />
-
-        {nearbyPlaces.map((place) => (
+        <GoogleMap
+          mapContainerStyle={{ width: "100%", height: "400px" }}
+          center={hotelLocation}
+          zoom={14}
+          options={mapOptions}
+          onLoad={handleMapLoad}
+        >
           <Marker
-            key={place.id}
-            position={place.position}
-            icon={{
-              url: place.icon,
-              scaledSize: { width: 35, height: 35 },
-            }}
-            onClick={() => setSelectedMarker(place)}
+            position={hotelLocation}
+            // icon={{
+            //   url: HotelIcon,
+            //   scaledSize: { width: 35, height: 35 },
+            // }}
+            title={hotel.name}
+            onClick={() =>
+              setSelectedMarker({
+                ...hotel,
+                position: {
+                  lat: hotel?.location?.coordinates[1],
+                  lng: hotel?.location?.coordinates[0],
+                },
+              })
+            }
           />
-        ))}
 
-        {selectedMarker && (
-          <InfoWindow
-            position={selectedMarker.position}
-            onCloseClick={() => setSelectedMarker(null)}
-          >
-            <div>
-              <h3>{selectedMarker.name}</h3>
-              <p>{selectedMarker.address}</p>
-            </div>
-          </InfoWindow>
-        )}
-      </GoogleMap>
+          {nearbyPlaces.map((place) => (
+            <Marker
+              key={place.id}
+              position={place.position}
+              icon={{
+                url: place.icon,
+                //scaledSize: { width: 35, height: 35 },
+              }}
+              onClick={() => setSelectedMarker(place)}
+            />
+          ))}
+
+          {selectedMarker && (
+            <InfoWindow
+              position={selectedMarker.position}
+              onCloseClick={() => setSelectedMarker(null)}
+            >
+              <div>
+                <h3>{selectedMarker.name}</h3>
+                <p>{selectedMarker.address}</p>
+              </div>
+            </InfoWindow>
+          )}
+        </GoogleMap>
+      </Box>
     </Container>
   );
 };

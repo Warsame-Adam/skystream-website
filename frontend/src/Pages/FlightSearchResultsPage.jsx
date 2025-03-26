@@ -185,6 +185,7 @@ const FlightSearchResultsPage = () => {
       {/* <FlightSearchResultsNavbar /> */}
       <FlightSearchUI fetchFlightsWithSearch={fetchFlightsWithSearch} />
       <FlightSearchResults loading={loading} error={error} flights={flights} />
+
       <HomeFooter />
     </>
   );

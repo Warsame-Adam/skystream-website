@@ -8,6 +8,7 @@ import HomeFooter from "../Components/Footer/HomeFooter";
 import { GlobalContext } from "../context/GlobalContext";
 import { useSelector, useDispatch } from "react-redux";
 import { setFrom } from "../Components/Slices/flightSearchSlice";
+import { Box } from "@mui/material";
 
 const HomePage = () => {
   const { visitorData, locations } = useContext(GlobalContext);
@@ -41,6 +42,8 @@ const HomePage = () => {
       {/* <CalendarLayout /> */}
       <Hero />
       <FAQ />
+      <Box sx={{ mt: "2rem" }} />
+
       <HomeFooter />
     </>
   );

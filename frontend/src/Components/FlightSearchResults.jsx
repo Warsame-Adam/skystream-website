@@ -34,6 +34,17 @@ import { GlobalContext } from "../context/GlobalContext";
 import * as moment from "moment";
 import { showInterest } from "../services/flight";
 import LoginModal from "./Login/LoginModal";
+
+function formatTextToTwoLines(text) {
+  const words = text.split(" ");
+
+  if (words.length === 2) {
+    return words.join("\n"); // Break between two words
+  } else {
+    return words.slice(0, 2).join(" ") + "\n" + words.slice(2).join(" ");
+  }
+}
+
 function formatFlightDuration(departureTime, arrivalTime) {
   const dep = moment(departureTime);
   const arr = moment(arrivalTime);
@@ -131,6 +142,9 @@ const FlightSearchResults = ({ loading, error, flights }) => {
       });
     }
   }, [matchesSM]);
+  useEffect(() => {
+    setJourneyDuration([minDuration, maxDuration]);
+  }, [minDuration, maxDuration]); // Runs when minDuration/maxDuration update
 
   const directParams = searchParams.get("direct");
   useEffect(() => {
@@ -315,7 +329,9 @@ const FlightSearchResults = ({ loading, error, flights }) => {
     </Box>
   );
   return (
-    <Box sx={{ width: "100%", backgroundColor: "#EFF3F8", pt: "30px" }}>
+    <Box
+      sx={{ pb: "2rem", width: "100%", backgroundColor: "#EFF3F8", pt: "30px" }}
+    >
       {!globalUser && (
         <LoginModal
           open={showLoginDialog}
@@ -836,6 +852,7 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                     fontWeight: 400,
                                     color: "#626971",
                                     maxWidth: "120px",
+                                    // whiteSpace: "break-spaces",
                                   }}
                                 >
                                   {flight?.location?.departureAirport?.name}
@@ -856,7 +873,7 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                       key={i}
                                       sx={{
                                         position: "absolute",
-                                        left: `${53.5 + i * 10}%`,
+                                        left: `${54.5 + i * 10}%`,
                                         top: "-4px",
                                         transform: `translateX(-${
                                           50 + i * 10
@@ -899,6 +916,7 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                     fontWeight: 400,
                                     color: "#626971",
                                     maxWidth: "120px",
+                                    //whiteSpace: "break-spaces",
                                   }}
                                 >
                                   {flight?.location?.arrivalAirport?.name}
@@ -907,11 +925,15 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                             </Box>
                             <Typography
                               sx={{
+                                position: "absolute",
+                                left: 0,
+                                bottom: "8px",
+                                width: "100%",
                                 textAlign: "center",
-                                mb: 3,
-                                mt: -4,
                                 color: "#0c838a",
                                 fontSize: "12px",
+                                // mb: 3,
+                                // mt: "-32px",
                               }}
                             >
                               {!flight.location?.outboundDirect
@@ -926,12 +948,11 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                               variant='body2'
                               color='black'
                               sx={{
-                                textAlign: "center",
-                                mb: 2,
                                 position: "absolute",
-                                top: "8px",
-                                left: "50%",
-                                transform: "translateX(-50%)",
+                                top: "0px",
+                                left: 0,
+                                width: "100%",
+                                textAlign: "center",
                               }}
                             >
                               {formatFlightDuration(
@@ -943,7 +964,11 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                         </Grid>
 
                         {flight.twoWay && (
-                          <Grid container alignItems='center'>
+                          <Grid
+                            container
+                            alignItems='center'
+                            sx={{ mt: "24px" }}
+                          >
                             <Grid item md={3} xs={12}>
                               <Typography
                                 variant='subtitle1'
@@ -986,6 +1011,7 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                       fontWeight: 400,
                                       color: "#626971",
                                       maxWidth: "120px",
+                                      // whiteSpace: "break-spaces",
                                     }}
                                   >
                                     {flight?.location?.arrivalAirport?.name}
@@ -1006,7 +1032,7 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                         key={i}
                                         sx={{
                                           position: "absolute",
-                                          left: `${53.5 + i * 10}%`,
+                                          left: `${54.5 + i * 10}%`,
                                           top: "-4px",
                                           transform: `translateX(-${
                                             50 + i * 10
@@ -1052,11 +1078,15 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                               </Box>
                               <Typography
                                 sx={{
+                                  position: "absolute",
+                                  left: 0,
+                                  bottom: "0px",
+                                  width: "100%",
                                   textAlign: "center",
-                                  mb: 2,
-                                  mt: -3,
                                   color: "#0c838a",
                                   fontSize: "12px",
+                                  // mb: 2,
+                                  // mt: "-22px",
                                 }}
                               >
                                 {!flight.location?.returnDirect
@@ -1071,12 +1101,11 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                                 variant='body2'
                                 color='black'
                                 sx={{
-                                  textAlign: "center",
-
                                   position: "absolute",
-                                  top: "8px",
-                                  left: "50%",
-                                  transform: "translateX(-50%)",
+                                  top: "-1px",
+                                  left: 0,
+                                  width: "100%",
+                                  textAlign: "center",
                                 }}
                               >
                                 {formatFlightDuration(

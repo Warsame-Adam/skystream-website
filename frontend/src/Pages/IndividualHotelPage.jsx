@@ -112,6 +112,8 @@ const IndividualHotelPage = () => {
               <RecommendedHotels hotel={hotel} />
             </>
           )}
+      <Box sx={{ mt: "2rem" }} />
+
       <CentredFooter />
     </>
   );

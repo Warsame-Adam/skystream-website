@@ -10,6 +10,7 @@ import HomeFooter from "../Components/Footer/HomeFooter";
 import { useDispatch } from "react-redux";
 import { GlobalContext } from "../context/GlobalContext";
 import { setFrom } from "../Components/Slices/flightSearchSlice";
+import { Box } from "@mui/material";
 const FlightPage = () => {
   const { visitorData, locations } = useContext(GlobalContext);
   const dispatch = useDispatch();
@@ -41,6 +42,8 @@ const FlightPage = () => {
       <FlightLocations />
       <FlightFAQ />
       <FlightInfoSection />
+      <Box sx={{ mt: "2rem" }} />
+
       <HomeFooter />
       {/* <CentredFooter /> */}
     </>
