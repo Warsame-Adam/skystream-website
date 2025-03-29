@@ -199,8 +199,22 @@ const FlightLocations = () => {
                 }
 
                 return (
-                  <Grid item xs={12} sm={6} md={4} key={index}>
-                    <Link to={`${path}`} style={{ textDecoration: "none" }}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    key={index}
+                    sx={{ display: "flex" }}
+                  >
+                    <Link
+                      to={`${path}`}
+                      style={{
+                        textDecoration: "none",
+                        width: "100%",
+                        height: "inherit",
+                      }}
+                    >
                       <Card
                         sx={{
                           borderRadius: "12px",
@@ -209,6 +223,12 @@ const FlightLocations = () => {
                             boxShadow: "0 4px 14px 0 #25201f40",
                           },
                           transition: "all .2s ease-in-out",
+                          height: "inherit",
+                          "&.MuiPaper-root": {
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                          },
                         }}
                       >
                         {/* Image Section */}
@@ -220,7 +240,13 @@ const FlightLocations = () => {
                           alt={`${deal.location?.arrivalCity?.cityName}`}
                         />
 
-                        <CardContent>
+                        <CardContent
+                          sx={{
+                            flex: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
                           {/* City/Town and Country */}
                           <Typography
                             variant='h6'
@@ -344,6 +370,10 @@ const FlightLocations = () => {
                               color: "#0062e3",
                               fontWeight: "bold",
                               fontSize: "14.5px",
+                              flex: 1,
+                              display: "flex",
+                              justifyContent: "flex-end",
+                              alignItems: "flex-end",
                             }}
                           >
                             from £
