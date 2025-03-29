@@ -8,6 +8,7 @@ import {
 } from "@react-google-maps/api";
 import { Box, Container } from "@mui/material";
 
+import HotelLocationIcon from "../Components/Assets/hotel-location-icon.png";
 import HotelIcon from "../Components/Assets/hotel_Icon.jpg";
 import MuseumIcon from "../Components/Assets/museum_Icon.jpg";
 import TrainIcon from "../Components/Assets/train_Icon.jpg";
@@ -118,11 +119,15 @@ const HotelMap = ({ hotel }) => {
         >
           <Marker
             position={hotelLocation}
-            // icon={{
-            //   url: HotelIcon,
-            //   scaledSize: { width: 35, height: 35 },
-            // }}
             title={hotel.name}
+            onLoad={(marker) => {
+              if (window.google) {
+                marker.setIcon({
+                  url: HotelLocationIcon,
+                  scaledSize: new window.google.maps.Size(40, 40),
+                });
+              }
+            }}
             onClick={() =>
               setSelectedMarker({
                 ...hotel,

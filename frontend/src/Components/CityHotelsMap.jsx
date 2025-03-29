@@ -16,6 +16,7 @@ import {
 } from "@react-google-maps/api";
 import { getHotels } from "../services/hotel";
 import { GlobalContext } from "../context/GlobalContext";
+import HotelLocationIcon from "../Components/Assets/hotel-location-icon.png";
 
 const containerStyle = {
   width: "100%",
@@ -167,6 +168,14 @@ const CityHotelsMap = () => {
                     position={{
                       lat: hotel.location.coordinates[1],
                       lng: hotel.location.coordinates[0],
+                    }}
+                    onLoad={(marker) => {
+                      if (window.google) {
+                        marker.setIcon({
+                          url: HotelLocationIcon,
+                          scaledSize: new window.google.maps.Size(40, 40),
+                        });
+                      }
                     }}
                     title={hotel.name}
                     onClick={() => setSelectedHotel(hotel)} // Set selected hotel on click
