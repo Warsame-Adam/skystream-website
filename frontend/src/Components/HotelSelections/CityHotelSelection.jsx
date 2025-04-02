@@ -17,7 +17,6 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentFabCityIndex } from "../Slices/hotelSlice";
-import { fabCityHotelLocations } from "../HotelData.js";
 import { Link } from "react-router-dom";
 import { getFabCityHotels } from "../../services/hotel.js";
 import { useEffect, useState } from "react";
@@ -77,7 +76,7 @@ const CityHotelSelection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleNext = () => {
-    if (currentFabCityIndex + 3 < fabCityHotelLocations.length) {
+    if (currentFabCityIndex + 3 < hotels.length) {
       dispatch(setCurrentFabCityIndex(currentFabCityIndex + 3));
     }
   };
@@ -88,7 +87,7 @@ const CityHotelSelection = () => {
     }
   };
 
-  const visibleCities = fabCityHotelLocations.slice(
+  const visibleCities = hotels.slice(
     currentFabCityIndex,
     currentFabCityIndex + 3
   );
@@ -123,7 +122,7 @@ const CityHotelSelection = () => {
           </Alert>
         ) : hotels.length > 0 ? (
           <Grid container spacing={2}>
-            {hotels.map((hotel, index) => (
+            {visibleCities.map((hotel, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Link
                   // /${hotel.name}/${hotel._id}
@@ -246,21 +245,29 @@ const CityHotelSelection = () => {
             </IconButton>
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
-            {Array.from({ length: 3 }).map((_, index) => (
-              <Box
-                key={index}
-                sx={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  backgroundColor:
-                    currentFabCityIndex === index * 3
-                      ? "darkgrey"
-                      : "lightgrey",
-                }}
-              />
-            ))}
+          <Box
+            sx={{
+              display: { md: "flex", xs: "none" },
+              justifyContent: "center",
+              gap: 1,
+            }}
+          >
+            {Array.from({ length: Math.ceil(hotels.length / 3) }).map(
+              (_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: "50%",
+                    backgroundColor:
+                      currentFabCityIndex === index * 3
+                        ? "darkgrey"
+                        : "lightgrey",
+                  }}
+                />
+              )
+            )}
           </Box>
 
           <Box
