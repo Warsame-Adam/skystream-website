@@ -15,11 +15,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { format } from "date-fns";
 import { useSelector } from "react-redux";
 
-import {
-  setDepartureDate,
-  setReturnDate,
-} from "../Components/Slices/dateStore.js";
-
 import HotelTravellersDropDown from "./HotelTravellersDropDown";
 import CalandarMenu from "./CalandarMenu";
 import roomsandpricesimg from "../Components/Assets/roomsandpricesimg.svg";
@@ -57,10 +52,6 @@ const RoomsAndPrices = ({ hotel }) => {
     (state) => state.hotelTravellers
   );
 
-  useEffect(() => {
-    setDepartureDate(null);
-    setReturnDate(null);
-  }, []);
   const travellersLabel = useMemo(() => {
     const parts = [];
     if (adults > 0) {

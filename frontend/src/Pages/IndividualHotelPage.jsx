@@ -21,6 +21,10 @@ import {
   setChildren,
   setRooms,
 } from "../Components/Slices/HotelTravellersddSlice";
+import {
+  setDepartureDate,
+  setReturnDate,
+} from "../Components/Slices/dateStore.js";
 
 const IndividualHotelPage = () => {
   const dispatch = useDispatch();
@@ -62,9 +66,11 @@ const IndividualHotelPage = () => {
 
   useEffect(() => {
     fetchHotelWithId(idParams, "page");
-    dispatch(setAdults(0));
+    dispatch(setAdults(1));
     dispatch(setChildren(0));
-    dispatch(setRooms(0));
+    dispatch(setRooms(1));
+    setDepartureDate(null);
+    setReturnDate(null);
   }, [idParams]);
 
   const loadingUI = (
