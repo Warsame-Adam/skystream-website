@@ -144,7 +144,7 @@ const CityHotelSelection = () => {
                     <CardMedia
                       component='img'
                       height='190px'
-                      src={hotel.cover}
+                      src={hotel.city.cover}
                       alt={hotel.name}
                     />
                     <CardContent

@@ -36,18 +36,14 @@ const getMinPrice = (hotel) => {
 const LocalHotelSelection = () => {
   const { locations, visitorData } = useContext(GlobalContext);
   const homeCities = locations.filter(
-    (x) =>
-      x.countryCode === visitorData?.countryCode &&
-      x.cityCode === visitorData?.cityCode
+    (x) => x.countryCode === visitorData?.countryCode
   );
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("md"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("sm"));
 
   const nCards = matchesXS ? 1 : matchesSM ? 2 : 3;
-  const [selectedCity, setSelectedCity] = useState(
-    homeCities.length > 0 ? homeCities[0].cityCode : ""
-  );
+  const [selectedCity, setSelectedCity] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState({
@@ -59,7 +55,6 @@ const LocalHotelSelection = () => {
     message: "",
     action: "",
   });
-
   const fetchHotels = async () => {
     setLoading({
       active: true,
@@ -69,7 +64,7 @@ const LocalHotelSelection = () => {
     currentD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
 
     const res = await getHotels({
-      originCountry: visitorData?.countryCode,
+      country: visitorData?.countryCode,
       availableFrom: currentD.toString(),
     });
     if (res.success) {
@@ -88,9 +83,18 @@ const LocalHotelSelection = () => {
     });
   };
   useEffect(() => {
-    fetchHotels();
+    if (visitorData) {
+      fetchHotels();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visitorData]);
+  useEffect(() => {
+    if (locations) {
+      const homeCity = homeCities.length > 0 ? homeCities[0].cityCode : "";
+      setSelectedCity(homeCity);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locations]);
   const handleCityChange = (event, newValue) => {
     setSelectedCity(newValue);
     setCurrentIndex(0);
@@ -137,7 +141,7 @@ const LocalHotelSelection = () => {
         <Alert severity='error' sx={{ mt: "20px" }}>
           {error.message}
         </Alert>
-      ) : cityHotels.length > 0 ? (
+      ) : hotels.length > 0 ? (
         <>
           <Tabs
             value={selectedCity}
