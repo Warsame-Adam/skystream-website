@@ -71,7 +71,8 @@ const CityHotelsList = ({ loading, error, hotels }) => {
             }}
           >
             <CardMedia
-              image={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+              component="img"
+              image={hotel.cover}
               alt='Hotel Image'
               sx={{
                 minHeight: "inherit",

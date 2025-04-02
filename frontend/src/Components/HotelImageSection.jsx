@@ -3,6 +3,7 @@ import { Box, Modal, Grid, IconButton, Typography } from "@mui/material";
 import styled from "@mui/material/styles/styled";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 const ImageGridItem = styled(Box)(({ theme }) => ({
   cursor: "pointer",
   "& img": {
@@ -30,6 +31,8 @@ const HotelImageSection = ({ hotel }) => {
   const [open, setOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
+  const allImages = [hotel.cover, ...hotel.images];
+
   const handleOpen = (index) => {
     setSelectedImageIndex(index);
     setOpen(true);
@@ -43,16 +46,18 @@ const HotelImageSection = ({ hotel }) => {
   return (
     <Box sx={{ width: "100%", height: "400px", overflow: "hidden", mt: 2 }}>
       <Grid container spacing={1} sx={{ height: "100%" }}>
+        {/* Left big image */}
         <Grid item xs={6} sx={{ height: "100%" }}>
           <ImageGridItem onClick={() => handleOpen(0)} sx={{ height: "100%" }}>
             <img
-              src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+              src={hotel.cover}
               alt={hotel.name}
               style={{ height: "100%", width: "100%", objectFit: "cover" }}
             />
           </ImageGridItem>
         </Grid>
 
+        {/* Right 4 small images */}
         <Grid item xs={6} sx={{ height: "100%" }}>
           <Grid container spacing={1} sx={{ height: "100%" }}>
             {hotel.images.slice(0, 4).map((image, index) => (
@@ -78,8 +83,8 @@ const HotelImageSection = ({ hotel }) => {
                     </div>
                   )}
                   <img
-                    src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${image}`}
-                    alt={image.alt}
+                    src={image}
+                    alt={`Hotel image ${index + 1}`}
                     style={{
                       height: "100%",
                       width: "100%",
@@ -93,6 +98,7 @@ const HotelImageSection = ({ hotel }) => {
         </Grid>
       </Grid>
 
+      {/* Modal for viewing large image */}
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
           <Grid container alignItems='center' wrap='nowrap'>
@@ -110,18 +116,16 @@ const HotelImageSection = ({ hotel }) => {
             </Grid>
             <Grid item sx={{ flex: 1 }}>
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${
-                  [hotel.cover, ...hotel.images][selectedImageIndex]
-                }`}
-                alt='Selected'
+                src={allImages[selectedImageIndex]}
+                alt={`Selected`}
                 style={{ width: "100%", height: "auto" }}
               />
             </Grid>
             <Grid item>
               <IconButton
-                disabled={selectedImageIndex === hotel.images.length}
+                disabled={selectedImageIndex === allImages.length - 1}
                 onClick={() => {
-                  if (selectedImageIndex < hotel.images.length) {
+                  if (selectedImageIndex < allImages.length - 1) {
                     setSelectedImageIndex((s) => s + 1);
                   }
                 }}
@@ -137,3 +141,4 @@ const HotelImageSection = ({ hotel }) => {
 };
 
 export default HotelImageSection;
+

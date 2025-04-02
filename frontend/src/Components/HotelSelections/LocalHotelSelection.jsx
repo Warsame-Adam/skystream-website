@@ -200,7 +200,7 @@ const LocalHotelSelection = () => {
                         <CardMedia
                           component='img'
                           height='140'
-                          src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+                          src={hotel.cover}
                           alt={hotel.name}
                         />
                         <Box

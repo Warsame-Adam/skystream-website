@@ -236,7 +236,8 @@ const FlightLocations = () => {
                           sx={{ height: "160px" }}
                           component='img'
                           height='140'
-                          image={`${process.env.REACT_APP_BACKEND_URL}/files/locations/${deal.location?.arrivalCity?.cover}`}
+                          src={deal.image || "/placeholder.png"}
+
                           alt={`${deal.location?.arrivalCity?.cityName}`}
                         />
 
