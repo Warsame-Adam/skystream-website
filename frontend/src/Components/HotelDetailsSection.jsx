@@ -41,7 +41,7 @@ const HotelDetailsSection = ({ hotel }) => {
           {hotelName}
         </Typography>
         <Rating
-          value={rating}
+          value={hotel.starRating}
           precision={0.5}
           readOnly
           sx={{ color: "#F55D42", borderColor: "#F55D42" }}

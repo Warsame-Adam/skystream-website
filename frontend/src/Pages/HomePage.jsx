@@ -15,6 +15,10 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (visitorData && locations.length > 0) {
       const cityCodeObj = locations.find(
         (x) =>

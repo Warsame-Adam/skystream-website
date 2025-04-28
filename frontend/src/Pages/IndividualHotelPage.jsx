@@ -65,6 +65,12 @@ const IndividualHotelPage = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  
+
+  useEffect(() => {
     fetchHotelWithId(idParams, "page");
     dispatch(setAdults(1));
     dispatch(setChildren(0));

@@ -22,7 +22,7 @@ function getMonthName(monthIndex) {
   ];
   return months[monthIndex - 1] || "Invalid Month";
 }
-const CityHotelsFastFacts = () => {
+const CityHotelsFastFacts = ({countryCode, cityCode}) => {
   const [funFacts, setFunFacts] = useState({
     highestRatedHotel: null,
     cheapestMonthToBook: {
@@ -45,7 +45,10 @@ const CityHotelsFastFacts = () => {
       active: true,
       action: action,
     });
-    const hotelsData = await getHotelsStats();
+    console.log("📤 Sending stats request for:", { countryCode, cityCode });
+
+    const hotelsData = await getHotelsStats({ countryCode, cityCode });
+    
     if (hotelsData.success) {
       setFunFacts(hotelsData.data);
     } else {
@@ -63,7 +66,7 @@ const CityHotelsFastFacts = () => {
 
   useEffect(() => {
     fetchHotelsFacts({}, "page");
-  }, []);
+  }, [countryCode, cityCode]);
 
   return (
     <Container className='container' sx={{ mt: "96px" }}>
@@ -104,7 +107,7 @@ const CityHotelsFastFacts = () => {
             Highest rated hotel
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            {funFacts.highestRatedHotel?.name || "None"}
+          {funFacts?.highestRatedHotel?.name || "None"}
           </Typography>
         </Grid>
 
@@ -128,7 +131,7 @@ const CityHotelsFastFacts = () => {
             Cheapest month to book
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            {getMonthName(funFacts.cheapestMonthToBook.cheapestMonth)}
+          {getMonthName(funFacts?.cheapestMonthToBook?.cheapestMonth || 1)}
           </Typography>
         </Grid>
 
@@ -152,7 +155,7 @@ const CityHotelsFastFacts = () => {
             Average 4 star hotel price
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            £{funFacts.average4StarPrice} per night
+          £{funFacts?.average4StarPrice ? funFacts.average4StarPrice.toFixed(0) : 0} per night
           </Typography>
         </Grid>
 
@@ -176,7 +179,7 @@ const CityHotelsFastFacts = () => {
             Average 5 star hotel price
           </Typography>
           <Typography variant='h6' sx={{ color: "#1976d2" }}>
-            £{funFacts.average5StarPrice} per night
+          £{funFacts?.average5StarPrice ? funFacts.average5StarPrice.toFixed(0) : 0} per night
           </Typography>
         </Grid>
       </Grid>

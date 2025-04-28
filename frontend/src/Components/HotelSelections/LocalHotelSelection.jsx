@@ -15,6 +15,7 @@ import {
   Alert,
   CircularProgress,
   Rating,
+  Divider
 } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -61,7 +62,7 @@ const LocalHotelSelection = () => {
       action: "page",
     });
     const currentD = new Date();
-    currentD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+    currentD.setHours(0, 0, 0, 0);
 
     const res = await getHotels({
       country: visitorData?.countryCode,
@@ -86,21 +87,21 @@ const LocalHotelSelection = () => {
     if (visitorData) {
       fetchHotels();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visitorData]);
   useEffect(() => {
     if (locations) {
       const homeCity = homeCities.length > 0 ? homeCities[0].cityCode : "";
       setSelectedCity(homeCity);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locations]);
   const handleCityChange = (event, newValue) => {
     setSelectedCity(newValue);
     setCurrentIndex(0);
   };
 
-  const cityHotels = hotels.filter((x) => x.city.cityCode === selectedCity);
+  const cityHotels = hotels
+    .filter((x) => x.city.cityCode === selectedCity)
+    .slice(0, 6);
   const visibleHotels = cityHotels.slice(currentIndex, currentIndex + nCards);
 
   const handleNext = () => {
@@ -116,12 +117,7 @@ const LocalHotelSelection = () => {
   };
 
   const loadingUI = (
-    <Box
-      minHeight='80px'
-      display='flex'
-      justifyContent='center'
-      alignItems='center'
-    >
+    <Box minHeight='80px' display='flex' justifyContent='center' alignItems='center'>
       <CircularProgress size='30px' />
     </Box>
   );
@@ -138,18 +134,14 @@ const LocalHotelSelection = () => {
       {loading.active && loading.action === "page" ? (
         loadingUI
       ) : error.active && error.action === "page" ? (
-        <Alert severity='error' sx={{ mt: "20px" }}>
-          {error.message}
-        </Alert>
+        <Alert severity='error' sx={{ mt: "20px" }}>{error.message}</Alert>
       ) : hotels.length > 0 ? (
         <>
           <Tabs
             value={selectedCity}
             onChange={handleCityChange}
             sx={{
-              "& .MuiTabs-indicator": {
-                display: "none",
-              },
+              "& .MuiTabs-indicator": { display: "none" },
               "& .MuiTab-root": {
                 padding: "5px 8px",
                 minHeight: "auto",
@@ -177,12 +169,7 @@ const LocalHotelSelection = () => {
             ))}
           </Tabs>
 
-          <Box
-            display='flex'
-            justifyContent='center'
-            aliSgnItems='center'
-            my={4}
-          >
+          <Box display='flex' justifyContent='center' alignItems='center' my={4}>
             <Grid container spacing={2}>
               {visibleHotels.map((hotel, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
@@ -194,112 +181,66 @@ const LocalHotelSelection = () => {
                       sx={{
                         borderRadius: "12px",
                         boxShadow: "0 1px 3px 0 #25201f4d",
-                        "&:hover": {
-                          boxShadow: "0 4px 14px 0 #25201f40",
-                        },
+                        "&:hover": { boxShadow: "0 4px 14px 0 #25201f40" },
                         transition: "all .2s ease-in-out",
                       }}
                     >
-                      <Box sx={{ position: "relative" }}>
-                        <CardMedia
-                          component='img'
-                          height='140'
-                          src={hotel.cover}
-                          alt={hotel.name}
-                        />
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            bottom: 10,
-                            left: 10,
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "flex-start",
-                          }}
-                        >
-                          <Typography
-                            variant='h6'
-                            style={{
-                              fontWeight: "bold",
-                              color: "black",
-                              fontSize: "20px",
-                              paddingLeft: "15px",
-                            }}
-                          >
-                            {hotel.name}
-                          </Typography>
-
-                          <Rating
-                            readOnly
-                            value={
-                              hotel.reviews.reduce(
-                                (acc, review) => acc + review.rating,
-                                0
-                              ) / hotel.reviews.length
-                            }
-                          />
-                        </Box>
-                      </Box>
+                      <CardMedia
+                        component='img'
+                        height='150px'
+                        src={hotel.cover}
+                        alt={hotel.name}
+                      />
                       <CardContent
                         sx={{
-                          px: "8px",
+                          px: 2,
+                          pt: 2,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Typography
+                          fontWeight='bold'
+                          fontSize='16px'
+                          sx={{ color: "black" }}
+                        >
+                          {hotel.name}
+                        </Typography>
+                        <Rating
+  readOnly
+  size='small'
+  value={hotel.starRating}
+  sx={{
+    "& .MuiRating-iconFilled": {
+      color: "red", // replace with your custom orange if needed
+    },
+  }}
+/>
+
+
+                      </CardContent>
+                      <Divider sx={{ backgroundColor: "#dcdcdc", opacity: 0.6 }} />
+                      <CardContent
+                        sx={{
+                          px: 2,
+                          pt: 2.5,
                           display: "flex",
                           justifyContent: "space-between",
                         }}
                       >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            flex: 1,
-                          }}
-                        >
-                          <Typography
-                            variant='subtitle1'
-                            sx={{
-                              color: "black",
-                              fontSize: "19px",
-                              fontWeight: "bold",
-                              marginBottom: "4px",
-                            }}
-                          >
-                            {hotel?.city?.cityName}
-                          </Typography>
-
-                          <Typography
-                            sx={{
-                              color: "black",
-                              fontSize: "11px",
-                              marginBottom: "8px",
-                            }}
-                          >
-                            {hotel?.city?.countryName}
+                        <Box>
+                          <Typography sx={{fontSize:"17px", color:"black", fontWeight:"bold", marginBottom:"4px" }}>{hotel.city.cityName}</Typography>
+                          <Typography sx={{fontSize:"14px", color:"black", marginBottom:"8px" }} color='textSecondary'>
+                            {hotel.city.countryName}
                           </Typography>
                         </Box>
-
-                        <Box
-                          sx={{
-                            marginTop: "10px",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "flex-end",
-                          }}
-                        >
-                          <Typography sx={{ color: "grey", fontSize: "11px" }}>
-                            From
-                          </Typography>
-                          <Typography
-                            sx={{
-                              color: "black",
-                              fontSize: "15px",
-                              fontWeight: "bold",
-                            }}
-                          >
+                        <Box textAlign='right'>
+                          <Typography fontSize={11} color='grey'>From</Typography>
+                          <Typography sx={{color:"black", fontSize:"15px", fontWeight:"bold"}}>
                             £{getMinPrice(hotel)}
                           </Typography>
-                          <Typography sx={{ color: "grey", fontSize: "11px" }}>
-                            per night
-                          </Typography>
+                          <Typography fontSize={11} color='grey'>per night</Typography>
                         </Box>
                       </CardContent>
                     </Card>
@@ -310,66 +251,38 @@ const LocalHotelSelection = () => {
           </Box>
 
           {cityHotels.length > nCards && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                my: 2,
-                width: "100%",
-              }}
-            >
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: "flex",
-                  justifyContent: "flex-start",
-                }}
-              >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, my: 2, width: "100%" }}>
+              <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
                 <IconButton
                   disabled={currentIndex === 0}
                   onClick={handlePrev}
                   disableRipple
-                  sx={{
-                    color: currentIndex === 0 ? "#cccccc" : "#0062e3",
-                  }}
+                  sx={{ color: currentIndex === 0 ? "#cccccc" : "#0062e3" }}
                 >
                   <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
                 </IconButton>
               </Box>
-
               <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
-                {Array.from({ length: cityHotels.length }).map((_, index) => (
+                {Array.from({ length: Math.ceil(cityHotels.length / nCards) }).map((_, pageIndex) => (
                   <Box
-                    key={index}
+                    key={pageIndex}
                     sx={{
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      backgroundColor:
-                        currentIndex === index * nCards
-                          ? "darkgrey"
-                          : "lightgrey",
+                      backgroundColor: currentIndex / nCards === pageIndex ? "darkgrey" : "lightgrey",
                     }}
                   />
                 ))}
               </Box>
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
+              <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}>
                 <IconButton
                   disabled={currentIndex + nCards >= cityHotels.length}
                   onClick={handleNext}
                   disableRipple
                   sx={{
                     color:
-                      currentIndex + nCards >= cityHotels.length
-                        ? "#cccccc"
-                        : "#0062e3",
+                      currentIndex + nCards >= cityHotels.length ? "#cccccc" : "#0062e3",
                   }}
                 >
                   <KeyboardArrowRightIcon sx={{ fontSize: "35px" }} />

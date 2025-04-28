@@ -21,6 +21,8 @@ import KeyboardArrowLeftOutlinedIcon from "@mui/icons-material/KeyboardArrowLeft
 import { getRecommendedHotels } from "../services/hotel";
 import { Link } from "react-router-dom";
 
+
+
 const getMinPrice = (hotel) => {
   if (
     !hotel.deals ||
@@ -38,7 +40,7 @@ const RecommendedHotels = ({ hotel }) => {
   const [data, setData] = useState({
     similarHotelsData: [],
     recommendedHotels: [],
-    popularHotels: [],
+    
   });
   const [loading, setLoading] = useState({
     active: false,
@@ -57,13 +59,13 @@ const RecommendedHotels = ({ hotel }) => {
   const [indices, setIndices] = useState({
     0: 0,
     1: 0,
-    2: 0,
+    
   });
 
   const hotelDataMap = {
     0: data.similarHotelsData,
     1: data.recommendedHotels,
-    2: data.popularHotels,
+    
   };
 
   const handleNext = () => {
@@ -103,7 +105,7 @@ const RecommendedHotels = ({ hotel }) => {
         setData({
           similarHotelsData: res.data.similarHotelsData,
           recommendedHotels: res.data.recommendedHotels,
-          popularHotels: res.data.popularHotels,
+          
         });
       }
     } else {
@@ -134,6 +136,12 @@ const RecommendedHotels = ({ hotel }) => {
       <CircularProgress size='30px' />
     </Box>
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  
   return (
     <Container className='container' sx={{ pt: "30px" }}>
       <Typography
@@ -204,26 +212,7 @@ const RecommendedHotels = ({ hotel }) => {
               }}
             />
 
-            <Tab
-              label='Most popular hotels'
-              disableRipple
-              sx={{
-                color: "grey",
-                textTransform: "none",
-                fontSize: "16px",
-                position: "relative",
-                "&.Mui-selected": { color: "#0062e3" },
-                "&:hover::after": {
-                  content: '""',
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "3px",
-                  backgroundColor: "#e0e4e9",
-                },
-              }}
-            />
+
           </Tabs>
 
           <Box
@@ -290,7 +279,7 @@ const RecommendedHotels = ({ hotel }) => {
                       <CardMedia
                         component='img'
                         height='200'
-                        src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${hotel.cover}`}
+                        src={hotel.cover}
                         alt={hotel.name}
                         sx={{ borderRadius: "12px 12px 0 0" }}
                       />

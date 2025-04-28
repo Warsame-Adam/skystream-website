@@ -21,6 +21,8 @@ import { Link } from "react-router-dom";
 import { getFabCityHotels } from "../../services/hotel.js";
 import { useEffect, useState } from "react";
 
+const BASE_URL = process.env.REACT_APP_BACKEND_URL
+
 const getMinPrice = (hotel) => {
   if (
     !hotel.deals ||
@@ -143,7 +145,7 @@ const CityHotelSelection = () => {
                     <CardMedia
                       component='img'
                       height='190px'
-                      src={hotel.city.cover}
+                      src={`${BASE_URL}/files/locations/${hotel?.city?.cover}`}
                       alt={hotel.name}
                     />
                     <CardContent

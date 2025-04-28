@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
   Menu,
@@ -113,7 +114,7 @@ const Navbar = () => {
   return (
     <AppBar
       position='static'
-      sx={{ padding: "0", backgroundColor: "common.blue" }}
+      sx={{padding: "0", backgroundColor: "common.blue" }}
     >
       <Container className='container'>
         <Toolbar
@@ -233,6 +234,10 @@ const Navbar = () => {
                   LinkComponent={page.link ? Link : <></>}
                   href={page.link ? page.link : ""}
                   onClick={handleCloseUserMenu}
+                  component={RouterLink}
+                  to={page.link}               
+                  sx={{ textDecoration: "none" }}  
+              
                 >
                   <IconButton sx={{ color: "#0665e3", mr: 1 }}>
                     {page.icon}

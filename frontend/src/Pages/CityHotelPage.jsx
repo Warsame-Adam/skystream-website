@@ -83,6 +83,10 @@ const CityHotelsPage = () => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (locations.length === 0) {
       return;
     }
@@ -191,7 +195,7 @@ const CityHotelsPage = () => {
       <CityHotelsMap />
       <CityHotelsList loading={loading} error={error} hotels={hotels} />
       <CityHotelStarRatings />
-      <CityHotelsFastFacts />
+      <CityHotelsFastFacts countryCode={countryParams} cityCode={cityParams} />
       <CityHotelsFAQs />
       <Box sx={{ mt: "2rem" }} />
 

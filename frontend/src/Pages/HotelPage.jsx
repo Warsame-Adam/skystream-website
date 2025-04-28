@@ -11,6 +11,12 @@ import FastFactsHotels from "../Components/FastFactsHotels";
 import { Box } from "@mui/material";
 
 const HotelPage = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  
   return (
     <>
       <FlightsNavbar />

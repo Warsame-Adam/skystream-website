@@ -157,10 +157,20 @@ const CityHotelsMap = () => {
           >
             <LoadScript googleMapsApiKey={apiKey}>
               <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center}
-                zoom={5}
-                onClick={() => setSelectedHotel(null)} // Close InfoWindow when clicking anywhere on the map
+               mapContainerStyle={containerStyle}
+               center={center}
+               zoom={11}
+               onClick={() => setSelectedHotel(null)}
+               options={{
+                streetViewControl: false, // removes the yellow person
+                mapTypeControl: false,    // removes "Map" and "Satellite" toggle
+                fullscreenControl: false, // optional: removes fullscreen icon
+                zoomControl: true,
+                rotateControl: false,
+                        
+              }}
+
+              
               >
                 {hotels.map((hotel) => (
                   <Marker
@@ -195,7 +205,7 @@ const CityHotelsMap = () => {
                     <div>
                       <h3>{selectedHotel.name}</h3>
                       <img
-                        src={`${process.env.REACT_APP_BACKEND_URL}/files/hotels/${selectedHotel.cover}`}
+                        src={selectedHotel.cover}
                         style={{
                           width: "100%",
                           height: "auto",

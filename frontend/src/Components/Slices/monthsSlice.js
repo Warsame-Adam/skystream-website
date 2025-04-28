@@ -9,7 +9,7 @@ const initialState = {
     }) (),
 }
 
-console.log('Initial State:', initialState);
+
 
 
 const monthsSlice  = createSlice({
@@ -33,8 +33,7 @@ const monthsSlice  = createSlice({
             newSecondMonth.setMonth(newSecondMonth.getMonth() + monthChange);
         
             
-            console.log('New First Month:', newFirstMonth); 
-            console.log('New Second Month:', newSecondMonth); 
+            
         
             if (!isNaN(newFirstMonth.getTime()) && !isNaN(newSecondMonth.getTime())) {
                 state.firstMonth = newFirstMonth;

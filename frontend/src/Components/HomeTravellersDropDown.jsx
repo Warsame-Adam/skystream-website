@@ -136,6 +136,7 @@ const HomeTravellersDropDown = ({ anchorEl, handleClose }) => {
           value={cabinClass}
           onChange={(e) => handleCabinClassChange(e.target.value)}
           sx={{
+            color: "black",
             "&:hover": {
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: "#161616",
@@ -144,7 +145,7 @@ const HomeTravellersDropDown = ({ anchorEl, handleClose }) => {
           }}
         >
           {classes.map((c) => (
-            <MenuItem key={c.id} value={c.type}>
+            <MenuItem key={c.id} value={c.type} sx={{color:"black"}}>
               {c.type}
             </MenuItem>
           ))}
@@ -162,7 +163,7 @@ const HomeTravellersDropDown = ({ anchorEl, handleClose }) => {
 
       <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <Box sx={{ flex: 1 }}>
-          <Typography sx={{ fontWeight: 600, fontSize: "15px" }}>
+          <Typography sx={{ fontWeight: 600, fontSize: "14px", color: "black" }}>
             Adults
           </Typography>
           <Typography sx={{ fontSize: "12px", color: "#5a5a5a" }}>
@@ -208,7 +209,7 @@ const HomeTravellersDropDown = ({ anchorEl, handleClose }) => {
 
       <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
         <Box sx={{ flex: 1 }}>
-          <Typography sx={{ fontWeight: 600, fontSize: "15px" }}>
+          <Typography sx={{ fontWeight: 600, fontSize: "14px", color: "black" }}>
             Children
           </Typography>
           <Typography sx={{ fontSize: "12px", color: "#5a5a5a" }}>

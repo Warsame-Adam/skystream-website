@@ -206,23 +206,38 @@ const FlightSearchResults = ({ loading, error, flights }) => {
 
     // 🛑 Stops Filter
     if (stops.length > 0) {
-      const flightStops = flight.location.outboundDirect
+      const outboundStops = flight.location.outboundDirect
         ? 0
-        : flight.location.outboundStops.length;
-      if (
-        !stops.includes(
-          flightStops === 0 ? "0" : flightStops === 1 ? "1" : "2+"
-        )
-      ) {
+        : (flight.location.outboundStops?.length || 0);
+    
+      const returnStops = flight.twoWay && !flight.location.returnDirect
+        ? (flight.location.returnStops?.length || 0)
+        : 0;
+    
+      const totalStops = outboundStops + returnStops;
+    
+      let stopCategory;
+      if (totalStops === 0) stopCategory = 0;
+      else if (totalStops === 1) stopCategory = 1;
+      else stopCategory = "2+";
+    
+      if (!stops.includes(stopCategory)) {
         return false;
       }
     }
 
     // 🛑 Airlines Filter
     if (selectedAirlines.length > 0) {
-      const outboundAirlineId = flight.outboundAirline._id.toString();
-      const returnAirlineId = flight.returnAirline._id.toString();
-
+      const outboundAirlineId =
+        typeof flight.outboundAirline === "string"
+          ? flight.outboundAirline
+          : flight.outboundAirline?._id;
+    
+      const returnAirlineId =
+        typeof flight.returnAirline === "string"
+          ? flight.returnAirline
+          : flight.returnAirline?._id;
+    
       if (
         !selectedAirlines.includes(outboundAirlineId) &&
         (!returnAirlineId || !selectedAirlines.includes(returnAirlineId))
@@ -1144,15 +1159,18 @@ const FlightSearchResults = ({ loading, error, flights }) => {
                               deals from
                             </Typography>
                             <Typography
-                              variant='h6'
-                              gutterBottom
-                              sx={{ color: "black", textAlign: "center" }}
-                            >
-                              £
-                              {flight.classes.reduce((minPrice, classObj) => {
-                                return Math.min(minPrice, classObj.price);
-                              }, Infinity)}
-                            </Typography>
+                    variant="h6"
+                    gutterBottom
+                    sx={{ color: "black", textAlign: "center" }}
+                  >
+                    {flight.totalPrice
+                      ? `£${flight.totalPrice}`
+                      : `£${flight.classes.reduce((minPrice, classObj) =>
+                          Math.min(minPrice, classObj.price),
+                        Infinity)}`
+                    }
+                  </Typography>
+                           
                           </Box>
                           <a
                             href={flight.externalURL}
@@ -1231,3 +1249,4 @@ const FlightSearchResults = ({ loading, error, flights }) => {
 };
 
 export default FlightSearchResults;
+

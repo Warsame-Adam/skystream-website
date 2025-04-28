@@ -35,6 +35,10 @@ const FlightPage = () => {
     }
   }, [visitorData, locations]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <FlightsNavbar />

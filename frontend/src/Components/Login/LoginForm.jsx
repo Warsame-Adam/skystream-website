@@ -211,7 +211,7 @@ export default function LoginForm({ onSignupClick }) {
       {/* sign up */}
       <Grid item sx={{ mt: "20px", width: "100%" }}>
         <Typography variant='subtitle2' sx={{ textAlign: "center" }}>
-          Don's have an account?{" "}
+          Don't have an account?{" "}
           <span
             style={{ cursor: "pointer", fontWeight: "bold" }}
             onClick={onSignupClick}
