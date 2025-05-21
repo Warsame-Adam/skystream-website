@@ -158,6 +158,7 @@ const ReusableDatePicker = ({
     // Cleanup on unmount or dependency change
     return () => clearTimeout(timeout);
   }, [currentMonth, departureDate, returnDate, anchorEl]);
+  
   const handleMonthChange = (monthChange) => {
     dispatch(updateMonth(monthChange));
   };

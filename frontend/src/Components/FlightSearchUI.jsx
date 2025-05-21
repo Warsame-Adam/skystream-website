@@ -62,6 +62,8 @@ const FlightSearchUI = () => {
   const { cabinClass, adults, children } = useSelector(
     (state) => state.travellers
   );
+  const searchType = useSelector((state) => state.search.searchType);
+const isOneWay   = searchType === "oneway";
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const showInputs = useSelector((state) => state.flightSearchui.showInputs);
@@ -84,25 +86,48 @@ const FlightSearchUI = () => {
   }
 
   const handleDateChange = (type, step) => {
-    let oldStr =
-      type === "departure" ? CurrentDepartureDate : CurrentReturnDate;
+  // pick the currently‐selected timestamp
+  const currMs =
+    type === "departure" ? CurrentDepartureDate : CurrentReturnDate;
+  if (!currMs) return;
 
-    // 1) Parse
-    const oldDate = new Date(oldStr);
-    if (!oldDate) return;
+  // build a new Date stepped by ±1 day
+  const d = new Date(currMs);
+  d.setDate(d.getDate() + step);
 
-    oldDate.setDate(oldDate.getDate() + step);
+  // floor of “today” (no back‐dating allowed)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (d < today) return;
 
-    const newStr = oldDate.getTime();
+  // departure must stay strictly before return
+  if (
+    type === "departure" &&
+    CurrentReturnDate != null &&
+    d.getTime() >= CurrentReturnDate
+  ) {
+    return;
+  }
 
-    if (type === "departure") {
-      dispatch(setDepartureDate(newStr));
-      handleParamChange("departureDate", newStr);
-    } else {
-      dispatch(setReturnDate(newStr));
-      handleParamChange("returnDate", newStr);
-    }
-  };
+  // return must stay strictly after departure
+  if (
+    type === "return" &&
+    CurrentDepartureDate != null &&
+    d.getTime() <= CurrentDepartureDate
+  ) {
+    return;
+  }
+
+  // all checks passed—commit the change
+  const newMs = d.getTime();
+  if (type === "departure") {
+    dispatch(setDepartureDate(newMs));
+    handleParamChange("departureDate", newMs);
+  } else {
+    dispatch(setReturnDate(newMs));
+    handleParamChange("returnDate", newMs);
+  }
+};
 
   const formattedDepartureDate = CurrentDepartureDate
     ? formatArrowDate(CurrentDepartureDate)
@@ -263,7 +288,7 @@ const FlightSearchUI = () => {
                   sx={{ color: "text.primary", fontSize: "0.4rem" }}
                 />
               </Grid>
-              <Grid
+              {!isOneWay && ( <Grid
                 item
                 sx={{
                   width: { sm: "unset", xs: "100%" },
@@ -317,6 +342,7 @@ const FlightSearchUI = () => {
                   <ArrowForwardIosRoundedIcon sx={{ fontSize: "24px" }} />
                 </Box>
               </Grid>
+              )}
             </Grid>
           </Grid>
           <ReusableDatePicker
