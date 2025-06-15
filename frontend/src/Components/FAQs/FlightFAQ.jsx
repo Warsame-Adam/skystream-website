@@ -61,8 +61,9 @@ const FlightFAQ = () => {
 
       <Box sx={{ width: { md: "65%", xs: "100%" } }}>
         {faqData.map((faq, index) => (
-          <Box>
-            <Box
+          <Box key={index}>
+            <Box 
+            
               onClick={() => handleToggleFAQ(index)}
               sx={{
                 display: "flex",

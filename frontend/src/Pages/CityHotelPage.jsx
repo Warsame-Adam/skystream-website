@@ -3,16 +3,16 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 // import CityHotelNavbar from "../Components/Navbar/CityHotelsNavbar";
-import FlightsNavbar from "../Components/Navbar/FlightsNavbar";
-import CityHotelsSearchBar from "../Components/SearchBar/CityHotelsSearchBar";
-import CityHotelsInfoSection from "../Components/CityHotelsInfoSection";
-import CityHotelsMap from "../Components/CityHotelsMap";
-import CityHotelsList from "../Components/CityHotelsList";
-import CityHotelStarRatings from "../Components/CityHotelStarRatings";
-import CityHotelsFastFacts from "../Components/CityHotelsFastFacts";
-import CityHotelsFAQs from "../Components/CityHotelsFAQs";
+import FlightsNavbar from "../Components/layout/FlightsNavbar";
+import CityHotelsSearchBar from "../Components/cityHotels/CityHotelsSearchBar";
+import CityHotelsInfoSection from "../Components/cityHotels/CityHotelsInfoSection";
+import CityHotelsMap from "../Components/cityHotels/CityHotelsMap";
+import CityHotelsList from "../Components/cityHotels/CityHotelsList";
+import CityHotelStarRatings from "../Components/cityHotels/CityHotelStarRatings";
+import CityHotelsFastFacts from "../Components/cityHotels/CityHotelsFastFacts";
+import CityHotelsFAQs from "../Components/FAQs/CityHotelsFAQs";
 // import CentredFooter from "../Components/Footer/CentredFooter";
-import HomeFooter from "../Components/Footer/HomeFooter";
+import HomeFooter from "../Components/layout/HomeFooter";
 import {
   setDestination,
   setOtherOptions,

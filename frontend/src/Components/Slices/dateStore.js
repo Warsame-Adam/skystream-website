@@ -11,11 +11,11 @@ const dateStore = createSlice({
   initialState,
   reducers: {
     setDepartureDate: (state, action) => {
-      console.log("Action payload (departure):", action.payload);
+      
       state.departureDate = action.payload
     },
     setReturnDate: (state, action) => {
-      console.log("Action payload (return):", action.payload);
+      
 
       state.returnDate = action.payload
     },

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import Navbar from "../Components/Navbar/Navbar";
-import HomeSearchBar from "../Components/SearchBar/HomeSearchBar";
+import Navbar from "../Components/layout/Navbar";
+import HomeSearchBar from "../Components/home/HomeSearchBar";
 // import CalendarLayout from "../Components/CalendarLayout";
-import Hero from "../Components/Hero/Hero";
+import Hero from "../Components/home/Hero";
 import FAQ from "../Components/FAQs/FAQs";
-import HomeFooter from "../Components/Footer/HomeFooter";
+import HomeFooter from "../Components/layout/HomeFooter";
 import { GlobalContext } from "../context/GlobalContext";
 import { useSelector, useDispatch } from "react-redux";
 import { setFrom } from "../Components/Slices/flightSearchSlice";

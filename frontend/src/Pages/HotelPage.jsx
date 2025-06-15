@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import FlightsNavbar from "../Components/Navbar/FlightsNavbar";
-import HeroHotel from "../Components/Hero/HeroHotel";
-import HotelBanner from "../Components/PromotionalBanner/HotelBanner";
-import LocalHotelSection from "../Components/HotelSelections/LocalHotelSelection";
-import CityHotelSelection from "../Components/HotelSelections/CityHotelSelection";
+import FlightsNavbar from "../Components/layout/FlightsNavbar";
+import HeroHotel from "../Components/hotels/HeroHotel";
+import HotelBanner from "../Components/hotels/HotelBanner";
+import LocalHotelSection from "../Components/hotels/LocalHotelSelection";
+import CityHotelSelection from "../Components/hotels/CityHotelSelection";
 import HotelFAQ from "../Components/FAQs/HotelFAQ";
-import HomeFooter from "../Components/Footer/HomeFooter";
+import HomeFooter from "../Components/layout/HomeFooter";
 
-import FastFactsHotels from "../Components/FastFactsHotels";
+import FastFactsHotels from "../Components/hotels/FastFactsHotels";
 import { Box } from "@mui/material";
 
 const HotelPage = () => {

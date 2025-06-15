@@ -61,7 +61,7 @@ const HotelFAQ = () => {
 
       <Box sx={{ width: { md: "65%", xs: "100%" } }}>
         {faqArray.map((faq, index) => (
-          <Box>
+          <Box key={index}>
             <Box
               onClick={() => handleToggleFAQ(index)}
               sx={{

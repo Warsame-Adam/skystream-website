@@ -1,26 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentMonth: new Date(),
+  // store as an ISO string, not a Date object
+  currentMonth: new Date().toISOString(),
 };
 
 const singleMonthSlice = createSlice({
-  name: 'singleMonth',
+  name: "singleMonth",
   initialState,
   reducers: {
     setCurrentMonth: (state, action) => {
-      state.currentMonth = action.payload;
+      // allow either a Date or an ISO string
+      state.currentMonth = typeof action.payload === "string"
+        ? action.payload
+        : action.payload.toISOString();
     },
     updateMonth: (state, action) => {
       const monthChange = action.payload;
-      let newMonth = new Date(state.currentMonth);
+      
+      const newMonth = new Date(state.currentMonth);
       newMonth.setMonth(newMonth.getMonth() + monthChange);
-       
-      state.currentMonth = newMonth;
-    }
+      
+      state.currentMonth = newMonth.toISOString();
+    },
   },
 });
 
 export const { setCurrentMonth, updateMonth } = singleMonthSlice.actions;
-
 export default singleMonthSlice.reducer;

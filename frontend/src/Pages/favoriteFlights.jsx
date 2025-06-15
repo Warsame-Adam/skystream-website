@@ -13,10 +13,10 @@ import {
 } from "@mui/material";
 import { ArrowForward, FavoriteBorder, Flight } from "@mui/icons-material";
 import * as moment from "moment";
-import FlightsNavbar from "../Components/Navbar/FlightsNavbar";
+import FlightsNavbar from "../Components/layout/FlightsNavbar";
 import { getMyFavFlights, showInterest } from "../services/flight";
 import { GlobalContext } from "../context/GlobalContext";
-import HomeFooter from "../Components/Footer/HomeFooter";
+import HomeFooter from "../Components/layout/HomeFooter";
 
 function formatTextToTwoLines(text) {
   const words = text.split(" ");

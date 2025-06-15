@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import FlightSearchResultsNavbar from "../Components/FlightSearchResultsNavbar";
-import FlightsNavbar from "../Components/Navbar/FlightsNavbar";
-import FlightSearchUI from "../Components/FlightSearchUI";
-import FlightSearchResults from "../Components/FlightSearchResults";
-import HomeFooter from "../Components/Footer/HomeFooter";
+import FlightSearchResultsNavbar from "../Components/_archive/FlightSearchResultsNavbar";
+import FlightsNavbar from "../Components/layout/FlightsNavbar";
+import FlightSearchUI from "../Components/flightResults/FlightSearchUI";
+import FlightSearchResults from "../Components/flightResults/FlightSearchResults";
+import HomeFooter from "../Components/layout/HomeFooter";
 import { GlobalContext } from "../context/GlobalContext";
 import {
   setFrom,

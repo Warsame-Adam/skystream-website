@@ -1,9 +1,22 @@
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import {
+  configureStore,
+  combineReducers,
+  
+} from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import monthsReducer from "./Slices/monthsSlice";
-import calendarVisibilty from "./Slices/calendarVisible";
+import calendarVisibility from "./Slices/calendarVisible";
 import dateSelector from "./Slices/dateStore";
 import faqVisibility from "./Slices/FAQVisible";
 import SearchBarReducer from "./Slices/SearchBarSlice";
@@ -16,11 +29,11 @@ import hotelSearchSlice from "./Slices/hotelSearchSlice";
 import HomeTravellersddSlice from "./Slices/HomeTravellersddSlice";
 import HotelTravellersddSlice from "./Slices/HotelTravellersddSlice";
 
-// Combine all reducers
+
 const rootReducer = combineReducers({
   months: monthsReducer,
-  visible: calendarVisibilty,
-  dates: dateSelector,                // persist this
+  visible: calendarVisibility,
+  dates: dateSelector,
   faqVisible: faqVisibility,
   search: SearchBarReducer,
   hotels: hotelSelectionReducer,
@@ -30,23 +43,29 @@ const rootReducer = combineReducers({
   flightSearch: flightSearchSlice,
   hotelSearch: hotelSearchSlice,
   travellers: HomeTravellersddSlice,
-  hotelTravellers: HotelTravellersddSlice, // persist this
+  hotelTravellers: HotelTravellersddSlice,
 });
 
-// Configuration for redux-persist
+
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["dates", "hotelTravellers"], // Only these slices will be persisted
+  whitelist: ["dates", "hotelTravellers"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-// Create persistor for use in the app
 export const persistor = persistStore(store);
-
 export default store;
