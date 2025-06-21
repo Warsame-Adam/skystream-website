@@ -80,7 +80,7 @@ const ReturnSearchBar = () => {
       const currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0); 
       const departure = new Date(
-        currentDate.setDate(currentDate.getDate() + 3)
+        currentDate.setDate(currentDate.getDate() + 4)
       );
       dispatch(setDepartureDate(departure.getTime()));
 
