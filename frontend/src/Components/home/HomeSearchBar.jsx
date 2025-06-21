@@ -65,10 +65,10 @@ const HomeSearchbar = () => {
       isDate(returnDate)
     ) {
       const departureD = new Date(departureDate);
-      departureD.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+      departureD.setHours(0, 0, 0, 0); 
 
       const returnD = new Date(returnDate);
-      returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+      returnD.setHours(23, 59, 59, 999); 
 
       const path = `/flights/search?originCountry=${
         origin.countryCode
@@ -94,13 +94,13 @@ const HomeSearchbar = () => {
 
   useEffect(() => {
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); // Set time to 00:00:00.000
+    currentDate.setHours(0, 0, 0, 0);
 
-    const departure = new Date(currentDate.setDate(currentDate.getDate() + 2));
+    const departure = new Date(currentDate.setDate(currentDate.getDate() + 3));
     dispatch(setDepartureDate(departure.getTime()));
 
     const returnD = new Date(departure);
-    returnD.setHours(23, 59, 59, 999); // Set time to 23:59:59.999
+    returnD.setHours(23, 59, 59, 999); 
     returnD.setDate(departure.getDate() + 5);
 
     dispatch(setReturnDate(returnD.getTime()));
